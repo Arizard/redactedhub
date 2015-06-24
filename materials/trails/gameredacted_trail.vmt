@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "trails/gameredacted_trail"
+	"$nocull" 1
+	"$translucent" 1
+	"$vertexalpha" 1
+}
