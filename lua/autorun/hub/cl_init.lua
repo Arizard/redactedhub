@@ -1,4 +1,4 @@
-print("Loaded cl_init.lua")
+print("RedactedHub - Loaded cl_init.lua")
 include("shared.lua")
 
 
@@ -35,7 +35,7 @@ end
 
 function RS:Initialize()
 
-	print("Clientside hub initialized")
+	print(" RedactedHub - Clientside Hub initialized")
 end
 
 net.Receive("RS:StoreChat", function()
@@ -117,13 +117,13 @@ function PLAYER:GetMoney()
 	return self:GetNWInt(RS.PDataMoney, 0)
 end
 
-//hats
+--hats
 
 
 
 net.Receive("CreateClientModel", function()
 	local data = net.ReadTable()
-	//PrintTable( data )
+	--PrintTable( data )
 	RS:CreateClientModel( data.mdl, data.att, data.posoff, data.angoff, data.scl, data.mat, data.col, data.ply, data.id, data.isToken, data.class, data.id64 )
 end)
 
@@ -135,14 +135,14 @@ net.Receive("SendClientModelsOnSpawn", function()
 	--PrintTable(mdls)
 
 	for k, cmod in ipairs( mdls ) do
-		//if cmod.isToken == false then
+		--if cmod.isToken == false then
 			RS:CreateClientModel( cmod.mdl, cmod.att, cmod.posoff, cmod.angoff, cmod.scl, cmod.mat, cmod.col, cmod.ply, cmod.id, cmod.isToken, cmod.class, cmod.id64 )
-		//else
-			//RS:CreateClientToken( cmod.ply, cmod.id, cmod.class )
-		//end
+		--else
+			--RS:CreateClientToken( cmod.ply, cmod.id, cmod.class )
+		--end
 	end
 
-	//PrintTable(RS.ClientSideModels)
+	--PrintTable(RS.ClientSideModels)
 
 end)
 
@@ -178,7 +178,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 
 	
 
-	print("Creating model for",cmod.id64)
+	print("RedactedHub - Creating model for",cmod.id64)
 
 	cmod:SetModelScale( scl, 0 )
 
@@ -196,24 +196,24 @@ function RS:RenderClientModels()
 		if (m.ply == nil or not IsValid(m.ply)) and m.id64 then
 			local found = nil
 			for k,v in ipairs(player.GetAll()) do
-				if m.id64 != nil then
+				if m.id64 ~= nil then
 					if m.id64 == v:SteamID64() then
 						found = v
 					end
 				end
 			end
-			if found != nil then m.ply = found else return end
+			if found ~= nil then m.ply = found else return end
 		end
 		if IsValid(m) and IsValid(m.ply) and RS.InPreview == false then
 
-			if ((LocalPlayer() != m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
+			if ((LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
 				if LocalPlayer():GetObserverTarget() == m.ply then
 					if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
 						return 
 					end
 				end
 
-				if m.ply:GetObserverMode() != OBS_MODE_NONE then return end
+				if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
 				if not m.ply:Alive() then return end
 
 				local atid = m.ply:LookupAttachment(m.att)
@@ -224,9 +224,9 @@ function RS:RenderClientModels()
 				local x = m.posoff.x * attach.Ang:Right()
 				local y = m.posoff.y * attach.Ang:Forward()
 				local z = m.posoff.z * attach.Ang:Up()
-				//print(x,y,z)
-				//print( Vector(x,y,z) )
-				//print(posoff2)
+				--print(x,y,z)
+				--print( Vector(x,y,z) )
+				--print(posoff2)
 				m:SetPos(attach.Pos + x + y + z)
 				local ang = attach.Ang
 				ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
@@ -253,19 +253,19 @@ function RS:RenderClientTokens()
 		if (m.ply == nil or not IsValid(m.ply)) and m.id64 then
 			local found = nil
 			for k,v in ipairs(player.GetAll()) do
-				if m.id64 != nil then
+				if m.id64 ~= nil then
 					if m.id64 == v:SteamID64() then
 						found = v
 					end
 				end
 			end
-			if found != nil then m.ply = found else return end
+			if found ~= nil then m.ply = found else return end
 		end
 
 
 		if IsValid(m) and IsValid(m.ply) and RS.InPreview == false then
 
-			if ((LocalPlayer() != m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
+			if ((LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
 				if m.isToken == true then
 					
 					if LocalPlayer():GetObserverTarget() == m.ply then
@@ -274,7 +274,7 @@ function RS:RenderClientTokens()
 						end
 					end
 
-					if m.ply:GetObserverMode() != OBS_MODE_NONE then return end
+					if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
 					if not m.ply:Alive() then return end
 
 					
@@ -288,10 +288,10 @@ function RS:RenderClientTokens()
 					local x = m.posoff.x * attach.Ang:Right()
 					local y = m.posoff.y * attach.Ang:Forward()
 					local z = m.posoff.z * attach.Ang:Up()
-					//print(x,y,z)
-					//print( Vector(x,y,z) )
-					//print(posoff2)
-					//m:SetPos(attach.Pos + x + y + z)
+					--print(x,y,z)
+					--print( Vector(x,y,z) )
+					--print(posoff2)
+					--m:SetPos(attach.Pos + x + y + z)
 					local ang = attach.Ang
 					ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
 					ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
@@ -299,9 +299,9 @@ function RS:RenderClientTokens()
 
 					ang:RotateAroundAxis( ang:Up(), 90)
 				
-					//print(m.class)
+					--print(m.class)
 					if RS.Items[m.class].IsToken == true then
-						//print("Drawing Token")
+						--print("Drawing Token")
 						cam.Start3D2D(m:GetPos()+ang:Up()*3.5, ang, 0.105)
 							RS.Items[m.class]:DrawTokenFace(0,0)
 						cam.End3D2D()

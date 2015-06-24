@@ -1,6 +1,6 @@
 print("loaded hub_init.lua")
 
-RS = {} // Redacted Shop aka hub
+RS = {} -- Redacted Shop aka hub
 
 RS.PDataMoney = "redacted_dosh_2015_3"
 
@@ -14,9 +14,9 @@ if SERVER then
 	AddCSLuaFile("hub/cl_jukebox_songs.lua")
 	AddCSLuaFile("hub/cl_init.lua")
 
-	//go through all the shop files, and add them to cs lua
-	//folder structure is
-	//hub/shop/category/unique_item_name.lua
+	--go through all the shop files, and add them to cs lua
+	--folder structure is
+	--hub/shop/category/unique_item_name.lua
 	local files, categories = file.Find("autorun/hub/shop/*","LUA")
 
 	for k,cat in ipairs(categories) do
@@ -94,7 +94,7 @@ end
 
 RS:Initialize()
 
-//PrintTable(RS.Items)
+--PrintTable(RS.Items)
 
 --[[
 Ordered table iterator, allow to iterate on the natural order of the keys of a
