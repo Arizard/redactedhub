@@ -182,7 +182,7 @@ concommand.Add("shop_restock_if_empty", function(ply, cmd, args)
 
 		if stock == 0 then
 			for i = 1, args[1] do
-				print("Restocking "..class)
+				print("RedactedHub - Restocking "..class)
 				RS:CreateItemManual(item, "0","SERVER")
 			end
 			
@@ -201,7 +201,7 @@ concommand.Add("shop_clearstock", function(ply, cmd, args)
 
 	local res = sql.Query("DELETE FROM shop_items WHERE owner_id64 = '0'")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		return #res
 	else
 		return 0
@@ -311,12 +311,12 @@ RS.ChatCommands = {}
 
 function RS:AddChatCommand(cmd, func)
 	RS.ChatCommands[cmd] = func
-	print("[HUB] Added chat command "..cmd)
+	print("RedactedHub - Added chat command "..cmd)
 end
 
 function RS:AddChatCommandAlias(cmd, cmd2)
 	RS.ChatCommands[cmd2] = RS.ChatCommands[cmd]
-	print("[HUB] Added chat command alias "..cmd.." -> "..cmd2)
+	print("RedactedHub - Added chat command alias "..cmd.." -> "..cmd2)
 end
 
 local function ProcessChat( ply, text, public )
@@ -325,7 +325,7 @@ local function ProcessChat( ply, text, public )
 	local prefix = string.sub(args[1],1,1)
 	local cmd = string.sub(args[1], 2,-1)
 
-	print(prefix, cmd)
+	--print(prefix, cmd)
 
 	if ((prefix == "!") or (prefix == "/")) and RS.ChatCommands[ cmd ] then
 		local cmdfunc = RS.ChatCommands[ cmd ]
@@ -335,7 +335,7 @@ local function ProcessChat( ply, text, public )
 		end
 
 		cmdfunc( ply, args2 )
-		if prefix == "/" then return false end
+		if prefix == "/" then return false end -- make it silent if you use /
 	end
 
 end
@@ -403,3 +403,10 @@ end)
 RS:AddChatCommand("checkvip", function(ply)
 	ply:ConCommand("shop_checkvip")
 end)
+
+RS:AddChatCommand("jukebox", function(ply)
+	ply:ConCommand("hub_open2 3")
+end)
+
+RS:AddChatCommandAlias("jukebox","juke")
+RS:AddChatCommandAlias("jukebox","music")

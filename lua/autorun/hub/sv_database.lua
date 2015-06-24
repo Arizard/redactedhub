@@ -3,20 +3,20 @@ include("shared.lua")
 
 function RS:DBInit()
 
-	//sql.Query("DROP TABLE shop_items")
+	--sql.Query("DROP TABLE shop_items")
 	sql.Query("CREATE TABLE IF NOT EXISTS shop_items (ID INTEGER PRIMARY KEY, category string, class string, equipped int, owner_id64 string, owner_name string)")
 	local res = sql.Query("SELECT * FROM shop_items WHERE 1")
 	if res == false then print(sql.LastError()) end
 
 	self.ExistingItems = res
  
- 	//sql.Query("DROP TABLE shop_money")
+ 	--sql.Query("DROP TABLE shop_money")
 	sql.Query("CREATE TABLE shop_money (money int, owner_id64 string)" )
-	//print(sql.LastError(), "Creating new table shop_money")
+	--print(sql.LastError(), "Creating new table shop_money")
 	sql.Query("INSERT INTO shop_money (money, owner_id64) VALUES (10000, '0')")
 
-	//RS:CreateItemManual( RS.Items["test_material"], "00000", "SERVER" )
-	//RS:ChangeItemOwner(7, player.GetByID(1))
+	--RS:CreateItemManual( RS.Items["test_material"], "00000", "SERVER" )
+	--RS:ChangeItemOwner(7, player.GetByID(1))
 end
 
 
@@ -40,7 +40,7 @@ concommand.Add("shop_drop", function(ply)
 	end
 end)
 
-function RS:CreateItem( item, ply ) // item is a table, loaded from the item file
+function RS:CreateItem( item, ply ) -- item is a table, loaded from the item file
 
 	print("Attempting to create new item...")
 	local res = sql.Query("INSERT INTO shop_items (category, class, equipped, owner_id64, owner_name) VALUES ('"..item.Category.."', '"..item.Class.."',0,'"..ply:SteamID64().."','"..Base64Encode(ply:Nick()).."')")
@@ -112,7 +112,7 @@ function RS:GetStoreItems( class )
 end
 
 function RS:GetStoreStock( class )
-	//print("retrieving stock for item "..tostring(class))
+	--print("retrieving stock for item "..tostring(class))
 	local res = sql.Query("SELECT ID FROM shop_items WHERE class='"..class.."' AND owner_id64 = '0'")
 	if res == false then print(sql.LastError()) return end
 	if res != nil then
@@ -136,15 +136,15 @@ function RS:EquipItem( ply, id )
 	local res = sql.Query( "UPDATE shop_items SET equipped=1 WHERE ID="..tostring(id).."")
 	if res == false then print(sql.LastError()) return end
 	if res != nil then
-		//return res
+		--return res
 	end
 
-	//RS:PlayerEquip( ply, id)
+	--RS:PlayerEquip( ply, id)
 end
 
 function RS:PlayerEquip( ply, id)
-	//do the necessary thingos
-	//get class
+	--do the necessary thingos
+	--get class
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id))
 	if res == false then print(sql.LastError()) return end
 	if res != nil then
@@ -162,11 +162,11 @@ function RS:HolsterItem( ply, id )
 		return res
 	end
 
-	//RS:PlayerHolster(ply, id)
+	--RS:PlayerHolster(ply, id)
 end
 function RS:PlayerHolster( ply, id)
-	//do the necessary thingos
-	//get class
+	--do the necessary thingos
+	--get class
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id))
 	if res == false then print(sql.LastError()) return end
 	if res != nil then
@@ -183,7 +183,7 @@ function RS:ItemEquipped( id )
 	if res == false then print(sql.LastError()) return end
 
 	if res != nil then
-		//PrintTable(res)
+		--PrintTable(res)
 		return tobool(res[1]["equipped"])
 	end
 end
@@ -193,7 +193,7 @@ function RS:DoesPlayerOwn( ply, id )
 	if res == false then print(sql.LastError()) return end
 
 	if res != nil then
-		//PrintTable(res)
+		--PrintTable(res)
 		return true
 	else
 		return false
@@ -205,7 +205,7 @@ function RS:DoesPlayerOwnClass( ply, class )
 	if res == false then print(sql.LastError()) return end
 
 	if res != nil then
-		//PrintTable(res)
+		--PrintTable(res)
 		local equipped = false
 		for k,v in ipairs(res) do
 			if tobool(v["equipped"]) ==  true then
@@ -228,13 +228,13 @@ function RS:GetItemTable( id )
 
 
 end
-// concommand.Add("shop_spawnself", function(ply, cmd, args)
-// 	if ply:IsSuperAdmin() then
-// 		RS:CreateItem( RS.Items[args[1]], ply )
-// 	end
+-- concommand.Add("shop_spawnself", function(ply, cmd, args)
+-- 	if ply:IsSuperAdmin() then
+-- 		RS:CreateItem( RS.Items[args[1]], ply )
+-- 	end
 
 
-// end)
+-- end)
 
 concommand.Add("shop_createstock", function(ply, cmd, args)
 	if ply:IsSuperAdmin() then
@@ -245,9 +245,9 @@ concommand.Add("shop_createstock", function(ply, cmd, args)
 end)
 concommand.Add("shop_destroy", function(ply, cmd, args)
 	if ply:IsSuperAdmin() then
-		//for i = 1, args[2] do
+		--for i = 1, args[2] do
 			RS:DestroyItem( tonumber(args[1]) )
-		//end
+		--end
 	end
 end)
 concommand.Add("shop_viewdb", function(ply, cmd, args)
@@ -288,7 +288,7 @@ end)
 
 
 
-// player money
+-- player money
 
 local PLAYER = FindMetaTable("Player")
 
@@ -301,7 +301,7 @@ function PLAYER:GetMoney()
 		return money
 	else
 		sql.Query("INSERT INTO shop_money (money, owner_id64) VALUES (0, '"..self:SteamID64().."')")
-		//print(sql.LastError())
+		--print(sql.LastError())
 		print("No Money Found for",self:Nick())
 		return 0
 	end
@@ -313,11 +313,11 @@ function PLAYER:SetMoney( amt )
 	local cur = self:GetMoney()
 
 	local res = sql.Query("UPDATE shop_money SET money="..amt.." WHERE owner_id64='"..self:SteamID64().."'")
-	//print(sql.LastError(), "MEMEMEMEMEME")
+	--print(sql.LastError(), "MEMEMEMEMEME")
 	if res == false then print(sql.LastError()) return end
 	if res != nil then
-		//local money = tonumber(res[1]["money"])
-		//return money
+		--local money = tonumber(res[1]["money"])
+		--return money
 	end
 
 	self:SyncMoney()
@@ -363,17 +363,17 @@ end
 
 RS:SyncStoreMoney()
 
-// timer.Create("UpdateStoreMoneyTimer",10,0,function() 
-// 	--print("sending money data to clients...", sql.LastError())
+-- timer.Create("UpdateStoreMoneyTimer",10,0,function() 
+-- 	--print("sending money data to clients...", sql.LastError())
 
-// 	RS:SyncStoreMoney()
-// 	--print("Store:",RS:GetStoreMoney())
-// 	for k,ply in ipairs(player.GetAll()) do
-// 		ply:SyncMoney()
-// 		--print(ply:Nick(), ply:GetMoney())
-// 	end
+-- 	RS:SyncStoreMoney()
+-- 	--print("Store:",RS:GetStoreMoney())
+-- 	for k,ply in ipairs(player.GetAll()) do
+-- 		ply:SyncMoney()
+-- 		--print(ply:Nick(), ply:GetMoney())
+-- 	end
 	
-//end)
+--end)
 
 hook.Add("PlayerInitialSpawn","SyncMoney",function( ply )
 	RS:SyncStoreMoney()

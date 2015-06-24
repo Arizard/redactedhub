@@ -10,7 +10,7 @@ function HubDrawBlur(panel, amount)
 	surface.SetDrawColor(255,255,255)
 	surface.SetMaterial(blur)
 
-	for i = 1, 3 do // 3 pass blur i guess?
+	for i = 1, 3 do -- 3 pass blur i guess?
 		blur:SetFloat("$blur", (i/3) * (amount or 7))
 		blur:Recompute()
 
@@ -30,7 +30,7 @@ function WINDOW:Init()
 	self.h = 240
 	self.padding = 8 
 
-	// add stuff below 8 + 16 + 8 (32)
+	-- add stuff below 8 + 16 + 8 (32)
 
 	self.Title = "Blank Window"
 
@@ -82,7 +82,7 @@ end
 vgui.Register("hub_window", WINDOW)
 
 
-local BUTTN = {} // custom buttons
+local BUTTN = {} -- custom buttons
 
 function BUTTN:Init()
 	self.w, self.h = 64,24
@@ -194,7 +194,7 @@ end
 vgui.Register("hub_button",BUTTN)
 
 
-//hub multi panels
+--hub multi panels
 
 local MPANEL = {}
 
@@ -312,7 +312,7 @@ function MPANEL:AddTab(str_name)
 
 	self.panels[str_name].Paint = function(self, w, h)
 		surface.SetDrawColor(Color(225,225,225))
-		surface.DrawRect(0,0,w, h) // meh
+		surface.DrawRect(0,0,w, h) -- meh
 	end
 
 	self:PerformLayout()
@@ -327,7 +327,7 @@ function MPANEL:PerformLayout()
 
 	
 	local maxoff = -((#self.tabs * 92) - self:GetWide()) -24*2 -8
-	//print( #self.tabs * 92, self:GetWide() )
+	--print( #self.tabs * 92, self:GetWide() )
 	if self.buttonoffset > 8 then self.buttonoffset = 8 end
 	if self.buttonoffset < maxoff then self.buttonoffset = maxoff end
 
@@ -340,16 +340,16 @@ function MPANEL:PerformLayout()
 	if self.spacer then
 		self.spacer:SetSize(self:GetWide(), 4)
 	end
-	//print("perofrm ing layrioru", #self.tabs)
+	--print("perofrm ing layrioru", #self.tabs)
 	for i = 1,#self.tabs do
-		//print(i)
+		--print(i)
 		self.buttons[self.tabs[i]]:SetPos(24+(i-1)*92+self.buttonoffset,0)
 		self.buttons[self.tabs[i]].OriginalX = 8+(i-1)*92
 		self.panels[self.tabs[i]]:SetSize(self:GetWide(),self:GetTall()-28)
 
 	end
 
-	//self.spacer:SetSize(self:GetWide(), 4)
+	--self.spacer:SetSize(self:GetWide(), 4)
 end
 
 -- function MPANEL:UpdateButtonOffset()
@@ -384,7 +384,7 @@ function M2PANEL:Init()
 
 	function self.spacer:Paint()
 		surface.SetDrawColor(self:GetParent().color[2])
-		//surface.DrawRect(0,0,self:GetWide(),self:GetTall())
+		--surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 	end
 	self.spacer:SetPos(0,24)
 
@@ -463,16 +463,16 @@ function M2PANEL:PerformLayout()
 	if self.spacer then
 		self.spacer:SetSize(self:GetWide(), 4)
 	end
-	//print("perofrm ing layrioru", #self.tabs)
+	--print("perofrm ing layrioru", #self.tabs)
 	for i = 1,#self.tabs do
-		//print(i)
+		--print(i)
 		self.buttons[self.tabs[i]]:SetWide( self:GetWide()/#self.tabs * 1.01 )
 		self.buttons[self.tabs[i]]:SetPos((i-1)*(self:GetWide()/#self.tabs),0)
 		self.panels[self.tabs[i]]:SetSize(self:GetWide(),self:GetTall()-28)
 
 	end
 
-	//self.spacer:SetSize(self:GetWide(), 4)
+	--self.spacer:SetSize(self:GetWide(), 4)
 end
 
 vgui.Register("hub_multipanel2", M2PANEL)
@@ -513,8 +513,8 @@ local hubdata = {}
 
 net.Receive("OpenHub",function()
 	hubdata = net.ReadTable()
-	//PrintTable(hubdata)
-	RS:CreateHubWindow( hubdata, hubdata.opentab )
+	--print(hubdata.opentab)
+	RS:CreateHubWindow( hubdata, tonumber( hubdata.opentab ) )
 end)
 
 
@@ -550,7 +550,7 @@ function ICON:Init()
 	self.b:SetColors(Color(128,128,128), Color(52, 152, 219))
 	
 	
-	self.trail = Material(")") // brank
+	self.trail = Material(")") -- brank
 
 	self:PerformLayout()
 end
@@ -585,6 +585,9 @@ function ICON:PerformLayout()
 		
 	end
 
+	self.b:SetWide( self:GetWide()-4 )
+	self.model:SetWide( self:GetWide()-4 )
+
 end
 local eqmat = Material("icon16/user_green.png")
 function ICON:Paint()
@@ -600,15 +603,15 @@ function ICON:Paint()
 	else
 		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
 	end
-	//draw.ShadowText("No. "..tostring(self.id), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
-	//image/color/model size: 117/117
+	--draw.ShadowText("No. "..tostring(self.id), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+	--image/color/model size: 117/117
 	if self.item.Category == "colours" then
 		surface.SetDrawColor(self.item.Col)
-		surface.DrawRect(2,2,117,117)
+		surface.DrawRect(self:GetWide()/2 - 117/2,2,117,117)
 	elseif self.item.Category == "trails" then
 		surface.SetMaterial( self.trail )
 		surface.SetDrawColor(self.item.Col)
-		surface.DrawTexturedRect(2,2,117,117)
+		surface.DrawTexturedRect(self:GetWide()/2 - 117/2,2,117,117)
 	end
 
 	if self.isToken == true then
@@ -621,7 +624,7 @@ function ICON:Paint()
 	end
 
 	if self.item.Category == "boosts" then
-		self.item:DrawBoostIcon()
+		self.item:DrawBoostIcon(self:GetWide()/2 - 117/2, 2)
 	end
 
 	if self.item.Category == "taunts" then
@@ -659,7 +662,7 @@ function ICON:SetItem( tab )
 		self.model:SetLookAt(Vector(0,0,0))
 		self.model:SetFOV(25)
 		self.model.Entity:SetMaterial( self.item.Material )
-		//print("Material is",self.item.Material)
+		--print("Material is",self.item.Material)
 	elseif self.item.Category == "trails" then
 		self.model:SetVisible(false)
 		self.trail = Material(self.item.Trail)
@@ -700,14 +703,14 @@ function ICON:SetStock( amt )
 end
 function ICON:OnCursorEntered2()
 
-	//print("Entered",self.item.Category)
+	--print("Entered",self.item.Category)
 
 	if not self.item then return end
 	if self.item.Category == "colours" then
 		
 		RS.PlayerModelPreview.Entity:SetColor( self.item.Col )
 		RS.PlayerModelPreview.Entity.PlyCol = ColToVec( self.item.Col )
-		//print(ColToVec( self.item.Col ))
+		--print(ColToVec( self.item.Col ))
 	elseif self.item.Category == "materials" then
 		
 		RS.PlayerModelPreview.Entity:SetMaterial( self.item.Material )
@@ -722,25 +725,25 @@ end
 
 function ICON:OnCursorExited2()
 
-	//print("Exited",self.item.Category)
+	--print("Exited",self.item.Category)
 
 	if not self.item then return end
 	if self.item.Category == "colours" then
 		RS.PlayerModelPreview.Entity:SetColor( LocalPlayer():GetColor() )
 		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
-		//print(LocalPlayer():GetPlayerColor())
+		--print(LocalPlayer():GetPlayerColor())
 	elseif self.item.Category == "materials" then
 		RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
 	elseif self.item.Category == "skins" then
 		RS.PlayerModelPreview:SetModel(LocalPlayer():GetModel())
 		
 		RS.PlayerModelPreview.Entity:SetColor( LocalPlayer():GetColor() )
-		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor() // we need heasp of stuff because playermodel resets shit
+		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor() -- we need heasp of stuff because playermodel resets shit
 		RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
 
 
 	elseif self.item.Category == "hats" then
-		//RS.PlayerModelPreview.Entity.HatPreviewID = self.id
+		--RS.PlayerModelPreview.Entity.HatPreviewID = self.id
 		
 		local idtouse = self:GetID()
 		if type(idtouse) == "string" or self.equipped == false then
@@ -768,7 +771,7 @@ end
 
 function ICON:SetEquipped( bool )
 	self.equipped = bool
-	//print(bool)
+	--print(bool)
 	if self.item then
 		if bool == true then
 			if self.item.Category == "materials" then
@@ -784,7 +787,7 @@ function ICON:SetEquipped( bool )
 end
 
 function ICON:SetID( num )
-	//print("Attempting to set id "..tostring(num))
+	--print("Attempting to set id "..tostring(num))
 	self.id = num
 	self:PerformLayout()
 end
@@ -960,15 +963,19 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	
 	link = string.Replace(link, "https://www.youtube.com/watch?v=", "")
 	link = string.Replace(link, "http://www.youtube.com/watch?v=", "")
-	//link = string.Replace(link, "/watch?v=","/embed/")
-	//link = link.."?autoplay=1"
+	--link = string.Replace(link, "/watch?v=","/embed/")
+	--link = link.."?autoplay=1"
 	local embed = "http://gameredacted.net/youtube_jukebox.html?v=" .. link .."&volume="..tostring(GetConVarNumber("grhub_jukebox_volume"))
-	//``print(embed)
+	--``print(embed)
 	RS.JukePlayer:OpenURL(embed)
 	RS.JukePlayer:SetAllowLua( true )
-	RS.JukeCurrent = {artist,song,embed} // parents everyehwere
+	RS.JukeCurrent = {artist,song,embed} -- parents everyehwere
 
 	timer.Create("FixJukeboxVolumeStuff", 3,0, function() RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );") end )
+
+	net.Start("RS:JukeboxNowPlaying")
+	net.WriteTable( RS.JukeCurrent )
+	net.SendToServer()
 end
 
 if not file.Exists("grhub_jukebox_queue.txt", "DATA") then
@@ -1041,7 +1048,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	RS.InPreview = true
 
 	local hub = vgui.Create("hub_window")
-	hub:SetTitle("Server Hub")
+	hub:SetTitle(RS.HubTitle)
 	hub:SetSize(ScrW()-100, ScrH()-100)
 	
 	hub:Center()
@@ -1052,18 +1059,19 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	hub.largemulti = vgui.Create("hub_multipanel2",hub)
 
-	// padded size: 1008, 536
-	// top left: 8, 32
+	-- padded size: 1008, 536
+	-- top left: 8, 32
 
 	hub.largemulti:SetSize(hub:GetWide()-16, hub:GetTall() - 32 - 8)
 	hub.largemulti:SetPos(8,32)
 	local storetab = hub.largemulti:AddTab("Store")
-	//local inventory = hub.largemulti:AddTab("Inventory")
+	--local inventory = hub.largemulti:AddTab("Inventory")
 	local info = hub.largemulti:AddTab("Coming Soon[1]")
 	local juketab = hub.largemulti:AddTab("Jukebox")
 	local supp = hub.largemulti:AddTab("Support Us")
 	local adm = hub.largemulti:AddTab("Admin")
-	local soon = hub.largemulti:AddTab("Coming Soon[2]") // the illusion of progress
+	local soon = hub.largemulti:AddTab("Coming Soon[2]") -- the illusion of progress
+
 
 	supp.html = vgui.Create("DHTML", supp)
 	supp.html:OpenURL("http://gameredacted.net/donate.php")
@@ -1079,13 +1087,12 @@ function RS:CreateHubWindow( hubdata, opentab )
 	end
 	supp.butt.DoClick = function() gui.OpenURL("http://gameredacted.net/donate.php") end
 
-	hub.largemulti:SetTab( opentab )
 	hub.largemulti:DisableTab( 6 )
 	hub.largemulti:DisableTab( 2 )
 
-	// below the navbar
-	// top left: 8, 72
-	// preview store items
+	-- below the navbar
+	-- top left: 8, 72
+	-- preview store items
 	local previewcon = vgui.Create("DPanel", storetab)
 	previewcon:SetSize( storetab:GetWide()*0.3333333333 -8, storetab:GetTall() - 36)
 	previewcon:SetPos(storetab:GetWide()*0.66666666666 + 8, 24)
@@ -1108,7 +1115,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 					cx = cx + cs 
 				end
 				surface.DrawRect(cx,cy,cs,cs)
-				//draw.SimpleText(tostring(i)..","..tostring(j%2),"Screen_Tiny",cx,cy,Color(0,0,0))
+				--draw.SimpleText(tostring(i)..","..tostring(j%2),"Screen_Tiny",cx,cy,Color(0,0,0))
 			end
 		end
 	end
@@ -1142,7 +1149,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
 	RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor()
 	function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
-	//function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
+	--function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
 	RS.PlayerModelPreview.rot = 0
 	RS.PlayerModelPreview.rotmod = 0
 	RS.PlayerModelPreview.ox = 0
@@ -1160,7 +1167,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function RS.PlayerModelPreview:OnMouseReleased( key )
 		if key == MOUSE_LEFT then
 			self.dragging = false
-			//self.rot = self.rotmod
+			--self.rot = self.rotmod
 		end
 	end
 
@@ -1171,12 +1178,12 @@ function RS:CreateHubWindow( hubdata, opentab )
 		end
 			self.ox = cx
 
-		//print(self.rot,self.ox,self.nx,self.dragging)
+		--print(self.rot,self.ox,self.nx,self.dragging)
 	end
 	function RS.PlayerModelPreview:DrawModel()
 		
 
-		if not LocalPlayer():Alive() or LocalPlayer():GetObserverMode() != OBS_MODE_NONE then return else self.Entity:DrawModel() end
+		if not LocalPlayer():Alive() or LocalPlayer():GetObserverMode() ~= OBS_MODE_NONE then return else self.Entity:DrawModel() end
 
 		for id, m in pairs(RS.ClientSideModels) do
 		if IsValid(m) then
@@ -1190,9 +1197,9 @@ function RS:CreateHubWindow( hubdata, opentab )
 					local x = m.posoff.x * attach.Ang:Right()
 					local y = m.posoff.y * attach.Ang:Forward()
 					local z = m.posoff.z * attach.Ang:Up()
-					//print(x,y,z)
-					//print( Vector(x,y,z) )
-					//print(posoff2)
+					--print(x,y,z)
+					--print( Vector(x,y,z) )
+					--print(posoff2)
 					m:SetPos(attach.Pos + x + y + z)
 					local ang = attach.Ang
 					ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
@@ -1205,7 +1212,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 					if m.isToken then
 						if RS.Items[m.class].IsToken == true then
-							//print("Drawing Token")
+							--print("Drawing Token")
 							cam.Start3D2D(m:GetPos()+ang:Up()*3.5, ang, 0.105)
 								RS.Items[m.class]:DrawTokenFace(0,0)
 							cam.End3D2D()
@@ -1255,7 +1262,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	
 	store.Categories = {}
 	for k,v in ipairs(RS.Categories) do
-		if v != "tokens" then
+		if v ~= "tokens" then
 			local tab = store:AddTab(string.CapFirst(v))
 			tab.scr = vgui.Create("DScrollPanel", tab)
 			tab.scr:SetSize(tab:GetWide()-4, tab:GetTall()-16-4)
@@ -1275,12 +1282,14 @@ function RS:CreateHubWindow( hubdata, opentab )
 	end
 
 	if RS.Items then
-		for k,v in pairs(RS.Items) do
+		for k,v2 in pairs(RS.ItemsOrdered) do
+			v = RS.Items[v2] -- some black magic to make it all ordered. I'm pretty sure i'm my own grandfather now.
 			if v.Buyable == true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
 				icon:SetStock( hubdata.stock[v.Class] )
-				//print(v.Category)
+				--icon:SetWide( store.Categories[ v.Category ]:GetWide()/6 - 7*4 )
+				--print(v.Category)
 				store.Categories[ v.Category ]:Add( icon )
 			end
 		end
@@ -1304,12 +1313,12 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	RS.InventoryList = inventory.list
 
-	//add inventory items
+	--add inventory items
 	if hubdata.owneditems then
 		for k,v in ipairs(hubdata.owneditems) do
 			local icon = vgui.Create("hub_icon")
 			local worked = icon:SetItem(RS.Items[v["class"]])
-			if worked != false then
+			if worked ~= false then
 				icon:SetInventoryItem( true )
 				icon:SetEquipped( tobool(v["equipped"]) )
 				icon:SetID( tonumber(v["ID"]) )
@@ -1321,7 +1330,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		end
 	end
 
-	//information
+	--information
 	info.html = vgui.Create("DHTML", info)
 	info.html:SetSize(info:GetWide(),info:GetTall())
 	info.html:SetPos(0,0)
@@ -1347,7 +1356,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.browse = juke:AddTab("Tracklist")
 
 
-	//jukebox controls size: parentwidth, 100
+	--jukebox controls size: parentwidth, 100
 	juke.play = vgui.Create("hub_button", juke.browse)
 	juke.play:SetSize(92,92)
 	juke.play:SetPos(2, juke.browse:GetTall()-106)
@@ -1359,7 +1368,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		RS.JukePlayer:OpenURL(RS.JukeCurrent[3])
 	end
 
-	//stop ■
+	--stop ■
 	juke.stop = vgui.Create("hub_button", juke.browse)
 	juke.stop:SetSize(92,92)
 	juke.stop:SetPos(92+4, juke.browse:GetTall()-106)
@@ -1393,7 +1402,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	end
 	juke.nxt:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
 
-	// cycle modes
+	-- cycle modes
 	juke.cycleall = vgui.Create("hub_button", juke.browse)
 	juke.cycleall:SetSize(92,92/4)
 	juke.cycleall:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*0)
@@ -1561,6 +1570,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	RS.JukeVolume = GetConVarNumber( "grhub_jukebox_volume" )
 
+	print(type(opentab), opentab)
+	hub.largemulti:SetTab( opentab ) -- set the current open tab after everything is initialised
 end
 
 RS.JukeVolume = 0
@@ -1625,16 +1636,16 @@ net.Receive("UpdateInventory", function()
 			RS.InventoryList:Add(icon)
 		end
 	end
-	//print(LocalPlayer():GetPlayerColor())
-	//refresh the preview
+	--print(LocalPlayer():GetPlayerColor())
+	--refresh the preview
 	timer.Create("ReloadPreview",1,1, function()
 		if RS.PlayerModelPreview.Entity then
 			RS.PlayerModelPreview:SetModel( LocalPlayer():GetModel() )
 			RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
 			RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
 			RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor()
-			//function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
-			//function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
+			--function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
+			--function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
 		end
 	end)
 

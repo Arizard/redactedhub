@@ -6,9 +6,9 @@ resource.AddFile("materials/trails/color.vmt")
 
 function RS:Initialize()
 	RS:DBInit()
-	if RS.ExistingItems != nil and RS.ExistingItems != false then
+	if RS.ExistingItems ~= nil and RS.ExistingItems ~= false then
 		print("Printing Database")
-		//PrintTable(RS.ExistingItems)
+		--PrintTable(RS.ExistingItems)
 	end
 end
 
@@ -24,6 +24,8 @@ util.AddNetworkString("DestroyClientModel")
 
 util.AddNetworkString("OpenHub")
 
+util.AddNetworkString("RS:JukeboxNowPlaying")
+
 concommand.Add("hub_open2", function(ply, cmd, args) 
 
 	if not ply.LastHubOpen then ply.LastHubOpen = 0 end
@@ -34,7 +36,9 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 		local data = {}
 		data.owneditems = RS:GetOwnedItems(ply)
 		data.stock = {}
-		data.opentab = 1
+		data.opentab = tonumber(args[1] or 1)
+
+		print(type(data.opentab), data.opentab)
 
 		if args[1] then
 			data.opentab = args[1]
@@ -44,7 +48,7 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 			data.stock[k] = RS:GetStoreStock(v.Class)
 		end
 
-		//PrintTable(data.stock)
+		--PrintTable(data.stock)
 
 		net.WriteTable(data)
 		net.Send(ply)
@@ -81,6 +85,13 @@ function RS:StoreChat( ply, msg )
 	end
 end
 
+function RS:StoreBroadcast( msg )
+	net.Start("RS:StoreChat")
+	net.WriteString( msg )
+	net.Broadcast()
+	print( msg )
+end
+
 
 
 function RS:BuyItem( ply, class )
@@ -90,7 +101,7 @@ function RS:BuyItem( ply, class )
 	local stock = self:GetStoreStock( class )
 	local amt = 1
 	local money = ply:GetMoney()
-	//print("Buyable?",item.Buyable)
+	--print("Buyable?",item.Buyable)
 	if item.Buyable == false then
 		RS:StoreMessage(ply, "You cannot buy this item.")
 		return
@@ -105,7 +116,7 @@ function RS:BuyItem( ply, class )
 		return
 	end
 
-	//assuming the two statements above don't trigger..
+	--assuming the two statements above don't trigger..
 	ply:SubMoney(price)
 	RS:AddStoreMoney( price )
 
@@ -114,7 +125,7 @@ function RS:BuyItem( ply, class )
 
 	self:ChangeItemOwner(id, ply)
 
-	//RS:PlayerEquip( ply, id )
+	--RS:PlayerEquip( ply, id )
 
 	RS:UpdateInventory( ply )
 
@@ -169,9 +180,9 @@ net.Receive("ToggleItem", function(len, ply)
 
 	local n = net.ReadInt( 32 )
 	print("Toggling item",n,"for",ply:Nick())
-	//print("Is Item Equipped?",RS:ItemEquipped( n ))
+	--print("Is Item Equipped?",RS:ItemEquipped( n ))
 	RS:ToggleItem( ply, n )
-	ItemEquipAll( ply ) // re-equip all
+	ItemEquipAll( ply ) -- re-equip all
 	RS:UpdateInventory( ply )
 	RS:StoreMessage(ply, "Toggled item "..tostring(n) )
 end)
@@ -186,12 +197,12 @@ function RS:UpdateInventory( ply )
 
 end
 
-/// Now handle equipped and unequipped items.
+--/ Now handle equipped and unequipped items.
 
 function ItemEquipAll( ply )
 	if ply:Team() == TEAM_SPECTATOR or not ply:Alive() then  return end
 	local eq = RS:GetEquippedItems( ply )
-	if eq != nil then
+	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			if RS.Items[v["class"]] then
 				if RS.Items[v["class"]].Category == "hats" or RS.Items[v["class"]].Category == "tokens" then
@@ -205,24 +216,24 @@ end
 
 function ItemPlayerSpawn( ply )
 	ply:SetRenderMode( RENDERMODE_TRANSALPHA )
-	//print(ply:SteamID64())
-	//get equipped items
+	--print(ply:SteamID64())
+	--get equipped items
 	ItemEquipAll( ply )
 
 	if ply:Team() == TEAM_SPECTATOR then return end
 	local eq = RS:GetEquippedItems( ply )
-	if eq != nil then
+	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			RS.Items[v["class"]]:OnSpawn( ply, tonumber(v["ID"]) )
 		end
 	end
 
 end
-//hook.Add("PlayerLoadout", "RS:PlayerSpawn", ItemPlayerSpawn)
+--hook.Add("PlayerLoadout", "RS:PlayerSpawn", ItemPlayerSpawn)
 hook.Remove("PlayerLoadout","RS:PlayerSpawn")
 function ItemHolsterAll( ply )
 	local eq = RS:GetEquippedItems( ply )
-	if eq != nil then
+	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			RS:PlayerHolster( ply, tonumber(v["ID"]) )
 		end
@@ -232,7 +243,7 @@ function ItemPlayerDeath( ply )
 	ItemHolsterAll( ply )
 	if ply:Team() == TEAM_SPECTATOR then return end
 	local eq = RS:GetEquippedItems( ply )
-	if eq != nil then
+	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			RS.Items[v["class"]]:OnDeath( ply, tonumber(v["ID"]) )
 		end
@@ -315,7 +326,7 @@ hook.Add("PlayerInitialSpawn","RS:InitialSpawn",ShopInitialSpawn)
 function ShopFirstSpawn( ply )
 
 	if ply.ShopFirstSpawn == true then
-		if not ply:Alive() or ply:GetObserverMode() != OBS_MODE_NONE then
+		if not ply:Alive() or ply:GetObserverMode() ~= OBS_MODE_NONE then
 			ItemHolsterAll( ply )
 		end
 
@@ -335,7 +346,7 @@ hook.Add("PlayerSpawn","RS:FirstSpawn", ShopFirstSpawn)
 
 function ShopLoadout( ply )
 
-	if not ply:Alive() or ply:GetObserverMode() != OBS_MODE_NONE then
+	if not ply:Alive() or ply:GetObserverMode() ~= OBS_MODE_NONE then
 		ItemHolsterAll( ply )
 	else
 		ply.HasLoadedOutAndNeedsEquip = true
@@ -346,7 +357,7 @@ hook.Add("PlayerLoadout", "RS:Loadout", ShopLoadout)
 
 
 
-//do stuff on team changed
+--do stuff on team changed
 function RS:PlyTeamChanged(ply, ot, nt)
 
 	if nt == TEAM_SPECTATOR then
@@ -359,7 +370,7 @@ hook.Add("OnPlayerChangedTeam","RS:PlyTeamChanged",RS.PlyTeamChanged)
 timer.Create("CheckForSpectators", 5,0, function()
 
 	for k, ply in ipairs(player.GetAll()) do
-		if ply:GetObserverMode() != OBS_MODE_NONE or ply:Team() == TEAM_SPECTATOR or not ply:Alive() then
+		if ply:GetObserverMode() ~= OBS_MODE_NONE or ply:Team() == TEAM_SPECTATOR or not ply:Alive() then
 			ItemHolsterAll( ply )
 		else
 			if ply.HasLoadedOutAndNeedsEquip == true then
@@ -383,7 +394,7 @@ end
 hook.Add("PlayerDisconnect","RS:PlayerDisconnect",ShopPlayerDisconnect)
 
 concommand.Add("shop_taunt", function(ply, cmd, args) -- handle taunts
-	if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and ply:Team() != TEAM_SPECTATOR then
+	if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and ply:Team() ~= TEAM_SPECTATOR then
 		if not ply.NextTaunt then ply.NextTaunt = 0 end
 		if ply.ChoiceTaunt and ply.NextTaunt then
 			if ply.NextTaunt < CurTime() then
@@ -428,4 +439,14 @@ hook.Add("PlayerInitialSpawn", "UpdateDonatorStatus", UpdateDonatorStatus)
 hook.Add("PlayerLoadout", "UpdateDonatorStatus", UpdateDonatorStatus)
 
 
+-- jukebox notification functionality
+local lastJukeboxUpdate = 0
+local jukeUpdateInterval = 60
+net.Receive("RS:JukeboxNowPlaying", function(len, ply)
+	local current = net.ReadTable()
 
+	if lastJukeboxUpdate+jukeUpdateInterval > CurTime() then return end
+
+	lastJukeboxUpdate = CurTime()
+	RS:StoreBroadcast(ply:Nick().." is now listening to "..current[2].." by "..current[1].."! Type /juke to listen to more music!")
+end)

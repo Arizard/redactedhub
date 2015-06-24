@@ -1,7 +1,7 @@
 RS.JukeSongs = {}
 
 -- this retrieves it from the list of things on the website so that the servers have more than one thing ya feel?
-http.Fetch( "http://gameredacted.net/jukebox_songs.lua",
+http.Fetch( "https://raw.githubusercontent.com/Arizard/redactedhub/master/jukebox_songs.lua",
 
 	function( body, len, headers, code )
 		local luatorun = body
@@ -10,7 +10,7 @@ http.Fetch( "http://gameredacted.net/jukebox_songs.lua",
 
 		RunString( luatorun )
 
-		print( luatorun, tempsongs )
+		--print( luatorun, tempsongs )
 
 		if tempsongs == nil then tempsongs = {} end
 
@@ -21,7 +21,7 @@ http.Fetch( "http://gameredacted.net/jukebox_songs.lua",
 			end
 		end
 
-		--PrintTable( RS.JukeSongs )
+		PrintTable( RS.JukeSongs )
 	end,
 
 	function( error )

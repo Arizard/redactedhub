@@ -25,10 +25,7 @@ end
 function ITEM:OnThink(ply, id)
 end
 
-function ITEM:DrawBoostIcon()
-	// 117x117
-	local x = 2
-	local y = 2
+function ITEM:DrawBoostIcon(x,y)
 	surface.SetDrawColor(16,16,16)
 	surface.DrawRect(x,y,117,117)
 

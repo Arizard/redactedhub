@@ -2,13 +2,15 @@ print("loaded hub_init.lua")
 
 RS = {} -- Redacted Shop aka hub
 
-RS.PDataMoney = "redacted_dosh_2015_3"
+
 
 if SERVER then
+	include("hub/sh_config.lua")
 	include("hub/shared.lua")
 	include("hub/init.lua")
 	include("hub/sv_database.lua")
 	include("hub/sv_commands.lua")
+	AddCSLuaFile("hub/sh_config.lua")
 	AddCSLuaFile("hub/shared.lua")
 	AddCSLuaFile("hub/cl_menus.lua")
 	AddCSLuaFile("hub/cl_jukebox_songs.lua")
@@ -17,10 +19,10 @@ if SERVER then
 	--go through all the shop files, and add them to cs lua
 	--folder structure is
 	--hub/shop/category/unique_item_name.lua
-	local files, categories = file.Find("autorun/hub/shop/*","LUA")
+	local files, categories = file.Find("autorun/hub/shop/*","LUA", "namedesc")
 
 	for k,cat in ipairs(categories) do
-		local itemfiles = file.Find("autorun/hub/shop/"..cat.."/*.lua", "LUA")
+		local itemfiles = file.Find("autorun/hub/shop/"..cat.."/*.lua", "LUA", "namedesc")
 
 		for kk, f in ipairs(itemfiles) do
 			local path = "autorun/hub/shop/"..cat.."/"..f
@@ -33,6 +35,7 @@ if SERVER then
 end
 
 if CLIENT then
+	include("hub/sh_config.lua")
 	include("hub/shared.lua")
 	include("hub/cl_menus.lua")
 	include("hub/cl_jukebox_songs.lua")
@@ -43,6 +46,8 @@ if CLIENT then
 	end
 
 end
+
+RS.PDataMoney = RS.PDataProvider
 
 RS.Items = {}
 RS.Caterogies = {}
@@ -65,11 +70,14 @@ end
 function blank_item:OnHolster()
 end
 
-local files, categories = file.Find("autorun/hub/shop/*","LUA")
+local files, categories = file.Find("autorun/hub/shop/*","LUA", "namedesc")
 RS.Categories = categories
+RS.ItemsOrdered = {}
+local catnum = 0
 
 for k,cat in ipairs(categories) do
-	local itemfiles = file.Find("autorun/hub/shop/"..cat.."/*.lua", "LUA")
+	local itemfiles = file.Find("autorun/hub/shop/"..cat.."/*.lua", "LUA", "namedesc")
+	PrintTable( itemfiles )
 
 	for kk, f in ipairs(itemfiles) do
 		local path = "autorun/hub/shop/"..cat.."/"..f
@@ -88,8 +96,9 @@ for k,cat in ipairs(categories) do
 		end
 
 		RS.Items[itemname] = table.Copy(ITEM)
-
+		RS.ItemsOrdered[catnum + kk] = itemname
 	end
+	catnum = catnum + #itemfiles
 end
 
 RS:Initialize()
