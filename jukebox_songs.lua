@@ -17,6 +17,9 @@
 	["Red"] = {
 		["Lost [Acoustic Version] (bhop_addict_v2 ending song)"] = "https://www.youtube.com/watch?v=2G7hfkGlgmc"
 	},
+	["Yung Lean"] = {
+		["Kyoto"] = "https://www.youtube.com/watch?v=tMgkt9jdjTU"
+	},
 	["Haddaway"] = {
 		["What Is Love?"] = "https://www.youtube.com/watch?v=xhrBDcQq2DM",
 	},
