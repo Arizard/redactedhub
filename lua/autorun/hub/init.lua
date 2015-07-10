@@ -229,8 +229,8 @@ function ItemPlayerSpawn( ply )
 	end
 
 end
---hook.Add("PlayerLoadout", "RS:PlayerSpawn", ItemPlayerSpawn)
-hook.Remove("PlayerLoadout","RS:PlayerSpawn")
+hook.Add("PlayerLoadout", "RS:PlayerSpawn", ItemPlayerSpawn)
+--hook.Remove("PlayerLoadout","RS:PlayerSpawn")
 function ItemHolsterAll( ply )
 	local eq = RS:GetEquippedItems( ply )
 	if eq ~= nil then
