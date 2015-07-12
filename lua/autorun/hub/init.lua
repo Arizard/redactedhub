@@ -65,7 +65,8 @@ end)
 
 hook.Add("ShowSpare1", "OpenHubStuff", function(ply)
 
-	--ply:ConCommand("hub_open2")
+	RS:StoreChat( ply, "Opening pointstore - You might experience a bit of lag.")
+	ply:ConCommand("hub_open2")
 
 end)
 
