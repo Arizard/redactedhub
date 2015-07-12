@@ -15,7 +15,7 @@ function ITEM:OnSpawn(ply, id)
 	local owns1, equipped1 = RS:DoesPlayerOwnClass( ply, "jump3" )
 
 	if equipped and (not equipped1) then
-		ply:SetJumpPower( Lerp(0.666, 200,260) )
+		ply:SetJumpPower( Lerp(0.666, 200,230) )
 	end
 end
 
