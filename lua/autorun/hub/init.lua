@@ -136,14 +136,14 @@ end
 net.Receive("SellItem", function(len, ply)
 
 	local id  = net.ReadInt(32)
-	ply:ChatPrint( "Received sale id "..tostring(id) )
+	--ply:ChatPrint( "Received sale id "..tostring(id) )
 
 	RS:SellItem( ply, id )
 
 end)
 
 function RS:SellItem( ply, id )
-	ply:ChatPrint("Attempting to sell item",id)
+	--ply:ChatPrint("Attempting to sell item",id)
 	if RS:DoesPlayerOwn( ply, id ) then
 		local item = RS:GetItemTable( id )
 

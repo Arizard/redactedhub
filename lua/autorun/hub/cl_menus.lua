@@ -1608,7 +1608,7 @@ function SellItem( id )
 	net.Start("SellItem")
 	net.WriteInt( tonumber(id), 32 )
 	net.SendToServer()
-	LocalPlayer():ChatPrint( "networking item sale "..tostring(id) )
+	--LocalPlayer():ChatPrint( "networking item sale "..tostring(id) )
 end
 
 function ToggleItem( id )
