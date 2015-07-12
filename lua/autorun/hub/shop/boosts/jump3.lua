@@ -7,7 +7,7 @@ function ITEM:OnEquip(ply, id)
 end
 
 function ITEM:OnHolster(ply, id)
-	ply:SetJumpPower( 290 )
+	ply:SetJumpPower( 200 )
 end
 
 function ITEM:OnSpawn(ply, id)
@@ -15,7 +15,7 @@ function ITEM:OnSpawn(ply, id)
 	local owns1, equipped1 = RS:DoesPlayerOwnClass( ply, "jump3" )
 
 	if (equipped) and (equipped1) then
-		ply:SetJumpPower( 310 )
+		ply:SetJumpPower( 260 )
 	end
 end
 

@@ -155,5 +155,11 @@
 	},
 	["Harry Enfield"] = {
 		["Loadsamoney"] = "https://www.youtube.com/watch?v=ON-7v4qnHP8",
+	},
+	["Yung Lean"] = {
+		["Kyoto"] = "https://www.youtube.com/watch?v=tMgkt9jdjTU",
+		["Oreomilkshake"] = "https://www.youtube.com/watch?v=-VxOwSNvXTA",
+		["Ginseng Strip 2002"] = "https://www.youtube.com/watch?v=vrQWhFysPKY",
+		["Yoshi City"] = "https://www.youtube.com/watch?v=iX1a3JngmpI",
 	}
 }
