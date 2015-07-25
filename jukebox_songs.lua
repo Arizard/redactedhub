@@ -161,6 +161,7 @@
 		["Oreomilkshake"] = "https://www.youtube.com/watch?v=-VxOwSNvXTA",
 		["Ginseng Strip 2002"] = "https://www.youtube.com/watch?v=vrQWhFysPKY",
 		["Yoshi City"] = "https://www.youtube.com/watch?v=iX1a3JngmpI",
-		["Lightsaber // Saviour"] = "https://www.youtube.com/watch?v=PN4sazbviho"
+		["Lightsaber // Saviour"] = "https://www.youtube.com/watch?v=PN4sazbviho",
+		["Hurt"] = "https://www.youtube.com/watch?v=stgrSjynPKs",
 	}
 }
