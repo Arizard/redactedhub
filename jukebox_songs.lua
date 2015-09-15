@@ -163,5 +163,13 @@
 		["Yoshi City"] = "https://www.youtube.com/watch?v=iX1a3JngmpI",
 		["Lightsaber // Saviour"] = "https://www.youtube.com/watch?v=PN4sazbviho",
 		["Hurt"] = "https://www.youtube.com/watch?v=stgrSjynPKs",
-	}
-}
+	},
+	["Skrillex and Diplo"] = {
+		["Where Are U Now (feat. Justin Bieber)"] = "https://www.youtube.com/watch?v=nntGTK2Fhb0"
+	},
+	["Justin Bieber"] = {
+		["What Do U Mean"] = "https://www.youtube.com/watch?v=NywWB67Z7zQ"
+	},
+	["Macintosh Plus"] = {
+		["リサフランク420 / 現代のコンピュー"] = "https://www.youtube.com/watch?v=cU8HrO7XuiE"
+	},
