@@ -171,6 +171,6 @@
 		["What Do U Mean"] = "https://www.youtube.com/watch?v=NywWB67Z7zQ"
 	},
 	["Macintosh Plus"] = {
-		["リサフランク420 / 現代のコンピュー"] = "https://www.youtube.com/watch?v=cU8HrO7XuiE"
+		[ [[リサフランク420 / 現代のコンピュー]] ] = "https://www.youtube.com/watch?v=cU8HrO7XuiE"
 	},
 }
