@@ -173,3 +173,4 @@
 	["Macintosh Plus"] = {
 		["リサフランク420 / 現代のコンピュー"] = "https://www.youtube.com/watch?v=cU8HrO7XuiE"
 	},
+}
