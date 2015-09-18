@@ -2,31 +2,27 @@ print("RedactedHub - Loaded cl_init.lua")
 include("shared.lua")
 
 
-local fontstandard = "Lucida Grande"
+local fontstandard = "Roboto"
 surface.CreateFont("Screen_Large", {
-	font = fontstandard,
+	font = fontstandard.." Bold",
 	size = 32,
 	antialias = true,
-	weight = 800
 })
 surface.CreateFont("Screen_Medium", {
-	font = fontstandard,
+	font = fontstandard.." Medium",
 	size = 24,
 	antialias = true,
-	weight = 800
 })
 
 surface.CreateFont("Screen_Small", {
-	font = fontstandard,
-	size = 18,
+	font = fontstandard.." Condensed",
+	size = 22,
 	antialias = true,
-	weight = 800
 })
 surface.CreateFont("Screen_Tiny", {
-	font = fontstandard,
-	size = 12,
+	font = "Roboto Condensed",
+	size = 14,
 	antialias = true,
-	weight = 600
 })
 
 function RS:ReceiveVip()

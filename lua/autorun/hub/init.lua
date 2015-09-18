@@ -1,6 +1,7 @@
 print("Loaded init.lua")
 
 include("sv_database.lua")
+include("sv_commands.lua")
 
 resource.AddFile("materials/trails/color.vmt")
 

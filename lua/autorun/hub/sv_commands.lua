@@ -319,7 +319,7 @@ function RS:AddChatCommandAlias(cmd, cmd2)
 	print("RedactedHub - Added chat command alias "..cmd.." -> "..cmd2)
 end
 
-local function ProcessChat( ply, text, public )
+function RS:ProcessChat( ply, text, public )
 
 	local args = string.Split(text, " ")
 	local prefix = string.sub(args[1],1,1)
@@ -338,26 +338,28 @@ local function ProcessChat( ply, text, public )
 		if prefix == "/" then return false end -- make it silent if you use /
 	end
 
+	print("RedactedHub - Checking chat...")
+
 end
-hook.Add("PlayerSay","ProcessStoreChat",ProcessChat)
+hook.Add("PlayerSay","ProcessStoreChatRedactedHub",function( ply, text, pub ) RS:ProcessChat( ply, text, pub ) end )
 
 RS:AddChatCommand("test", function(ply, args)
 	RS:StoreChat(ply, "The commands work!") 
 end)
 
-RS:AddChatCommand("sendrd", function(ply, args)
+RS:AddChatCommand("sendam", function(ply, args)
 
 	ply:ConCommand("shop_sendpoints "..args[1].." "..args[2])
 
 end)
 
-RS:AddChatCommand("spawnrd", function(ply, args)
+RS:AddChatCommand("spawnam", function(ply, args)
 
 	ply:ConCommand("shop_spawnpoints "..args[1].." "..args[2])
 
 end)
 
-RS:AddChatCommand("setrd", function(ply, args)
+RS:AddChatCommand("setam", function(ply, args)
 
 	ply:ConCommand("shop_setpoints "..args[1].." "..args[2])
 
@@ -380,7 +382,7 @@ RS:AddChatCommand("restockempty", function(ply, args)
 	ply:ConCommand("shop_restock_if_empty "..(args[1] or ""))
 end)
 
-RS:AddChatCommand("addstorerd", function(ply, args)
+RS:AddChatCommand("addstoream", function(ply, args)
 	ply:ConCommand("shop_addstorepoints "..(args[1] or "") )
 end)
 

@@ -65,7 +65,7 @@ end
 function WINDOW:Paint()
 	HubDrawBlur(self, 6)
 
-	surface.SetDrawColor( 255,255,255, 13 )
+	surface.SetDrawColor( 0,0,0, 100 )
 	surface.DrawRect(0,0, self:GetWide(), self:GetTall())
 
 	draw.ShadowText( self.Title, "Screen_Small", self.padding, self.padding/2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1 )
@@ -208,8 +208,8 @@ function MPANEL:Init()
 	self.tabs = {}
 
 	self.color = {
-		Color(41, 128, 185),
-		Color(52, 152, 219)
+		Color(192, 57, 43),
+		Color(231, 76, 60)
 	}
 
 	self:PerformLayout()
@@ -311,7 +311,7 @@ function MPANEL:AddTab(str_name)
 	self.panels[str_name]:SetVisible(false)
 
 	self.panels[str_name].Paint = function(self, w, h)
-		surface.SetDrawColor(Color(225,225,225))
+		surface.SetDrawColor(Color(16,16,16, 150))
 		surface.DrawRect(0,0,w, h) -- meh
 	end
 
@@ -547,7 +547,7 @@ function ICON:Init()
 	self.b = vgui.Create("hub_button", self)
 	self.b:SetSize(117, 22)
 	self.b:SetPos(2,196-24)
-	self.b:SetColors(Color(128,128,128), Color(52, 152, 219))
+	self.b:SetColors(Color(128,128,128), Color(255,75,75))
 	
 	
 	self.trail = Material(")") -- brank
@@ -559,7 +559,7 @@ function ICON:PerformLayout()
 
 	if self.inv == false then
 		if self.item then
-			self.b:SetText(tostring(self.item.StorePrice).." RD")
+			self.b:SetText(tostring(self.item.StorePrice).." "..RS.Currency )
 
 			function self.b:DoClick()
 
@@ -591,7 +591,7 @@ function ICON:PerformLayout()
 end
 local eqmat = Material("icon16/user_green.png")
 function ICON:Paint()
-	surface.SetDrawColor(Color(41, 128, 185))
+	surface.SetDrawColor(Color(48,48,48,170))
 	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
 	if not self.item then return nil end
@@ -646,12 +646,18 @@ function ICON:SetItem( tab )
 		self:Remove()
 		return false
 	end
+
+	self.b:SetColors(Color(128,128,128), Color(255,40,40))
+
+	if (self.item.StorePrice <= LocalPlayer():GetMoney()) then
+		self.b:SetColors(Color(128,128,128), Color(75,255,75))
+	end
 	
 	self.oldcol = VecToCol(LocalPlayer():GetPlayerColor())
 	self.oldmat = LocalPlayer():GetMaterial()
 	self.oldpmod = LocalPlayer():GetModel()
 
-	self.b:SetText(tostring(self.item.StorePrice).." RD")
+	self.b:SetText(tostring(self.item.StorePrice).." "..RS.Currency)
 	if self.item.Category == "colours" then
 		self.model:SetModel("models/props_junk/metal_paintcan001a.mdl")
 		self.model:SetLookAt(Vector(0,0,0))
@@ -1005,7 +1011,7 @@ function RS:UpdateJukeQueue()
 		local jb = self.JukeQueueList:Add( "hub_button" )
 		jb:SetSize(self.JukeQueueList:GetWide()-1, 28)
 		jb:SetText(artist.." - "..song)
-		jb:SetColors(Color(128,128,128), Color(52, 152, 219))
+		jb:SetColors(Color(128,128,128, 90), Color(52, 152, 219, 90))
 		jb.link = link
 		jb.name = song
 		jb.artist = artist
@@ -1066,15 +1072,74 @@ function RS:CreateHubWindow( hubdata, opentab )
 	hub.largemulti:SetPos(8,32)
 	local storetab = hub.largemulti:AddTab("Store")
 	--local inventory = hub.largemulti:AddTab("Inventory")
-	local info = hub.largemulti:AddTab("Coming Soon[1]")
 	local juketab = hub.largemulti:AddTab("Jukebox")
 	local supp = hub.largemulti:AddTab("Support Us")
-	local adm = hub.largemulti:AddTab("Admin")
-	local soon = hub.largemulti:AddTab("Coming Soon[2]") -- the illusion of progress
+	local info = hub.largemulti:AddTab("Commands")
+
+	-- info panel, i.e commands
+	info.html = vgui.Create("DHTML", info)
+	info.html:SetSize(info:GetWide(),info:GetTall())
+	info.html:SetPos(0,0)
+	info.html:SetHTML( RS.InfoHTML )
+	function info.html:Paint()
+		surface.SetDrawColor(32,32,32)
+		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
+	end
+	
+	if LocalPlayer():IsSuperAdmin() then
+		local adm = hub.largemulti:AddTab("Admin")
+
+		-- admin tab
+		adm.scr = vgui.Create("DScrollPanel", adm)
+		adm.scr:SetSize(adm:GetWide()-4, adm:GetTall() -16 -4)
+		adm.scr:SetPos(2,2)
+		RS:ImproveScrollbar( adm.scr:GetVBar() )
+
+		-- create a list of players and then give them properties
+
+		adm.list = vgui.Create("DListView")
+		adm.scr:AddItem( adm.list )
+		adm.list:SetPos(0,0)
+		adm.list:SetSize( adm.scr:GetWide(), adm.scr:GetTall() )
+		
+		adm.list:AddColumn("Player")
+		adm.list:AddColumn("SteamID")
+		adm.list:AddColumn("Balance")
+		adm.list:AddColumn("Is Admin")
+
+		for k,v in ipairs( player.GetAll() ) do
+			local line = adm.list:AddLine( v:Nick(), v:SteamID(), v:GetMoney(), v:IsSuperAdmin() and "Super Admin" or "" )
+		end
+
+		function adm.list:OnClickLine( li, is )
+			local menu = DermaMenu()
+
+			local givevip = menu:AddOption("Give VIP")
+			local takevip = menu:AddOption("Revoke VIP")
+			local sid = menu:AddOption("Copy SteamID")
+
+			givevip:SetIcon("icon16/star.png")
+			takevip:SetIcon("icon16/box.png")
+			sid:SetIcon("icon16/page_copy.png")
+
+			function givevip:DoClick()
+				RunConsoleCommand("shop_givevip", li:GetValue(1) )
+			end
+			function takevip:DoClick()
+				RunConsoleCommand("shop_takevip", li:GetValue(1) )
+			end
+			function sid:DoClick()
+				SetClipboardText( li:GetValue(2) )
+			end
+
+			menu:Open()
+		end
+	end
+
 
 
 	supp.html = vgui.Create("DHTML", supp)
-	supp.html:OpenURL("http://gameredacted.net/donate.php")
+	supp.html:OpenURL("http://aftermind.gg")
 	supp.html:SetSize(supp:GetWide(),supp:GetTall())
 	--we need to create a button over the screen, so that when they click it opens through the steam overlay.
 	supp.butt = vgui.Create("DButton", supp)
@@ -1085,10 +1150,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 		surface.DrawRect(0,0,w,h)
 		draw.ShadowText("Click to view in Steam Overlay", "Screen_Large", w/2, h/2-32, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,1)
 	end
-	supp.butt.DoClick = function() gui.OpenURL("http://gameredacted.net/donate.php") end
+	supp.butt.DoClick = function() gui.OpenURL("http://aftermind.gg") end
 
-	hub.largemulti:DisableTab( 6 )
-	hub.largemulti:DisableTab( 2 )
+	--hub.largemulti:DisableTab( 6 )
+	--hub.largemulti:DisableTab( 2 )
 
 	-- below the navbar
 	-- top left: 8, 72
@@ -1128,7 +1193,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		surface.SetDrawColor(Color(231, 76, 60))
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-		draw.ShadowText("You have "..tostring(LocalPlayer():GetMoney()).." RD", "Screen_Small", self:GetWide()/2, self:GetTall()/2 - 11, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText("You have "..tostring(LocalPlayer():GetMoney()).." "..RS.Currency, "Screen_Small", self:GetWide()/2, self:GetTall()/2 - 11, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 	end
 
 	local smoneybg = vgui.Create("DPanel", previewcon)
@@ -1136,10 +1201,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 	smoneybg:SetPos(0,0)
 
 	function smoneybg:Paint()
-		surface.SetDrawColor(Color(155, 89, 182))
+		surface.SetDrawColor(Color(16,16,16))
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-		draw.ShadowText("The Store has "..tostring(GetGlobalInt("StoreMoney")).." RD", "Screen_Small", self:GetWide()/2, self:GetTall()/2 - 11, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText("The Store has "..tostring(GetGlobalInt("StoreMoney")).." "..RS.Currency, "Screen_Small", self:GetWide()/2, self:GetTall()/2 - 11, Color(255,75,75), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 	end
 
 	RS.PlayerModelPreview = vgui.Create("DModelPanel",previewcon)
@@ -1330,15 +1395,15 @@ function RS:CreateHubWindow( hubdata, opentab )
 		end
 	end
 
-	--information
-	info.html = vgui.Create("DHTML", info)
-	info.html:SetSize(info:GetWide(),info:GetTall())
-	info.html:SetPos(0,0)
-	info.html:OpenURL("http://gameredacted.net")
-	function info.html:Paint()
-		surface.SetDrawColor(32,32,32)
-		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
-	end
+	-- --information
+	-- info.html = vgui.Create("DHTML", info)
+	-- info.html:SetSize(info:GetWide(),info:GetTall())
+	-- info.html:SetPos(0,0)
+	-- info.html:OpenURL("http://gameredacted.net")
+	-- function info.html:Paint()
+	-- 	surface.SetDrawColor(32,32,32)
+	-- 	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
+	-- end
 
 	local juke = vgui.Create("hub_multipanel", juketab)
 	juke:ArrowsVisible( false )
@@ -1362,7 +1427,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.play:SetPos(2, juke.browse:GetTall()-106)
 	juke.play:SetFont("Screen_Large")
 	juke.play:SetText("▶")
-	juke.play:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.play:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 	juke.play:SetOffsets(0,-18)
 	function juke.play:DoClick()
 		RS.JukePlayer:OpenURL(RS.JukeCurrent[3])
@@ -1378,7 +1443,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.stop:DoClick()
 		RS.JukePlayer:OpenURL("http://gameredacted.net/deathrun")
 	end
-	juke.stop:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.stop:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	juke.prev = vgui.Create("hub_button", juke.browse)
 	juke.prev:SetSize(92,92)
@@ -1389,7 +1454,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.prev:DoClick()
 		RS:JukeboxPlayPrevious()
 	end
-	juke.prev:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.prev:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	juke.nxt = vgui.Create("hub_button", juke.browse)
 	juke.nxt:SetSize(92,92)
@@ -1400,7 +1465,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.nxt:DoClick()
 		RS:JukeboxPlayNext();
 	end
-	juke.nxt:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.nxt:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	-- cycle modes
 	juke.cycleall = vgui.Create("hub_button", juke.browse)
@@ -1412,7 +1477,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.cycleall:DoClick()
 		RS.JukeState = "cycleall"
 	end
-	juke.cycleall:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.cycleall:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 	
 	juke.cyclequeue = vgui.Create("hub_button", juke.browse)
 	juke.cyclequeue:SetSize(92,92/4)
@@ -1423,7 +1488,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.cyclequeue:DoClick()
 		RS.JukeState = "cyclequeue"
 	end
-	juke.cyclequeue:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.cyclequeue:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	juke.shuffleall = vgui.Create("hub_button", juke.browse)
 	juke.shuffleall:SetSize(92,92/4)
@@ -1434,7 +1499,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.shuffleall:DoClick()
 		RS.JukeState = "shuffleall"
 	end
-	juke.shuffleall:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.shuffleall:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	juke.shufflequeue = vgui.Create("hub_button", juke.browse)
 	juke.shufflequeue:SetSize(92,92/4)
@@ -1445,7 +1510,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.shufflequeue:DoClick()
 		RS.JukeState = "shufflequeue"
 	end
-	juke.shufflequeue:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.shufflequeue:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	juke.displaymode = vgui.Create("hub_button", juke.browse)
 	juke.displaymode:SetSize(juke.browse:GetWide() - (92+2)*5 - 4,92)
@@ -1456,7 +1521,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.displaymode:Think()
 		self:SetText(JukeStates[ RS.JukeState ])
 	end
-	juke.displaymode:SetColors( Color(41, 128, 185), Color(52, 152, 219) )
+	juke.displaymode:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
 
 	juke.browse.scroll = vgui.Create("DScrollPanel",juke.browse)
 	juke.browse.scroll:SetSize( juke.browse:GetWide(), juke.browse:GetTall()-108 )
@@ -1485,7 +1550,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 			local jb = juke.browse.list:Add( "hub_button" )
 			jb:SetSize(juke.browse:GetWide(), 28)
 			jb:SetText(kk)
-			jb:SetColors(Color(128,128,128), Color(52, 152, 219))
+			jb:SetColors(Color(128,128,128, 90), Color(52, 152, 219, 90))
 			jb.link = vv
 			jb.name = kk
 			jb.artist = artist
@@ -1527,7 +1592,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.info:SetSize((queue:GetWide()-4)*0.66666 -1, 92)
 	juke.info:SetPos(2, queue:GetTall()-106)
 	function juke.info:Paint()
-		surface.SetDrawColor(Color(41, 128, 185))
+		surface.SetDrawColor(Color(41, 128, 185, 90))
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 		
 		draw.ShadowText("Now Playing: "..RS.JukeCurrent[2],"Screen_Large",16,8,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1)
@@ -1537,7 +1602,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.volume:SetSize((queue:GetWide()-4)*0.33333, 92)
 	juke.volume:SetPos(2 + (queue:GetWide()-4)*0.66666 +1, queue:GetTall()-106)
 	function juke.volume:Paint()
-		surface.SetDrawColor(Color(41, 128, 185))
+		surface.SetDrawColor(Color(41, 128, 185, 90))
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 		draw.ShadowText("Volume: "..tostring( math.floor(RS.JukeVolume) ), "Screen_Medium", self:GetWide()/2, 10, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
 	end
