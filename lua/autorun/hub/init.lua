@@ -79,7 +79,7 @@ util.AddNetworkString("RS:StoreChat")
 
 function RS:StoreChat( ply, msg )
 	if IsValid( ply ) then
-		net.Start("RS:StoreChat")
+		net.Start( "RS:StoreChat" )
 		net.WriteString( msg )
 		net.Send(ply)
 	else

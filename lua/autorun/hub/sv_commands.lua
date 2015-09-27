@@ -407,7 +407,7 @@ RS:AddChatCommand("checkvip", function(ply)
 end)
 
 RS:AddChatCommand("jukebox", function(ply)
-	ply:ConCommand("hub_open2 3")
+	ply:ConCommand("hub_open2 2")
 end)
 
 RS:AddChatCommandAlias("jukebox","juke")
