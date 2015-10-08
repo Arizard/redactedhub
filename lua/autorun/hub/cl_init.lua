@@ -4,19 +4,19 @@ include("shared.lua")
 
 local fontstandard = "Roboto"
 surface.CreateFont("Screen_Large", {
-	font = fontstandard.." Bold",
+	font = fontstandard.." Black",
 	size = 32,
 	antialias = true,
 })
 surface.CreateFont("Screen_Medium", {
-	font = fontstandard.." Medium",
-	size = 24,
+	font = fontstandard.." Bold",
+	size = 26,
 	antialias = true,
 })
 
 surface.CreateFont("Screen_Small", {
-	font = fontstandard.." Condensed",
-	size = 22,
+	font = fontstandard.." Regular",
+	size = 20,
 	antialias = true,
 })
 surface.CreateFont("Screen_Tiny", {
@@ -101,8 +101,9 @@ function surface.DrawSector(x, y, r, ang, rot)
 end
 
 function draw.ShadowText( text, font, x, y, col, ax, ay , d)
-	draw.DrawText( text, font, x+d, y+d, Color(0,0,0,col.a), ax, ay )
-	draw.DrawText( text, font, x, y, col, ax, ay)
+	draw.SimpleText( text, font, x+d*2, y+d*2, Color(0,0,0,col.a*0.1), ax, ay )
+	draw.SimpleText( text, font, x+d, y+d, Color(0,0,0,col.a*0.3), ax, ay )
+	draw.SimpleText( text, font, x, y, col, ax, ay)
 end
 
 
@@ -164,7 +165,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 	cmod.angoff = angoff
 	cmod.scl = scl
 	cmod.mat = mat
-	cmod.col = col
+	cmod.col = col or Color(255,255,255)
 	cmod.ply = ply
 	cmod.id = id
 	cmod:SetNoDraw( true )

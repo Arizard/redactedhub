@@ -39,7 +39,7 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 		data.stock = {}
 		data.opentab = tonumber(args[1] or 1)
 
-		print(type(data.opentab), data.opentab)
+		--print(type(data.opentab), data.opentab)
 
 		if args[1] then
 			data.opentab = args[1]

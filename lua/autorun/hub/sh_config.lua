@@ -3,14 +3,14 @@ RS.OpenMenuCommands = {"shop","store"}
 
 RS.UseStock = false -- if true, you will need to manually add stock for items.
 
-RS.HubTitle = "AftermindServers.com | Server Hub"
-RS.Currency = "AM" -- "AfterMoney :)"
+RS.HubTitle = "VHS-7 / Server Hub"
+RS.Currency = "VC" -- "VaporCredits"
 
 RS.InfoHTML = [[
 	<style>
 
 	b {
-		color: #FF9999;
+		color: #2ecc71;
 	}
 
 	body {
@@ -19,11 +19,11 @@ RS.InfoHTML = [[
 	}
 	</style>
 
-	<body style="font-family: Roboto; background: #111; color: #fff;">
+	<body style="font-family: Roboto; background: #ecf0f1; color: #333;">
 
 		<h1>Help & Commands</h1>
-		<p>Welcome to the AftermindServers Server Hub. From here you can purchase cosmetics for your player using our ingame 
-		currency, AM (AfterMoney). Cosmetics include items such as playermodels, hats, trails, and sound taunts. Please read 
+		<p>Welcome to the VHS-7 Server Hub. From here you can purchase cosmetics for your player using our ingame 
+		currency, VC (VaporCredits). Cosmetics include items such as playermodels, hats, trails, and sound taunts. Please read 
 		below for information about chat commands related to the HUB.</p>
 		
 		<h2>Commands</h2>
@@ -31,7 +31,7 @@ RS.InfoHTML = [[
 
 		<p>
 			<b>/sendam NAME AMOUNT</b><br>
-			Send a specified amount of AM to a certain player. You cannot send more AM than you currently have.<br>
+			Send a specified amount of VC to a certain player. You cannot send more VC than you currently have.<br>
 			Aliases: <b>None</b>.
 		</p>
 		<p>
@@ -52,12 +52,12 @@ RS.InfoHTML = [[
 
 		<p>
 			<b>/spawnam NAME AMOUNT</b><br>
-			Spawns brand new AM for a player and adds it to their current balance.<br>
+			Spawns brand new VC for a player and adds it to their current balance.<br>
 			Aliases: <b>None</b>.
 		</p>
 		<p>
 			<b>/setam NAME AMOUNT</b><br>
-			Sets a player's AM to a specified amount.<br>
+			Sets a player's VC to a specified amount.<br>
 			Aliases: <b>None</b>.
 		</p>
 		<p>
@@ -72,7 +72,7 @@ RS.InfoHTML = [[
 		</p>
 		<p>
 			<b>/addstoream AMOUNT</b><br>
-			Adds more AM to the store so that it's possible for players to sell their items back.<br>
+			Adds more VC to the store so that it's possible for players to sell their items back.<br>
 			Aliases: <b>None</b>.
 		</p>
 		<p>

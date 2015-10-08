@@ -45,10 +45,10 @@ function WINDOW:Init()
 	function self.close.Paint()
 		surface.SetDrawColor( 215,0,0 )
 		surface.DrawRect(0,0,32,16)
-		surface.SetDrawColor( 0,0,0,50 )
-		surface.DrawRect(0,10,32,6)
-		surface.SetDrawColor(255,0,0)
-		surface.DrawOutlinedRect(0,0,32,16)
+		--surface.SetDrawColor( 0,0,0,50 )
+		--surface.DrawRect(0,10,32,6)
+		--surface.SetDrawColor(255,0,0)
+		--surface.DrawOutlinedRect(0,0,32,16)
 	end
 
 	function self.close.DoClick( self2 )
@@ -65,10 +65,10 @@ end
 function WINDOW:Paint()
 	HubDrawBlur(self, 6)
 
-	surface.SetDrawColor( 0,0,0, 100 )
+	surface.SetDrawColor( HexColor("#ecf0f1") )
 	surface.DrawRect(0,0, self:GetWide(), self:GetTall())
 
-	draw.ShadowText( self.Title, "Screen_Small", self.padding, self.padding/2, Color(255,255,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1 )
+	draw.ShadowText( self.Title, "Screen_Medium", self.padding, self.padding/4, HexColor("#2ecc71"), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1 )
 
 end
 
@@ -115,9 +115,20 @@ function BUTTN:Init()
 	function self.b:Paint() end
 	self.b:SetText("")
 
-
+	self.textcol = Color(255,255,255)
+	self.textshad = 1
 	--self.b.DoClick = function() self:DoClick() end
 
+	self:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+
+end
+
+function BUTTN:SetTextColor( col )
+	self.textcol = col
+end
+
+function BUTTN:SetTextShadow( s )
+	self.textshad = s
 end
 
 function BUTTN:PerformLayout()
@@ -132,7 +143,7 @@ function BUTTN:PaintOver()
 	end
 	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-	draw.ShadowText(self.text,self.font,self:GetWide()/2 + self.offsets[1], self:GetTall()/2 +self.offsets[2], Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+	draw.ShadowText(self.text,self.font,self:GetWide()/2 , self:GetTall()/2 , self.textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, self.textshad)
 end
 
 function BUTTN:SetFont(fo)
@@ -200,6 +211,8 @@ local MPANEL = {}
 
 function MPANEL:Init()
 
+	self.numbutts = 0
+
 	self.buttonoffset = 0
 
 	self:SetSize(640,320)
@@ -208,8 +221,7 @@ function MPANEL:Init()
 	self.tabs = {}
 
 	self.color = {
-		Color(192, 57, 43),
-		Color(231, 76, 60)
+		HexColor("#2ecc71"), HexColor("#3ad87d")
 	}
 
 	self:PerformLayout()
@@ -253,8 +265,7 @@ function MPANEL:Init()
 	self.navleft:SetZPos(99)
 	self.navright:SetZPos(98)
 
-
-	self.arrowsvisible = true
+	self:ArrowsVisible( false )
 end
 
 function MPANEL:ArrowsVisible( bool )
@@ -311,7 +322,7 @@ function MPANEL:AddTab(str_name)
 	self.panels[str_name]:SetVisible(false)
 
 	self.panels[str_name].Paint = function(self, w, h)
-		surface.SetDrawColor(Color(16,16,16, 150))
+		surface.SetDrawColor( Color(0,0,0,0) )
 		surface.DrawRect(0,0,w, h) -- meh
 	end
 
@@ -319,12 +330,16 @@ function MPANEL:AddTab(str_name)
 
 	self:SetTab( self.activetab )
 
+	self.numbutts = self.numbutts + 1
+	if self.numbutts * 92 > self:GetWide()-50 then
+		self:ArrowsVisible( true )
+	end
+
 	return self.panels[str_name]
 
 end
 
 function MPANEL:PerformLayout()
-
 	
 	local maxoff = -((#self.tabs * 92) - self:GetWide()) -24*2 -8
 	--print( #self.tabs * 92, self:GetWide() )
@@ -372,8 +387,7 @@ function M2PANEL:Init()
 	self.tabs = {}
 
 	self.color = {
-		Color(192, 57, 43),
-		Color(231, 76, 60)
+		HexColor("#2ecc71"), HexColor("#3ad87d")
 	}
 
 	self:PerformLayout()
@@ -488,7 +502,7 @@ function LABEL:Init()
 end
 
 function LABEL:Paint()
-	draw.ShadowText(self.text, self.font, self.offsets[1],self.offsets[2],self.color,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER,1)
+	draw.ShadowText(self.text, self.font, 4,self:GetTall()/2,self.color,TEXT_ALIGN_LEFT,TEXT_ALIGN_CENTER,1)
 end
 
 function LABEL:SetText(text)
@@ -596,12 +610,12 @@ function ICON:Paint()
 
 	if not self.item then return nil end
 
-	draw.ShadowText(self.item.Name, "Screen_Small", self:GetWide()/2, 121, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
-	draw.ShadowText(self.item.Description, "Screen_Tiny", self:GetWide()/2, 121+18, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+	draw.ShadowText(self.item.Name, "Screen_Small", self:GetWide()/2, 121, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
+	draw.ShadowText(self.item.Description, "Screen_Tiny", self:GetWide()/2, 121+18, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
 	if self.inv == false then
-		draw.ShadowText(tostring(self.stock).." In Stock", "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+		draw.ShadowText(tostring(self.stock).." In Stock", "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
 	else
-		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
 	end
 	--draw.ShadowText("No. "..tostring(self.id), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
 	--image/color/model size: 117/117
@@ -712,19 +726,26 @@ function ICON:OnCursorEntered2()
 	--print("Entered",self.item.Category)
 
 	if not self.item then return end
-	if self.item.Category == "colours" then
-		
-		RS.PlayerModelPreview.Entity:SetColor( self.item.Col )
-		RS.PlayerModelPreview.Entity.PlyCol = ColToVec( self.item.Col )
-		--print(ColToVec( self.item.Col ))
-	elseif self.item.Category == "materials" then
+
+	if self.item.Category == "materials" then
 		
 		RS.PlayerModelPreview.Entity:SetMaterial( self.item.Material )
-	elseif self.item.Category == "skins" then
+	end
+	
+	if self.item.Category == "skins" then
 		RS.PlayerModelPreview:SetModel(self.item.PlayerModel)
-	elseif self.item.Category == "hats" then
+	end
+
+	if self.item.Category == "hats" then
 		local idtouse = self:GetID()
 		self.item:OnEquip( LocalPlayer(), idtouse )
+	end
+
+	if self.item.Category == "colours" then
+		
+		RS.PlayerModelPreview:SetColor( self.item.Col )
+		RS.PlayerModelPreview.Entity.PlyCol = ColToVec( self.item.Col )
+		--print(ColToVec( self.item.Col ))
 	end
 
 end
@@ -998,8 +1019,8 @@ function RS:UpdateJukeQueue()
 	lb:SetSize(self.JukeQueueList:GetWide(), 64)
 	lb:SetText( "Queued Songs" )
 	lb:SetFont("Screen_Medium")
-	lb:SetColor(Color(52, 152, 219))
-	lb:SetOffsets( 16, lb:GetTall()/2 -16)
+	lb:SetColor(HexColor("#2ecc71"))
+	lb:SetOffsets( 0,0 )
 
 	for i=1,#RS.JukeQueue do
 		local track = RS.JukeQueue[i]
@@ -1011,6 +1032,8 @@ function RS:UpdateJukeQueue()
 		local jb = self.JukeQueueList:Add( "hub_button" )
 		jb:SetSize(self.JukeQueueList:GetWide()-1, 28)
 		jb:SetText(artist.." - "..song)
+		jb:SetTextColor( HexColor("#606060") )
+		jb:SetTextShadow( 0 )
 		jb:SetColors(Color(128,128,128, 90), Color(52, 152, 219, 90))
 		jb.link = link
 		jb.name = song
@@ -1055,7 +1078,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	local hub = vgui.Create("hub_window")
 	hub:SetTitle(RS.HubTitle)
-	hub:SetSize(ScrW()-100, ScrH()-100)
+	hub:SetSize(ScrW()-16, ScrH()-16)
+	--hub:SetSize(800,600)
 	
 	hub:Center()
 
@@ -1139,18 +1163,18 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 
 	supp.html = vgui.Create("DHTML", supp)
-	supp.html:OpenURL("http://aftermind.gg")
+	supp.html:OpenURL("http://steamcommunity.com/groups/vhs7")
 	supp.html:SetSize(supp:GetWide(),supp:GetTall())
 	--we need to create a button over the screen, so that when they click it opens through the steam overlay.
 	supp.butt = vgui.Create("DButton", supp)
 	supp.butt:SetSize(supp:GetWide(), supp:GetTall())
 	supp.butt:SetText("")
 	supp.butt.Paint = function(self, w, h)
-		surface.SetDrawColor(64,64,64,200)
+		surface.SetDrawColor(64,64,64,100)
 		surface.DrawRect(0,0,w,h)
 		draw.ShadowText("Click to view in Steam Overlay", "Screen_Large", w/2, h/2-32, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,1)
 	end
-	supp.butt.DoClick = function() gui.OpenURL("http://aftermind.gg") end
+	supp.butt.DoClick = function() gui.OpenURL("http://steamcommunity.com/groups/vhs7") end
 
 	--hub.largemulti:DisableTab( 6 )
 	--hub.largemulti:DisableTab( 2 )
@@ -1190,10 +1214,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 	moneybg:SetPos(0,previewcon:GetTall()-64)
 
 	function moneybg:Paint()
-		surface.SetDrawColor(Color(231, 76, 60))
+		surface.SetDrawColor( HexColor("#2ecc71") )
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-		draw.ShadowText("You have "..tostring(LocalPlayer():GetMoney()).." "..RS.Currency, "Screen_Small", self:GetWide()/2, self:GetTall()/2 - 11, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText("You have "..tostring(LocalPlayer():GetMoney()).." "..RS.Currency, "Screen_Medium", self:GetWide()/2, self:GetTall()/2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 	end
 
 	local smoneybg = vgui.Create("DPanel", previewcon)
@@ -1201,10 +1225,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 	smoneybg:SetPos(0,0)
 
 	function smoneybg:Paint()
-		surface.SetDrawColor(Color(16,16,16))
+		surface.SetDrawColor( HexColor("#2ecc71") )
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-		draw.ShadowText("The Store has "..tostring(GetGlobalInt("StoreMoney")).." "..RS.Currency, "Screen_Small", self:GetWide()/2, self:GetTall()/2 - 11, Color(255,75,75), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText("The Store has "..tostring(GetGlobalInt("StoreMoney")).." "..RS.Currency, "Screen_Medium", self:GetWide()/2, self:GetTall()/2, HexColor("#ecf0f1"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 	end
 
 	RS.PlayerModelPreview = vgui.Create("DModelPanel",previewcon)
@@ -1251,43 +1275,44 @@ function RS:CreateHubWindow( hubdata, opentab )
 		if not LocalPlayer():Alive() or LocalPlayer():GetObserverMode() ~= OBS_MODE_NONE then return else self.Entity:DrawModel() end
 
 		for id, m in pairs(RS.ClientSideModels) do
-		if IsValid(m) then
+			if IsValid(m) then
 
-			if m.ply == LocalPlayer() and RS.InPreview == true then
-				local atid = self.Entity:LookupAttachment(m.att)
-				local attach = self.Entity:GetAttachment(atid)
+				if m.ply == LocalPlayer() and RS.InPreview == true then
+					local atid = self.Entity:LookupAttachment(m.att)
+					local attach = self.Entity:GetAttachment(atid)
 
-				if attach then
-				
-					local x = m.posoff.x * attach.Ang:Right()
-					local y = m.posoff.y * attach.Ang:Forward()
-					local z = m.posoff.z * attach.Ang:Up()
-					--print(x,y,z)
-					--print( Vector(x,y,z) )
-					--print(posoff2)
-					m:SetPos(attach.Pos + x + y + z)
-					local ang = attach.Ang
-					ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
-					ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
-					ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
+					if attach then
+					
+						local x = m.posoff.x * attach.Ang:Right()
+						local y = m.posoff.y * attach.Ang:Forward()
+						local z = m.posoff.z * attach.Ang:Up()
+						--print(x,y,z)
+						--print( Vector(x,y,z) )
+						--print(posoff2)
+						m:SetPos(attach.Pos + x + y + z)
+						local ang = attach.Ang
+						ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
+						ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
+						ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
 
-					m:SetAngles(ang)
-					m:DrawModel()
+						m:SetAngles(ang)
+						m:SetColor( m.col or Color(255,255,255) )						
+						m:DrawModel()
 
 
-					if m.isToken then
-						if RS.Items[m.class].IsToken == true then
-							--print("Drawing Token")
-							cam.Start3D2D(m:GetPos()+ang:Up()*3.5, ang, 0.105)
-								RS.Items[m.class]:DrawTokenFace(0,0)
-							cam.End3D2D()
+						if m.isToken then
+							if RS.Items[m.class].IsToken == true then
+								--print("Drawing Token")
+								cam.Start3D2D(m:GetPos()+ang:Up()*3.5, ang, 0.105)
+									RS.Items[m.class]:DrawTokenFace(0,0)
+								cam.End3D2D()
+							end
 						end
-					end
 
+					end
 				end
 			end
 		end
-	end
 	end
 	RS.PlayerModelPreview:SetFOV( 50 )
 
@@ -1298,7 +1323,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		local m = self.LastMsg
 		local a = self.Alpha
 
-		if a > 255 then a = 255 end
+		--if a > 255 then a = 255 end
 
 		local w, h = self:GetWide()*0.95, 30
 		local x = self:GetWide()/2 - w/2
@@ -1307,10 +1332,11 @@ function RS:CreateHubWindow( hubdata, opentab )
 		surface.SetDrawColor(Color(46, 204, 113, a))
 		surface.DrawRect(x,y, w, h)
 
-		draw.ShadowText(m, "Screen_Small", self:GetWide()/2, y + 5, Color(255,255,255,a), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText(m, "Screen_Small", self:GetWide()/2, y + h/2, Color(255,255,255,a > 255 and 255 or ( a > 0 and a or 0 )), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 
 		if self.Alpha > 0 then
-			self.Alpha = self.Alpha - 7
+			self.Alpha = self.Alpha - 255 * FrameTime() * 1/2
+			--print(FrameTime())
 		elseif self.Alpha < 0 then
 			self.Alpha = 0
 		end
@@ -1427,8 +1453,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.play:SetPos(2, juke.browse:GetTall()-106)
 	juke.play:SetFont("Screen_Large")
 	juke.play:SetText("▶")
-	juke.play:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
-	juke.play:SetOffsets(0,-18)
+	juke.play:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.play:SetOffsets(0,0)
 	function juke.play:DoClick()
 		RS.JukePlayer:OpenURL(RS.JukeCurrent[3])
 	end
@@ -1443,29 +1469,29 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.stop:DoClick()
 		RS.JukePlayer:OpenURL("http://gameredacted.net/deathrun")
 	end
-	juke.stop:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.stop:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	juke.prev = vgui.Create("hub_button", juke.browse)
 	juke.prev:SetSize(92,92)
 	juke.prev:SetPos((92+2)*2 + 2, juke.browse:GetTall()-106)
 	juke.prev:SetFont("Screen_Small")
 	juke.prev:SetText("<<")
-	juke.prev:SetOffsets(0,-10)
+	juke.prev:SetOffsets(0,0)
 	function juke.prev:DoClick()
 		RS:JukeboxPlayPrevious()
 	end
-	juke.prev:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.prev:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	juke.nxt = vgui.Create("hub_button", juke.browse)
 	juke.nxt:SetSize(92,92)
 	juke.nxt:SetPos((92+2)*3 + 2, juke.browse:GetTall()-106)
 	juke.nxt:SetFont("Screen_Small")
 	juke.nxt:SetText(">>")
-	juke.nxt:SetOffsets(0,-10)
+	juke.nxt:SetOffsets(0,-0)
 	function juke.nxt:DoClick()
 		RS:JukeboxPlayNext();
 	end
-	juke.nxt:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.nxt:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	-- cycle modes
 	juke.cycleall = vgui.Create("hub_button", juke.browse)
@@ -1473,55 +1499,55 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.cycleall:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*0)
 	juke.cycleall:SetFont("Screen_Tiny")
 	juke.cycleall:SetText("Cycle All")
-	juke.cycleall:SetOffsets(0,-7)
+	juke.cycleall:SetOffsets(0,-0)
 	function juke.cycleall:DoClick()
 		RS.JukeState = "cycleall"
 	end
-	juke.cycleall:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.cycleall:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 	
 	juke.cyclequeue = vgui.Create("hub_button", juke.browse)
 	juke.cyclequeue:SetSize(92,92/4)
 	juke.cyclequeue:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*1)
 	juke.cyclequeue:SetFont("Screen_Tiny")
 	juke.cyclequeue:SetText("Cycle Queue")
-	juke.cyclequeue:SetOffsets(0,-7)
+	juke.cyclequeue:SetOffsets(0,-0)
 	function juke.cyclequeue:DoClick()
 		RS.JukeState = "cyclequeue"
 	end
-	juke.cyclequeue:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.cyclequeue:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	juke.shuffleall = vgui.Create("hub_button", juke.browse)
 	juke.shuffleall:SetSize(92,92/4)
 	juke.shuffleall:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*2)
 	juke.shuffleall:SetFont("Screen_Tiny")
 	juke.shuffleall:SetText("Shuffle All")
-	juke.shuffleall:SetOffsets(0,-7)
+	juke.shuffleall:SetOffsets(0,-0)
 	function juke.shuffleall:DoClick()
 		RS.JukeState = "shuffleall"
 	end
-	juke.shuffleall:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.shuffleall:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	juke.shufflequeue = vgui.Create("hub_button", juke.browse)
 	juke.shufflequeue:SetSize(92,92/4)
 	juke.shufflequeue:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*3)
 	juke.shufflequeue:SetFont("Screen_Tiny")
 	juke.shufflequeue:SetText("Shuffle Queue")
-	juke.shufflequeue:SetOffsets(0,-7)
+	juke.shufflequeue:SetOffsets(0,-0)
 	function juke.shufflequeue:DoClick()
 		RS.JukeState = "shufflequeue"
 	end
-	juke.shufflequeue:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.shufflequeue:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	juke.displaymode = vgui.Create("hub_button", juke.browse)
 	juke.displaymode:SetSize(juke.browse:GetWide() - (92+2)*5 - 4,92)
 	juke.displaymode:SetPos((92+2)*5 + 2, juke.browse:GetTall()-106)
 	juke.displaymode:SetFont("Screen_Medium")
 	juke.displaymode:SetText(JukeStates[ RS.JukeState ] )
-	juke.displaymode:SetOffsets(0,-14)
+	juke.displaymode:SetOffsets(0,0)
 	function juke.displaymode:Think()
 		self:SetText(JukeStates[ RS.JukeState ])
 	end
-	juke.displaymode:SetColors( Color(41, 128, 185, 90), Color(52, 152, 219, 90) )
+	juke.displaymode:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
 
 	juke.browse.scroll = vgui.Create("DScrollPanel",juke.browse)
 	juke.browse.scroll:SetSize( juke.browse:GetWide(), juke.browse:GetTall()-108 )
@@ -1542,14 +1568,16 @@ function RS:CreateHubWindow( hubdata, opentab )
 		lb:SetSize(juke.browse.list:GetWide(), 64)
 		lb:SetText( artist )
 		lb:SetFont("Screen_Medium")
-		lb:SetColor(Color(52, 152, 219))
-		lb:SetOffsets( 16, lb:GetTall()/2 -16)
+		lb:SetColor( HexColor("#2ecc71") )
+		lb:SetOffsets( 0,0 )
 
 		for kk,vv in orderedPairs(v) do
 
 			local jb = juke.browse.list:Add( "hub_button" )
 			jb:SetSize(juke.browse:GetWide(), 28)
 			jb:SetText(kk)
+			jb:SetTextColor( HexColor("#606060") )
+			jb:SetTextShadow( 0 )
 			jb:SetColors(Color(128,128,128, 90), Color(52, 152, 219, 90))
 			jb.link = vv
 			jb.name = kk
@@ -1592,19 +1620,19 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.info:SetSize((queue:GetWide()-4)*0.66666 -1, 92)
 	juke.info:SetPos(2, queue:GetTall()-106)
 	function juke.info:Paint()
-		surface.SetDrawColor(Color(41, 128, 185, 90))
+		surface.SetDrawColor(HexColor("#2ecc71"))
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 		
-		draw.ShadowText("Now Playing: "..RS.JukeCurrent[2],"Screen_Large",16,8,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1)
-		draw.ShadowText("By "..RS.JukeCurrent[1],"Screen_Medium",17,42,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1)
+		draw.ShadowText("Now Playing: "..RS.JukeCurrent[2],"Screen_Large",16,8,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM,1)
+		draw.ShadowText("By "..RS.JukeCurrent[1],"Screen_Medium",17,42,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM,1)
 	end
 	juke.volume = vgui.Create("DPanel", queue)
 	juke.volume:SetSize((queue:GetWide()-4)*0.33333, 92)
 	juke.volume:SetPos(2 + (queue:GetWide()-4)*0.66666 +1, queue:GetTall()-106)
 	function juke.volume:Paint()
-		surface.SetDrawColor(Color(41, 128, 185, 90))
+		surface.SetDrawColor(HexColor("#2ecc71"))
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
-		draw.ShadowText("Volume: "..tostring( math.floor(RS.JukeVolume) ), "Screen_Medium", self:GetWide()/2, 10, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+		draw.ShadowText("Volume: "..tostring( math.floor(RS.JukeVolume) ), "Screen_Medium", self:GetWide()/2, 10, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
 	end
 
 	local sl = vgui.Create("Slider", juke.volume)
@@ -1615,11 +1643,14 @@ function RS:CreateHubWindow( hubdata, opentab )
 	sl:SetMax( 100 )
 	sl:SetValue( GetConVarNumber("grhub_jukebox_volume") )
 	sl:SetDecimals(0)
+	sl.TextArea:SetVisible( false )
+	sl:InvalidateLayout()
+	--PrintTable(sl:GetTable())
 
 
 	function sl:Paint()
 		surface.SetDrawColor(Color(255,255,255))
-		surface.DrawLine(8,sl:GetTall()/2,sl:GetWide()-50,sl:GetTall()/2)
+		surface.DrawLine(8,sl:GetTall()/2,sl:GetWide()-10,sl:GetTall()/2)
 	end
 	sl.oldx = 0
 	function sl:OnValueChanged()
@@ -1635,8 +1666,11 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	RS.JukeVolume = GetConVarNumber( "grhub_jukebox_volume" )
 
-	print(type(opentab), opentab)
+	--print(type(opentab), opentab)
 	hub.largemulti:SetTab( opentab ) -- set the current open tab after everything is initialised
+
+	RS:ResetPlayerModelPreview()
+
 end
 
 RS.JukeVolume = 0
@@ -1703,15 +1737,21 @@ net.Receive("UpdateInventory", function()
 	end
 	--print(LocalPlayer():GetPlayerColor())
 	--refresh the preview
+	RS:ResetPlayerModelPreview()
 	timer.Create("ReloadPreview",1,1, function()
-		if RS.PlayerModelPreview.Entity then
-			RS.PlayerModelPreview:SetModel( LocalPlayer():GetModel() )
-			RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
-			RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
-			RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor()
-			--function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
-			--function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
-		end
+		RS:ResetPlayerModelPreview()
 	end)
 
 end)
+
+function RS:ResetPlayerModelPreview()
+	if RS.PlayerModelPreview.Entity then
+		RS.PlayerModelPreview:SetModel( LocalPlayer():GetModel() )
+		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
+		RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
+		RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor()
+		RS.PlayerModelPreview:SetColor( LocalPlayer():GetColor() )
+		--function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
+		--function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
+	end
+end
