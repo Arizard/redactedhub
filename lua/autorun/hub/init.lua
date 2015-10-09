@@ -249,7 +249,9 @@ function ItemPlayerDeath( ply )
 	local eq = RS:GetEquippedItems( ply )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
-			RS.Items[v["class"]]:OnDeath( ply, tonumber(v["ID"]) )
+			if RS.Items[v["class"]] then
+				RS.Items[v["class"]]:OnDeath( ply, tonumber(v["ID"]) )
+			end
 		end
 	end
 end
