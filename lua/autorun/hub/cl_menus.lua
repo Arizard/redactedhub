@@ -746,6 +746,7 @@ function ICON:OnCursorEntered2()
 		RS.PlayerModelPreview:SetColor( self.item.Col )
 		RS.PlayerModelPreview.Entity.PlyCol = ColToVec( self.item.Col )
 		--print(ColToVec( self.item.Col ))
+		RS:InvalidatePlayerColor()
 	end
 
 end
@@ -756,7 +757,7 @@ function ICON:OnCursorExited2()
 
 	if not self.item then return end
 	if self.item.Category == "colours" then
-		RS.PlayerModelPreview.Entity:SetColor( LocalPlayer():GetColor() )
+		RS.PlayerModelPreview:SetColor( LocalPlayer():GetColor() or Color(255,255,255) )
 		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
 		--print(LocalPlayer():GetPlayerColor())
 	elseif self.item.Category == "materials" then
@@ -764,7 +765,7 @@ function ICON:OnCursorExited2()
 	elseif self.item.Category == "skins" then
 		RS.PlayerModelPreview:SetModel(LocalPlayer():GetModel())
 		
-		RS.PlayerModelPreview.Entity:SetColor( LocalPlayer():GetColor() )
+		RS.PlayerModelPreview:SetColor( LocalPlayer():GetColor() or Color(255,255,255) )
 		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor() -- we need heasp of stuff because playermodel resets shit
 		RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
 
@@ -777,8 +778,6 @@ function ICON:OnCursorExited2()
 			self.item:OnHolster( LocalPlayer(), idtouse )
 		end
 	end
-
-	function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
 
 end
 
@@ -1236,8 +1235,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 	RS.PlayerModelPreview:SetPos(0,64)
 	RS.PlayerModelPreview:SetModel( LocalPlayer():GetModel() )
 	RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
-	RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor()
-	function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
+	RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor() or Color(255,255,255)
+
 	--function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
 	RS.PlayerModelPreview.rot = 0
 	RS.PlayerModelPreview.rotmod = 0
@@ -1313,6 +1312,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 				end
 			end
 		end
+
+		self.Entity:SetColor( self.Entity.NCol )
 	end
 	RS.PlayerModelPreview:SetFOV( 50 )
 
@@ -1343,7 +1344,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	end
 
-
+	function RS.PlayerModelPreview.Entity:GetPlayerColor() 
+		print( self.PlyCol, "meme" )
+		return self.PlyCol 
+	end
 
 
 
@@ -1746,12 +1750,27 @@ end)
 
 function RS:ResetPlayerModelPreview()
 	if RS.PlayerModelPreview.Entity then
+		--print( LocalPlayer():GetPlayerColor(), RS.PlayerModelPreview.Entity.PlyCol )
 		RS.PlayerModelPreview:SetModel( LocalPlayer():GetModel() )
-		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
+		
 		RS.PlayerModelPreview.Entity:SetMaterial( LocalPlayer():GetMaterial() )
-		RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor()
-		RS.PlayerModelPreview:SetColor( LocalPlayer():GetColor() )
+		RS.PlayerModelPreview.Entity.NCol = LocalPlayer():GetColor() or Color(255,255,255)
+		RS.PlayerModelPreview:SetColor( LocalPlayer():GetColor() or Color(255,255,255) )
+
+		RS.PlayerModelPreview.Entity.PlyCol = LocalPlayer():GetPlayerColor()
+		--print( LocalPlayer():GetPlayerColor(), RS.PlayerModelPreview.Entity.PlyCol )
 		--function RS.PlayerModelPreview.Entity:GetPlayerColor() return self.PlyCol end
 		--function RS.PlayerModelPreview.Entity:GetColor() return self.NCol end
+
+		RS:InvalidatePlayerColor()
+	end
+end
+
+function RS:InvalidatePlayerColor()
+	if RS.PlayerModelPreview then
+		function RS.PlayerModelPreview.Entity:GetPlayerColor() 
+			--print( self.PlyCol, "meme" )
+			return self.PlyCol 
+		end
 	end
 end

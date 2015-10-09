@@ -30,7 +30,7 @@ RS.InfoHTML = [[
 		<div style="margin-left: 24px;">
 
 		<p>
-			<b>/sendam NAME AMOUNT</b><br>
+			<b>/sendvc NAME AMOUNT</b><br>
 			Send a specified amount of VC to a certain player. You cannot send more VC than you currently have.<br>
 			Aliases: <b>None</b>.
 		</p>
@@ -51,12 +51,12 @@ RS.InfoHTML = [[
 		<div style="margin-left: 24px;">
 
 		<p>
-			<b>/spawnam NAME AMOUNT</b><br>
+			<b>/spawnvc NAME AMOUNT</b><br>
 			Spawns brand new VC for a player and adds it to their current balance.<br>
 			Aliases: <b>None</b>.
 		</p>
 		<p>
-			<b>/setam NAME AMOUNT</b><br>
+			<b>/setvc NAME AMOUNT</b><br>
 			Sets a player's VC to a specified amount.<br>
 			Aliases: <b>None</b>.
 		</p>
@@ -71,7 +71,7 @@ RS.InfoHTML = [[
 			Aliases: <b>None</b>.
 		</p>
 		<p>
-			<b>/addstoream AMOUNT</b><br>
+			<b>/addstorevc AMOUNT</b><br>
 			Adds more VC to the store so that it's possible for players to sell their items back.<br>
 			Aliases: <b>None</b>.
 		</p>
@@ -110,6 +110,7 @@ RS.InfoHTML = [[
 		<h2>Credits</h2>
 		<b>Arizard</b> - Development of this addon<br>
 		<b>The GameREDACTED Community</b>
+		<b>Facepunch</b>
 		<br><br><br><br>
 
 	</body>
