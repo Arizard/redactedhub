@@ -1269,7 +1269,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		--print(self.rot,self.ox,self.nx,self.dragging)
 	end
 	function RS.PlayerModelPreview:DrawModel()
-		
+		local x, y = self:LocalToScreen( 0, 0 )	
 
 		if not LocalPlayer():Alive() or LocalPlayer():GetObserverMode() ~= OBS_MODE_NONE then return else self.Entity:DrawModel() end
 
@@ -1302,9 +1302,14 @@ function RS:CreateHubWindow( hubdata, opentab )
 						if m.isToken then
 							if RS.Items[m.class].IsToken == true then
 								--print("Drawing Token")
-								cam.Start3D2D(m:GetPos()+ang:Up()*3.5, ang, 0.105)
-									RS.Items[m.class]:DrawTokenFace(0,0)
+								ang:RotateAroundAxis( ang:Up(), 90 )
+								--cam.Start3D2D(Vector( m:GetPos().x, m:GetPos().y, m:GetPos().z ) * (1/self:GetFOV()), ang, 0.105)
+								cam.IgnoreZ( true )
+								cam.Start3D2D(m:GetPos() + ang:Up()*2.75 + ang:Right()*-20.75 + ang:Forward()*-115.3, ang, 0.105)
+								--print(m:GetPos())
+									RS.Items[m.class]:DrawTokenFace(30,30)
 								cam.End3D2D()
+								cam.IgnoreZ( false )
 							end
 						end
 
@@ -1341,6 +1346,15 @@ function RS:CreateHubWindow( hubdata, opentab )
 		elseif self.Alpha < 0 then
 			self.Alpha = 0
 		end
+		local x, y = self:LocalToScreen( 0, 0 )	
+		-- cam.IgnoreZ( true )
+		-- cam.Start3D( self:GetCamPos(), self:GetLookAng(), self:GetFOV(), x, y, self:GetWide(), self:GetTall() )
+		-- 	cam.Start3D2D( self.Entity:GetPos(), self.Entity:GetAngles(), 0.25 )
+		-- 		surface.SetDrawColor( 255,0,0 )
+		-- 		surface.DrawRect( -500, -500, 1000, 1000 )
+		-- 	cam.End3D2D()
+		-- cam.End3D()
+		-- cam.IgnoreZ( false )
 
 	end
 

@@ -109,7 +109,7 @@ RS.InfoHTML = [[
 		
 		<h2>Credits</h2>
 		<b>Arizard</b> - Development of this addon<br>
-		<b>The GameREDACTED Community</b>
+		<b>The GameREDACTED Community</b><br>
 		<b>Facepunch</b>
 		<br><br><br><br>
 

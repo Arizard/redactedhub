@@ -347,19 +347,19 @@ RS:AddChatCommand("test", function(ply, args)
 	RS:StoreChat(ply, "The commands work!") 
 end)
 
-RS:AddChatCommand("sendam", function(ply, args)
+RS:AddChatCommand("sendvc", function(ply, args)
 
 	ply:ConCommand("shop_sendpoints "..args[1].." "..args[2])
 
 end)
 
-RS:AddChatCommand("spawnam", function(ply, args)
+RS:AddChatCommand("spawnvc", function(ply, args)
 
 	ply:ConCommand("shop_spawnpoints "..args[1].." "..args[2])
 
 end)
 
-RS:AddChatCommand("setam", function(ply, args)
+RS:AddChatCommand("setvc", function(ply, args)
 
 	ply:ConCommand("shop_setpoints "..args[1].." "..args[2])
 

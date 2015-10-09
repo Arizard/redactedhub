@@ -299,9 +299,11 @@ function RS:RenderClientTokens()
 					--print(m.class)
 					if RS.Items[m.class].IsToken == true then
 						--print("Drawing Token")
+						cam.IgnoreZ( true )
 						cam.Start3D2D(m:GetPos()+ang:Up()*3.5, ang, 0.105)
 							RS.Items[m.class]:DrawTokenFace(0,0)
 						cam.End3D2D()
+						cam.IgnoreZ( false )
 						
 					end
 				end

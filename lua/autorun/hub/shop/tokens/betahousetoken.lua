@@ -30,7 +30,7 @@ function ITEM:DrawTokenFace(x,y)
 
 	surface.SetDrawColor(Color(241, 196, 15))
 	surface.DrawCircle(x,y,22)
-	draw.ShadowText("BH", "Screen_Large", x,y-18,Color(211, 84, 0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,1)
+	draw.ShadowText("BH", "Screen_Large", x,y,Color(211, 84, 0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,1)
 
 end
 
