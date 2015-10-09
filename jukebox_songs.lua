@@ -173,4 +173,10 @@
 	["Macintosh Plus"] = {
 		[ [[リサフランク420 / 現代のコンピュー]] ] = "https://www.youtube.com/watch?v=cU8HrO7XuiE"
 	},
+	["CHVRCHES"] = {
+		["Leave A Trace"] = "https://www.youtube.com/watch?v=4Eo84jDIMKI",
+		["Clearest Blue"] = "https://www.youtube.com/watch?v=QpFXXPruuqU",
+		["Bury It"] = "https://www.youtube.com/watch?v=gXCEq4T6gsA",
+		["Recover"] = "https://www.youtube.com/watch?v=JyqemIbjcfg"
+	}
 }
