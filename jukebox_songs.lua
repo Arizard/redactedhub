@@ -128,6 +128,7 @@
 		["Heartbeat"] = "https://www.youtube.com/watch?v=dFVxGRekRSg",
 		["Sweatpants ft. Problem"] = "https://www.youtube.com/watch?v=ExVtrghW5Y4",
 		["Crawl"] = "https://www.youtube.com/watch?v=iFbhSijV41o",
+		["Sober"] = "https://www.youtube.com/watch?v=ayLiAVJ6vTM"
 	},
 	["KDrew"] = {
 		["Bullseye"] = "https://www.youtube.com/watch?v=kqjKOL0N8ks",
@@ -176,7 +177,9 @@
 	["CHVRCHES"] = {
 		["Leave A Trace"] = "https://www.youtube.com/watch?v=4Eo84jDIMKI",
 		["Clearest Blue"] = "https://www.youtube.com/watch?v=QpFXXPruuqU",
-		["Bury It"] = "https://www.youtube.com/watch?v=gXCEq4T6gsA",
 		["Recover"] = "https://www.youtube.com/watch?v=JyqemIbjcfg"
+	},
+	["Macklemore & Ryan Lewis"] = {
+		["Downtown"] = "https://www.youtube.com/watch?v=JGhoLcsr8GA"
 	}
 }
