@@ -37,7 +37,7 @@ concommand.Add("shop_sendpoints",function(ply, cmd, args)
 			RS:StoreChat( ply, "Too many targets! Try using a more specific name." )
 			return false
 		end
-
+ 
 		if #targets < 1 then
 			RS:StoreChat( ply, "No players found with that name." )
 			return false
@@ -48,8 +48,8 @@ concommand.Add("shop_sendpoints",function(ply, cmd, args)
 		if ply:GetMoney() >= amount then
 			ply:SubMoney( amount )
 			targ:AddMoney( amount )
-			RS:StoreChat( ply, "You gave "..targ:Nick().." "..tostring(amount).." RD")
-			RS:StoreChat( targ, "You received "..tostring(amount).." RD from "..ply:Nick() )
+			RS:StoreChat( ply, "You gave "..targ:Nick().." "..tostring(amount).." "..RS.Currency)
+			RS:StoreChat( targ, "You received "..tostring(amount).." "..RS.Currency.." from "..ply:Nick() )
 		end
 	else
 		RS:StoreChat(ply, "An Error Occured.")
@@ -82,8 +82,8 @@ concommand.Add("shop_spawnpoints",function(ply, cmd, args)
 		--if ply:GetMoney() >= amount then
 			--ply:SubMoney( amount )
 			targ:AddMoney( amount )
-			RS:StoreChat( ply, "You spawned "..targ:Nick().." "..tostring(amount).." RD")
-			RS:StoreChat( targ, "You received "..tostring(amount).." RD from the aether!" )
+			RS:StoreChat( ply, "You spawned "..targ:Nick().." "..tostring(amount).." "..RS.Currency)
+			RS:StoreChat( targ, "You received "..tostring(amount).." "..RS.Currency.." from the aether!" )
 		--end
 	else
 		RS:StoreChat(ply, "An Error Occured.")
@@ -116,8 +116,8 @@ concommand.Add("shop_setpoints",function(ply, cmd, args)
 		--if ply:GetMoney() >= amount then
 			--ply:SubMoney( amount )
 			targ:SetMoney( amount )
-			RS:StoreChat( ply, "You set "..targ:Nick().."'s money to "..tostring(amount).." RD")
-			RS:StoreChat( targ, "Your money was set to "..tostring(amount).." RD by "..ply:Nick() )
+			RS:StoreChat( ply, "You set "..targ:Nick().."'s money to "..tostring(amount).." "..RS.Currency)
+			RS:StoreChat( targ, "Your money was set to "..tostring(amount).." "..RS.Currency.." by "..ply:Nick() )
 		--end
 	else
 		RS:StoreChat(ply, "An Error Occured.")
@@ -326,7 +326,7 @@ concommand.Add("shop_addstorepoints",function(ply, cmd, args)
 	local amt = tonumber(args[1])
 	if amt then
 		RS:AddStoreMoney( amt )
-		RS:StoreChat(ply, "Added "..tostring(amt).." RD to the store's reserves." )
+		RS:StoreChat(ply, "Added "..tostring(amt).." "..RS.Currency.." to the store's reserves." )
 	else
 		RS:StoreChat(ply, "An Error Occured.")
 	end
