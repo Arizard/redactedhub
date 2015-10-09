@@ -168,6 +168,48 @@ concommand.Add("shop_spawnitem", function(ply, cmd, args)
 
 end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
 
+concommand.Add("shop_removeitemsfromplayer", function(ply, cmd, args)
+
+	if AdminAccess( ply ) == false then 
+		RS:StoreChat( ply, "No Access." )
+		return false
+	end
+
+	if args[1] and args[2] then
+		local targets = FindPlayersByName( args[1] )
+		--local amount = tonumber( args[2] )
+
+		if #targets > 1 then
+			RS:StoreChat( ply, "Too many targets! Try using a more specific name." )
+			return false
+		end
+
+		if #targets < 1 then
+			RS:StoreChat( ply, "No players found with that name." )
+			return false
+		end
+
+		local targ = targets[1]
+
+		--if ply:GetMoney() >= amount then
+			--ply:SubMoney( amount )
+
+			if RS.Items[args[2]] then
+
+				RS:RemoveItemsFromPlayer( targ:SteamID64(), args[2] )
+				RS:StoreChat( ply, "Removed all instances of "..args[2].." from "..targ:Nick().."'s account." )
+
+			else
+				RS:StoreChat( ply, "Item not found.")
+			end
+		--end
+	else
+		RS:StoreChat(ply, "An Error Occured.")
+	end
+
+
+end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
+
 concommand.Add("shop_restock_if_empty", function(ply, cmd, args)
 
 	if AdminAccess( ply ) == false then 
@@ -368,6 +410,12 @@ end)
 RS:AddChatCommand("spawnitem", function(ply, args)
 
 	ply:ConCommand("shop_spawnitem "..args[1].." "..args[2])
+
+end)
+
+RS:AddChatCommand("removeitems", function(ply, args)
+
+	ply:ConCommand("shop_removeitemsfromplayer "..args[1].." "..args[2])
 
 end)
 

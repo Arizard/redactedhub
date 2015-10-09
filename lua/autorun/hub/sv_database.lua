@@ -62,6 +62,15 @@ function RS:DestroyItem( itemid )
 
 end
 
+function RS:RemoveItemsFromPlayer( id64, class ) -- give the item back to the store
+	local res = sql.Query( "SELECT ID FROM shop_items WHERE ( class = '"..class.."' AND owner_id64 = '"..id64.."' )")
+	if res then
+		for k,v in pairs( res ) do
+			RS:ChangeItemOwnerManual( v["ID"], "0", "SERVER" )
+		end
+	end
+end
+
 function RS:ChangeItemOwner( itemid, ply )
 
 	print("changing item",itemid,"to owner",ply:Nick())
@@ -94,7 +103,7 @@ end
 function RS:GetEquippedItems( ply )
 	local res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."' AND equipped=1")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		return res
 	end
 end
@@ -115,7 +124,7 @@ function RS:GetStoreStock( class )
 	--print("retrieving stock for item "..tostring(class))
 	local res = sql.Query("SELECT ID FROM shop_items WHERE class='"..class.."' AND owner_id64 = '0'")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		return #res
 	else
 		return 0
@@ -135,7 +144,7 @@ end
 function RS:EquipItem( ply, id ) 
 	local res = sql.Query( "UPDATE shop_items SET equipped=1 WHERE ID="..tostring(id).."")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		--return res
 	end
 
@@ -147,7 +156,7 @@ function RS:PlayerEquip( ply, id)
 	--get class
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id))
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		local class = res[1]["class"]
 		local item = RS.Items[class]
 		if item then
@@ -158,7 +167,7 @@ end
 function RS:HolsterItem( ply, id )
 	local res = sql.Query( "UPDATE shop_items SET equipped=0 WHERE ID="..tostring(id).."")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		return res
 	end
 
@@ -169,7 +178,7 @@ function RS:PlayerHolster( ply, id)
 	--get class
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id))
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		local class = res[1]["class"]
 		local item = RS.Items[class]
 		if item then
@@ -182,7 +191,7 @@ function RS:ItemEquipped( id )
 	local res = sql.Query( "SELECT equipped FROM shop_items WHERE ID="..tostring(id) )
 	if res == false then print(sql.LastError()) return end
 
-	if res != nil then
+	if res ~= nil then
 		--PrintTable(res)
 		return tobool(res[1]["equipped"])
 	end
@@ -192,7 +201,7 @@ function RS:DoesPlayerOwn( ply, id )
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id).." AND owner_id64='"..ply:SteamID64().."'" )
 	if res == false then print(sql.LastError()) return end
 
-	if res != nil then
+	if res ~= nil then
 		--PrintTable(res)
 		return true
 	else
@@ -204,7 +213,7 @@ function RS:DoesPlayerOwnClass( ply, class )
 	local res = sql.Query( "SELECT equipped FROM shop_items WHERE class='"..tostring(class).."' AND owner_id64='"..ply:SteamID64().."'" )
 	if res == false then print(sql.LastError()) return end
 
-	if res != nil then
+	if res ~= nil then
 		--PrintTable(res)
 		local equipped = false
 		for k,v in ipairs(res) do
@@ -222,7 +231,7 @@ function RS:GetItemTable( id )
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id) )
 	if res == false then print(sql.LastError()) return end
 
-	if res != nil then
+	if res ~= nil then
 		return RS.Items[res[1]["class"]]
 	end
 
@@ -296,7 +305,7 @@ function PLAYER:GetMoney()
 	local res = sql.Query("SELECT * FROM shop_money WHERE owner_id64='"..self:SteamID64().."'")
 	if res == false then print(sql.LastError()) return end
 
-	if res != nil then
+	if res ~= nil then
 		local money = tonumber(res[1]["money"])
 		return money
 	else
@@ -315,7 +324,7 @@ function PLAYER:SetMoney( amt )
 	local res = sql.Query("UPDATE shop_money SET money="..amt.." WHERE owner_id64='"..self:SteamID64().."'")
 	--print(sql.LastError(), "MEMEMEMEMEME")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		--local money = tonumber(res[1]["money"])
 		--return money
 	end
@@ -336,7 +345,7 @@ end
 function RS:GetStoreMoney()
 	local res = sql.Query("SELECT money FROM shop_money WHERE owner_id64='0'")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 		local money = tonumber(res[1]["money"])
 		return money
 	end
@@ -345,7 +354,7 @@ end
 function RS:SetStoreMoney( amt )
 	local res = sql.Query("UPDATE shop_money SET money="..amt.." WHERE owner_id64='0'")
 	if res == false then print(sql.LastError()) return end
-	if res != nil then
+	if res ~= nil then
 	end
 	RS:SyncStoreMoney()
 end

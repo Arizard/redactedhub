@@ -66,6 +66,11 @@ RS.InfoHTML = [[
 			Aliases: <b>None</b>.
 		</p>
 		<p>
+			<b>/removeitems NAME ITEMNAME</b><br>
+			Removes all instances of an item from a player's account. ITEMNAME is the filename of the item, without the .lua extension.<br>
+			Aliases: <b>None</b>.
+		</p>
+		<p>
 			<b>/restockempty AMOUNT</b><br>
 			Restocks all empty items by a certain amount. BE CAREFUL when using this, as it takes a few seconds to go through a lot of items.<br>
 			Aliases: <b>None</b>.
