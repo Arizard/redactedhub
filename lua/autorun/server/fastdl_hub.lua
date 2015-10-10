@@ -1,4 +1,6 @@
 --Generated with Kogitsune's Resource Generator
+resource.AddFile( "materials/trails/vaporgrid.vmt" )
+resource.AddFile( "materials/trails/vaporgrid.vtf" )
 resource.AddFile( "materials/trails/ausmoney.vmt" )
 resource.AddFile( "materials/trails/ausmoney.vtf" )
 resource.AddFile( "materials/trails/australian_flag.vmt" )
