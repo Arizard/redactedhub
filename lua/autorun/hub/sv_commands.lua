@@ -27,6 +27,42 @@ local function AdminAccess( ply )
 	end
 end
 
+concommand.Add("shop_senditem",function(ply, cmd, args)
+
+	if args[1] and args[2] and IsValid( ply ) then
+		local targets = FindPlayersByName( args[1] )
+		local itemid = tonumber( args[2] )
+
+		if #targets > 1 then
+			RS:StoreChat( ply, "Too many targets! Try using a more specific name." )
+			return false
+		end
+ 
+		if #targets < 1 then
+			RS:StoreChat( ply, "No players found with that name." )
+			return false
+		end
+
+		local targ = targets[1]
+
+		if RS:DoesPlayerOwn( ply, itemid ) then
+			RS:ChangeItemOwner( itemid, targ )
+
+			local itable = RS:GetItemTable( itemid )
+
+			RS:StoreChat(ply, "You sent "..itable.Name.." to "..targ:Nick().."!")
+			RS:StoreChat(targ, "You received "..itable.Name.." from "..ply:Nick().."!")
+
+			RS:UpdateInventory(ply)
+			RS:UpdateInventory(targ)
+		end
+
+	else
+		RS:StoreChat(ply, "An Error Occured.")
+	end
+
+end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
+
 concommand.Add("shop_sendpoints",function(ply, cmd, args)
 
 	if args[1] and args[2] and IsValid( ply ) then
@@ -413,6 +449,12 @@ RS:AddChatCommand("spawnitem", function(ply, args)
 
 end)
 
+RS:AddChatCommand("senditem", function(ply, args)
+
+	ply:ConCommand("shop_senditem "..args[1].." "..args[2])
+
+end)
+
 RS:AddChatCommand("removeitems", function(ply, args)
 
 	ply:ConCommand("shop_removeitemsfromplayer "..args[1].." "..args[2])
@@ -430,7 +472,7 @@ RS:AddChatCommand("restockempty", function(ply, args)
 	ply:ConCommand("shop_restock_if_empty "..(args[1] or ""))
 end)
 
-RS:AddChatCommand("addstoream", function(ply, args)
+RS:AddChatCommand("addstorevc", function(ply, args)
 	ply:ConCommand("shop_addstorepoints "..(args[1] or "") )
 end)
 

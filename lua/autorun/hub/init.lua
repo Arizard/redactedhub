@@ -148,19 +148,22 @@ function RS:SellItem( ply, id )
 	if RS:DoesPlayerOwn( ply, id ) then
 		local item = RS:GetItemTable( id )
 
+		local saleprice = math.floor(item.StorePrice * RS.RefundRatio)
+
+
 		if item.Buyable == false then
 			RS:StoreMessage(ply, "You cannot sell this item.")
 			return
 		end
 
-		if RS:GetStoreMoney() < item.StorePrice then
+		if RS:GetStoreMoney() < saleprice then
 			RS:StoreMessage(ply, "Store is too poor.")
 			return false
 		end
 
 		RS:PlayerHolster( ply, id )
-		ply:AddMoney( item.StorePrice )
-		RS:SubStoreMoney( item.StorePrice )
+		ply:AddMoney( saleprice )
+		RS:SubStoreMoney( saleprice )
 		RS:ChangeItemOwnerManual( id, "0", "SERVER" )
 
 		RS:UpdateInventory( ply )

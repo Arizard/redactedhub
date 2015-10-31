@@ -576,9 +576,10 @@ function ICON:PerformLayout()
 			self.b:SetText(tostring(self.item.StorePrice).." "..RS.Currency )
 
 			function self.b:DoClick()
-
-				BuyItem( self:GetParent().item.Class )
-
+				self.m = vgui.Create("DMenu")
+				self.m.pur = self.m:AddOption("Purchase ("..tostring(self:GetParent().item.StorePrice).." "..RS.Currency..")", function() BuyItem( self:GetParent().item.Class ) end):SetIcon( "icon16/coins_delete.png")
+			
+				self.m:Open()
 			end
 		end
 	end
@@ -590,13 +591,24 @@ function ICON:PerformLayout()
 
 			self.m = vgui.Create("DMenu")
 			self.m.e = self.m:AddOption( "Toggle", function() ToggleItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/user_green.png" )
-			self.m.s = self.m:AddOption( "Sell", function() SellItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/coins.png")
+			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() SellItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/coins_add.png")
+
+			self.m.send = self.m:AddSubMenu("Send To")
+
+			for k,v in ipairs(player.GetAll()) do
+				if v ~= LocalPlayer() then
+					self.m.send:AddOption( v:Nick(), function() 
+						
+						RunConsoleCommand( "shop_senditem", string.Split(v:Nick(), " ")[1], tostring(self:GetParent():GetID()) )
+					end):SetIcon("icon16/email_go.png")
+				end
+			end
 
 			self.m:Open()
 
 		end
 
-		
+		self.b:SetColors(Color(128,128,128), Color(75,255,75))
 	end
 
 	self.b:SetWide( self:GetWide()-4 )
@@ -652,6 +664,12 @@ function ICON:Paint()
 		surface.DrawTexturedRect(4,4,16,16)
 	end
 
+	if (self.item.StorePrice <= LocalPlayer():GetMoney()) or self.inv == true then
+		self.b:SetColors(Color(128,128,128), Color(75,255,75))
+	else
+		self.b:SetColors(Color(128,128,128), Color(255,75,75))
+	end
+
 end
 function ICON:SetItem( tab )
 	self.item = tab
@@ -662,10 +680,6 @@ function ICON:SetItem( tab )
 	end
 
 	self.b:SetColors(Color(128,128,128), Color(255,40,40))
-
-	if (self.item.StorePrice <= LocalPlayer():GetMoney()) then
-		self.b:SetColors(Color(128,128,128), Color(75,255,75))
-	end
 	
 	self.oldcol = VecToCol(LocalPlayer():GetPlayerColor())
 	self.oldmat = LocalPlayer():GetMaterial()
@@ -1079,6 +1093,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 	hub:SetTitle(RS.HubTitle)
 	hub:SetSize(ScrW()-16, ScrH()-16)
 	--hub:SetSize(800,600)
+
+	RS.HubWindow = hub
 	
 	hub:Center()
 
@@ -1735,6 +1751,8 @@ function ToggleItem( id )
 end
 
 net.Receive("UpdateInventory", function()
+
+	if not IsValid( RS.HubWindow ) or RS.HubWindow == nil then return end
 
 	local owneditems = net.ReadTable()
 
