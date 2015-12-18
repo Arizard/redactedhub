@@ -1005,7 +1005,7 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	link = string.Replace(link, "http://www.youtube.com/watch?v=", "")
 	--link = string.Replace(link, "/watch?v=","/embed/")
 	--link = link.."?autoplay=1"
-	local embed = "http://gameredacted.net/youtube_jukebox.html?v=" .. link .."&volume="..tostring(GetConVarNumber("grhub_jukebox_volume"))
+	local embed = "http://arizard.github.io/youtube_jukebox/host.html?v=" .. link .."&volume="..tostring(GetConVarNumber("grhub_jukebox_volume"))
 	--``print(embed)
 	RS.JukePlayer:OpenURL(embed)
 	RS.JukePlayer:SetAllowLua( true )
