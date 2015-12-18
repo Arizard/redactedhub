@@ -1011,11 +1011,15 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	RS.JukePlayer:SetAllowLua( true )
 	RS.JukeCurrent = {artist,song,embed} -- parents everyehwere
 
-	timer.Create("FixJukeboxVolumeStuff", 3,0, function() RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );") end )
+	timer.Create("FixJukeboxVolumeStuff", 3,0, function()
+		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );")
+		
+		-- net.Start("RS_JukeboxNowPlaying")
+		-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+		-- net.SendToServer()
+	end )
 
-	net.Start("RS:JukeboxNowPlaying")
-	net.WriteTable( RS.JukeCurrent )
-	net.SendToServer()
+	
 end
 
 if not file.Exists("grhub_jukebox_queue.txt", "DATA") then

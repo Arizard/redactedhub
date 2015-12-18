@@ -25,7 +25,7 @@ util.AddNetworkString("DestroyClientModel")
 
 util.AddNetworkString("OpenHub")
 
-util.AddNetworkString("RS:JukeboxNowPlaying")
+util.AddNetworkString("RS_JukeboxNowPlaying")
 
 concommand.Add("hub_open2", function(ply, cmd, args) 
 
@@ -451,11 +451,13 @@ hook.Add("PlayerLoadout", "UpdateDonatorStatus", UpdateDonatorStatus)
 -- jukebox notification functionality
 local lastJukeboxUpdate = 0
 local jukeUpdateInterval = 60
-net.Receive("RS:JukeboxNowPlaying", function(len, ply)
-	local current = net.ReadTable()
+net.Receive("RS_JukeboxNowPlaying", function(len, ply)
+	local current = util.JSONToTable( net.ReadString() )
 
-	if lastJukeboxUpdate+jukeUpdateInterval > CurTime() then return end
+	if not ( lastJukeboxUpdate+jukeUpdateInterval > CurTime() ) then
 
-	lastJukeboxUpdate = CurTime()
-	RS:StoreBroadcast(ply:Nick().." is now listening to "..current[2].." by "..current[1].."! Type /juke to listen to more music!")
+		lastJukeboxUpdate = CurTime()
+		RS:StoreBroadcast(ply:Nick().." is now listening to "..current[2].." by "..current[1].."! Type /juke to listen to more music!")
+
+	end
 end)
