@@ -256,3 +256,10 @@ resource.AddFile( "materials/models/horsie/horsie_c.vtf" )
 resource.AddFile( "materials/models/horsie/horsie_normal.vtf" )
 resource.AddFile( "models/horsie/horsiemask.mdl" )
 
+--christmeme
+resource.AddFile( "materials/trails/candycane_1.vmt" )
+resource.AddFile( "materials/trails/candycane_1.vtf" )
+
+resource.AddFile( "materials/trails/candycane_2.vmt" )
+resource.AddFile( "materials/trails/candycane_2.vtf" )
+
