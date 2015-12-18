@@ -181,5 +181,19 @@
 	},
 	["Macklemore & Ryan Lewis"] = {
 		["Downtown"] = "https://www.youtube.com/watch?v=JGhoLcsr8GA"
+	},
+	["ZHU"] = {
+		["x AlunaGeorge - Automatic"] = "https://www.youtube.com/watch?v=Fh9afpUYVHI",
+		["x Skrillex x THEY. - Working For It"] = "https://www.youtube.com/watch?v=hn1awIcBrhw",
+	},
+	["MØ"] = {
+		["Kamikaze"] = "https://www.youtube.com/watch?v=eVD9j36Ke94"
+	},
+	["Major Lazer & DJ Snake"] = {
+		["Lean On"] = "https://www.youtube.com/watch?v=YqeW9_5kURI"
+	},
+	["DJ Snake"] = {
+		["Middle"] = "https://www.youtube.com/watch?v=mOKqNxN4jWM",
 	}
+
 }
