@@ -263,3 +263,36 @@ resource.AddFile( "materials/trails/candycane_1.vtf" )
 resource.AddFile( "materials/trails/candycane_2.vmt" )
 resource.AddFile( "materials/trails/candycane_2.vtf" )
 
+-- new taunts dec 2015
+local taunts = {
+	"ram_stomach",
+	"say_my_name",
+	"seduce_me",
+	"sue_me",
+	"tearing_lisa",
+	"teleport_bread",
+	"this_is_illegal_you_know",
+	"you_sob",
+	"another_one",
+	"appreciate",
+	"asshole_tv",
+	"bacon",
+	"cancer",
+	"cant_handle_success",
+	"communism",
+	"dear_god",
+	"death_alternative",
+	"dickwad",
+	"excuse2",
+	"hasta_la_vista",
+	"kill_you_last",
+	"kiss_mothers_behind",
+	"now_good_time",
+	"pizza",
+	"quickly",
+}
+
+for k,v in ipairs(taunts) do
+	resource.AddFile( "sound/taunts/"..v..".ogg" )
+end
+
