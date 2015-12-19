@@ -296,3 +296,6 @@ for k,v in ipairs(taunts) do
 	resource.AddFile( "sound/taunts/"..v..".ogg" )
 end
 
+-- angel wings
+resource.AddFile("models/sinful/angel_wings.mdl")
+resource.AddFile("materials/models/sinful/angel_wings/wings.vmt")

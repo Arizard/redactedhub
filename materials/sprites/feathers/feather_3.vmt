@@ -1,0 +1,6 @@
+"Sprite"
+{
+	"$basetexture" "sprites/Feathers/feather_3"
+	"$spriterendermode" 5
+	"$vertexcolor"  1
+}
