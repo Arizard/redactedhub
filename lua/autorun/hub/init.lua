@@ -407,7 +407,7 @@ concommand.Add("shop_taunt", function(ply, cmd, args) -- handle taunts
 		if not ply.NextTaunt then ply.NextTaunt = 0 end
 		if ply.ChoiceTaunt and ply.NextTaunt then
 			if ply.NextTaunt < CurTime() then
-				ply:EmitSound( ply.ChoiceTaunt )
+				ply:EmitSound( ply.ChoiceTaunt, 500, 100, 1 )
 				ply.NextTaunt = CurTime() + 35
 			end
 		end
