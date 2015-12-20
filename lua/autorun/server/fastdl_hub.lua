@@ -298,4 +298,8 @@ end
 
 -- angel wings
 resource.AddFile("models/sinful/angel_wings.mdl")
+resource.AddFile("models/sinful/angel_wings.dx80.vtx")
+resource.AddFile("models/sinful/angel_wings.dx90.vtx")
+resource.AddFile("models/sinful/angel_wings.sw.vtx")
+resource.AddFile("models/sinful/angel_wings.vvd")
 resource.AddFile("materials/models/sinful/angel_wings/wings.vmt")
