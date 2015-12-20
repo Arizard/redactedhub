@@ -1,0 +1,21 @@
+ITEM.Name = "Gold!"
+ITEM.Description = "Always believe!"
+ITEM.StorePrice = 510
+ITEM.Material = "models/player/shared/gold_player.vmt"
+
+function ITEM:OnEquip(ply, id)
+	ply:SetMaterial( self.Material )
+end
+
+function ITEM:OnHolster(ply, id)
+	ply:SetMaterial( "" )
+end
+
+function ITEM:OnSpawn(ply, id)
+end
+
+function ITEM:OnDeath(ply, id)
+end
+
+function ITEM:OnThink(ply, id)
+end
