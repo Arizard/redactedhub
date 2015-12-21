@@ -1422,14 +1422,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	if RS.Items then
 		for k,v2 in pairs(RS.ItemsOrdered) do
 			v = RS.Items[v2] -- some black magic to make it all ordered. I'm pretty sure i'm my own grandfather now.
-			if v.Buyable == true then
-				local icon = vgui.Create("hub_icon")
-				icon:SetItem(v)
-				icon:SetStock( hubdata.stock[v.Class] )
-				--icon:SetWide( store.Categories[ v.Category ]:GetWide()/6 - 7*4 )
-				--print(v.Category)
-				store.Categories[ v.Category ]:Add( icon )
-			else
+			if v.IsToken ~= true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
 				icon:SetStock( 0 )
