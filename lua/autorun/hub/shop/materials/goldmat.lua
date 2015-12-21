@@ -1,7 +1,8 @@
 ITEM.Name = "Gold!"
 ITEM.Description = "Always believe!"
-ITEM.StorePrice = 510
+ITEM.StorePrice = 99999
 ITEM.Material = "models/player/shared/gold_player.vmt"
+ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

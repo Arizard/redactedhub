@@ -1,7 +1,8 @@
 ITEM.Name = "Ice"
 ITEM.Description = "Ice Ice Baby"
-ITEM.StorePrice = 410
+ITEM.StorePrice = 99999
 ITEM.Material = "models/player/shared/ice_player.vmt"
+ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

@@ -1,7 +1,8 @@
 ITEM.Name = "Chrome"
 ITEM.Description = "Shiny!"
-ITEM.StorePrice = 360
+ITEM.StorePrice = 99999
 ITEM.Material = "debug/env_cubemap_model.vmt"
+ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )
