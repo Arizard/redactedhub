@@ -227,8 +227,10 @@ function RS:OpenCrate( ply, id )
 			net.WriteString( class )
 			net.Send( ply )
 
+			RS:DestroyItem( id )
+			
 			timer.Simple(3, function() 
-				RS:DestroyItem( id )
+				
 				RS:CreateItem( RS.Items[result], ply )
 				RS:UpdateInventory( ply )
 
