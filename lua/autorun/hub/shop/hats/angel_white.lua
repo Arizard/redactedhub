@@ -1,5 +1,5 @@
 ITEM.Name = "Angel Wings"
-ITEM.Description = "Messenger of god."
+ITEM.Description = "Summer Lovin' Crate"
 ITEM.StorePrice = 99999
 ITEM.HatModel = "models/sinful/angel_wings.mdl"
 ITEM.HatMat = ""

@@ -1,5 +1,5 @@
 ITEM.Name = "Gold!"
-ITEM.Description = "Always believe!"
+ITEM.Description = "Summer Lovin' Crate"
 ITEM.StorePrice = 99999
 ITEM.Material = "models/player/shared/gold_player.vmt"
 ITEM.Buyable = false

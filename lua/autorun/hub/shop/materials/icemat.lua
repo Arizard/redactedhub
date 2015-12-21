@@ -1,5 +1,5 @@
 ITEM.Name = "Ice"
-ITEM.Description = "Ice Ice Baby"
+ITEM.Description = "Summer Lovin' Crate"
 ITEM.StorePrice = 99999
 ITEM.Material = "models/player/shared/ice_player.vmt"
 ITEM.Buyable = false
