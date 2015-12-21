@@ -603,7 +603,7 @@ function ICON:PerformLayout()
 				if v ~= LocalPlayer() then
 					self.m.send:AddOption( v:Nick(), function() 
 						
-						RunConsoleCommand( "shop_senditem", string.Split(v:Nick(), " ")[1], tostring(self:GetParent():GetID()) )
+						RunConsoleCommand( "shop_senditem", v:Nick(), tostring(self:GetParent():GetID()) )
 					end):SetIcon("icon16/email_go.png")
 				end
 			end
