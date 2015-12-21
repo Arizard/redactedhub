@@ -71,6 +71,16 @@ function RS:RemoveItemsFromPlayer( id64, class ) -- give the item back to the st
 	end
 end
 
+function RS:HasInventorySpace( ply )
+	local id64 = ply:SteamID64()
+	local res = sql.Query( "SELECT ID FROM shop_items WHERE ( owner_id64 = '"..id64.."' )")
+	if #res < RS.InventoryLimit then
+		return true
+	else
+		return false
+	end
+end
+
 function RS:ChangeItemOwner( itemid, ply )
 
 	print("changing item",itemid,"to owner",ply:Nick())

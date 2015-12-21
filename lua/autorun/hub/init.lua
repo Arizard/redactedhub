@@ -108,15 +108,24 @@ function RS:BuyItem( ply, class )
 	--print("Buyable?",item.Buyable)
 	if item.Buyable == false then
 		RS:StoreMessage(ply, "You cannot buy this item.")
+		ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 		return
 	end
 
 	if money < item.StorePrice then
 		RS:StoreMessage(ply, "Insufficient funds.")
+		ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 		return
 	end
 	if stock < amt then
 		RS:StoreMessage(ply, "No stock for that item.")
+		ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
+		return
+	end
+
+	if not RS:HasInventorySpace( ply ) then
+		RS:StoreMessage(ply, "Your inventory is full.")
+		ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 		return
 	end
 
@@ -155,11 +164,13 @@ function RS:SellItem( ply, id )
 
 		if item.Buyable == false then
 			RS:StoreMessage(ply, "You cannot sell this item.")
+			ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 			return
 		end
 
 		if RS:GetStoreMoney() < saleprice then
 			RS:StoreMessage(ply, "Store is too poor.")
+			ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 			return false
 		end
 
