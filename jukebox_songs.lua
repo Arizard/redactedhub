@@ -194,6 +194,12 @@
 	},
 	["DJ Snake"] = {
 		["Middle"] = "https://www.youtube.com/watch?v=mOKqNxN4jWM",
+	},
+	["Red Hot Chilli Peppers"] = {
+		["Dani California"] = "https://www.youtube.com/watch?v=8MR9OH6BjOo",
+		["By The Way"] = "https://www.youtube.com/watch?v=JnfyjwChuNU",
+		["Under The Bridge"] = "https://www.youtube.com/watch?v=lwlogyj7nFE",
+		["Scar Tissue"] = "https://www.youtube.com/watch?v=mzJj5-lubeM",
 	}
 
 }
