@@ -593,7 +593,7 @@ function ICON:PerformLayout()
 			if self:GetParent().item.Category ~= "crates" then
 				self.m.e = self.m:AddOption( "Toggle", function() ToggleItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/user_green.png" )
 			else
-				self.m.e = self.m:AddOption( "Open", function() OpenCrate( self:GetParent():GetID() ) end ):SetIcon( "icon16/briefcase.png" )
+				self.m.e = self.m:AddOption( "Open", function() if self:GetParent() then OpenCrate( self:GetParent():GetID() ) end end ):SetIcon( "icon16/briefcase.png" )
 			end
 			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() SellItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/coins_add.png")
 
