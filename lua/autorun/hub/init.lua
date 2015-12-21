@@ -231,6 +231,8 @@ function RS:OpenCrate( ply, id )
 				RS:DestroyItem( id )
 				RS:CreateItem( RS.Items[result], ply )
 				RS:UpdateInventory( ply )
+
+				RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..RS.Items[result].Name.."!" )
 			end )
 		end
 	end
