@@ -1,6 +1,6 @@
 ITEM.Name = "Sunflower Paint"
 ITEM.Description = "Colours you yellow."
-ITEM.StorePrice = 100
+ITEM.StorePrice = 30
 ITEM.Col = Color(241, 196, 15)
 
 

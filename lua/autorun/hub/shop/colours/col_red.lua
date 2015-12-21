@@ -1,6 +1,6 @@
 ITEM.Name = "Alizarin Paint"
 ITEM.Description = "Colours you red."
-ITEM.StorePrice = 60
+ITEM.StorePrice = 30
 ITEM.Col = Color(231, 76, 60)
 
 function ITEM:OnEquip(ply, id)
