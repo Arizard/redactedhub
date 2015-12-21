@@ -9,7 +9,9 @@ ITEM.CrateContains = {
 	["col_blue"] = 25,
 	["col_red"] = 20,
 	["burgerhat"] = 5,
+	["chromemat"] = 2,
 	["angel_white"] = 1,
+	["goldmat"] = 1,
 }
 
 function ITEM:OnEquip(ply, id)
