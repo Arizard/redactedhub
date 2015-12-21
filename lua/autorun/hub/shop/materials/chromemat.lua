@@ -1,6 +1,6 @@
 ITEM.Name = "Chrome"
 ITEM.Description = "Summer Lovin' Crate"
-ITEM.StorePrice = 99999
+ITEM.StorePrice = 1000
 ITEM.Material = "debug/env_cubemap_model.vmt"
 ITEM.Buyable = false
 

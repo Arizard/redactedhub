@@ -162,7 +162,7 @@ function RS:SellItem( ply, id )
 		local saleprice = math.floor(item.StorePrice * RS.RefundRatio)
 
 
-		if item.Buyable == false then
+		if item.IsToken == true then
 			RS:StoreMessage(ply, "You cannot sell this item.")
 			ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 			return
