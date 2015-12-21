@@ -39,12 +39,12 @@ RS.InfoHTML = [[
 			Aliases: <b>None</b>.
 		</p>
 		<p>
-			<b>/juke NAME AMOUNT</b><br>
+			<b>/juke</b><br>
 			Opens the jukebox where you can play music. This can also be accessed by clicking on the Jukebox tab in the Hub.<br>
 			Aliases: <b>jukebox, music</b>.
 		</p>
 		<p>
-			<b>/shop NAME AMOUNT</b><br>
+			<b>/shop</b><br>
 			Opens your item inventory in the Hub. Can also be accessed by pressing F3.<br>
 			Aliases: <b>store, hub</b>.
 		</p>
@@ -118,6 +118,7 @@ RS.InfoHTML = [[
 		
 		<h2>Credits</h2>
 		<b>Arizard</b> - Development of this addon<br>
+		<b>Zelpa</b> - fuckin cool kid</br>
 		<b>The GameREDACTED Community</b><br>
 		<b>Facepunch</b>
 		<br><br><br><br>
