@@ -1425,7 +1425,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 			if v.IsToken ~= true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
-				icon:SetStock( 0 )
+				icon:SetStock( hubdata.stock[v.Class] )
 				if store.Categories[ v.Category ] then
 					store.Categories[ v.Category ]:Add( icon )
 				end
