@@ -590,7 +590,11 @@ function ICON:PerformLayout()
 		function self.b:DoClick()
 
 			self.m = vgui.Create("DMenu")
-			self.m.e = self.m:AddOption( "Toggle", function() ToggleItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/user_green.png" )
+			if self:GetParent().item.Category ~= "crates" then
+				self.m.e = self.m:AddOption( "Toggle", function() ToggleItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/user_green.png" )
+			else
+				self.m.e = self.m:AddOption( "Open", function() OpenCrate( self:GetParent():GetID() ) end ):SetIcon( "icon16/briefcase.png" )
+			end
 			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() SellItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/coins_add.png")
 
 			self.m.send = self.m:AddSubMenu("Send To")
@@ -728,6 +732,11 @@ function ICON:SetItem( tab )
 		self.model:SetLookAt(Vector(0,0,0))
 		self.model.Entity:SetMaterial( self.item.HatMat )
 		self.model.Entity:SetColor( self.item.HatCol )
+	elseif self.item.Category == "crates" then
+		self.model:SetModel(self.item.CrateModel)
+		self.model:SetFOV(35)
+		self.model:SetLookAt(Vector(0,0,5))
+		self.model.Entity:SetMaterial( self.item.CrateMat )
 	end
 
 	self:PerformLayout()
@@ -1355,7 +1364,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		local x = self:GetWide()/2 - w/2
 		local y = 16
 
-		surface.SetDrawColor(Color(46, 204, 113, a))
+		surface.SetDrawColor(HexColor("#E74C3C",a))
 		surface.DrawRect(x,y, w, h)
 
 		draw.ShadowText(m, "Screen_Small", self:GetWide()/2, y + h/2, Color(255,255,255,a > 255 and 255 or ( a > 0 and a or 0 )), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
@@ -1754,6 +1763,12 @@ function ToggleItem( id )
 	net.SendToServer()
 end
 
+function OpenCrate( id )
+	net.Start("OpenCrate")
+	net.WriteInt( id, 32 )
+	net.SendToServer()
+end
+
 net.Receive("UpdateInventory", function()
 
 	if not IsValid( RS.HubWindow ) or RS.HubWindow == nil then return end
@@ -1809,4 +1824,147 @@ function RS:InvalidatePlayerColor()
 			return self.PlyCol 
 		end
 	end
+end
+
+net.Receive("OpenCrateGUI", function( len )
+	RS:OpenCrateGUI( net.ReadString(), net.ReadString() )
+end)
+
+function RS:OpenCrateGUI( result, class ) -- class as in crate class
+
+	local crate = RS.Items[class]
+	local item = RS.Items[result]
+
+	local frame = vgui.Create("hub_window")
+	frame:SetSize( 640,360 )
+	frame:Center()
+	frame:MakePopup()
+	frame:SetTitle("Opening "..crate.Name.." Crate")
+
+	function frame:PaintOver(w,h)
+		local x, y = 320-40 + math.sin(CurTime()*4)*7, 170
+
+		local tri = {
+			{x+40, y-10},
+			{x+80, y+20},
+			{x+40, y+50}
+		}
+
+		draw.NoTexture()
+		surface.SetDrawColor( HexColor("#2ecc71") )
+		surface.DrawRect(x,y,41,40)
+		surface.EasyPoly( tri )
+	end
+
+	local cratepanel = vgui.Create("DPanel", frame)
+	cratepanel:SetWide(cratepanel:GetParent():GetWide()/2 -12)
+	cratepanel:SetTall(cratepanel:GetWide())
+	cratepanel:SetPos(8,cratepanel:GetParent():GetTall() - cratepanel:GetTall()-8)
+	function cratepanel:Paint( w, h )
+		surface.SetDrawColor(48,48,48,170)
+		--surface.DrawRect(0,0,w,h)
+	end
+
+	local cratemodel = vgui.Create("DModelPanel", cratepanel)
+	cratemodel:SetModel( crate.CrateModel )
+	cratemodel:SetSize(cratemodel:GetParent():GetSize())
+	cratemodel:SetLookAt( Vector(0,0,5) )
+	cratemodel:SetFOV( 40 )
+	cratemodel.Entity:SetMaterial( crate.CrateMat )
+
+	local resultpanel = vgui.Create("DPanel", frame)
+	resultpanel:SetWide(resultpanel:GetParent():GetWide()/2 - 12)
+	resultpanel:SetTall(resultpanel:GetWide())
+	resultpanel:SetPos(resultpanel:GetParent():GetWide()-resultpanel:GetWide()-8,resultpanel:GetParent():GetTall() - resultpanel:GetTall()-8)
+
+	resultpanel.clk = 0
+	resultpanel.dt = 0
+	resultpanel.last = CurTime()
+
+	surface.PlaySound("crates/item_open_crate_short.ogg")
+
+	resultpanel.countdown = 3
+	function resultpanel:PaintOver( w, h )
+		self.dt = CurTime() - self.last
+		self.last = CurTime()
+
+		self.clk = self.clk + self.dt
+
+		if self.clk > 1 then
+			self.countdown = self.countdown - 1
+			if self.countdown == 0 then
+				local icon = vgui.Create("hub_icon", self)
+				icon:SetItem( item )
+				icon:SetInventoryItem( false)
+				icon:SetEquipped( false )
+				icon:SetStock( 1 )
+				if item then
+					icon:SetIsToken( item.IsToken )
+				end
+
+				surface.PlaySound("crates/killstreak.ogg")
+
+				function icon.b:OnMousePressed() end
+				function icon.b:Paint() end
+				icon.b.text = "Woohoo!"
+				icon:Center()
+				icon.ox, icon.oy = icon:GetPos()
+				function icon:Think()
+					self:SetPos( self.ox, self.oy + math.sin(CurTime()*2)*8 )
+				end
+			end
+			self.clk = 0
+		end
+
+		if self.countdown <= 0 then return end
+
+		surface.SetDrawColor( HexColor("#ecf0f1") )
+		surface.DrawRect(0,0,w,h)
+
+		local m = Matrix()
+		m:Translate( Vector( self:LocalToScreen( w/2 ), self:LocalToScreen( -h-20 ) ) )
+		--m:Scale( Vector(1,1,1)*1.1 )
+		m:Rotate( Angle(0, math.sin(CurTime()*16)*7, 0) )
+		m:Translate( -Vector( self:LocalToScreen( w/2 ), self:LocalToScreen( -h-20 ) ) )
+
+		cam.PushModelMatrix( m )
+
+		draw.ShadowText( tostring(self.countdown).."...", "Screen_XLarge", w/2, h/2-8, HexColor("#2ecc71"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		
+		cam.PopModelMatrix()
+	end
+
+	function resultpanel:Paint(w,h) -- pinwheel animation
+
+		local clk = CurTime()
+		local x, y = w/2, h/2
+
+		surface.SetDrawColor( HexColor("#2ecc71") )
+		surface.DrawRect(0,0,w,h)
+
+		surface.SetDrawColor( HexColor("#ecf0f1", math.sin(CurTime() + math.pi/2)*127 + 127) )
+		surface.DrawRect(0,0,w,h)
+
+		for i = 1, 6 do
+			local arclength = ( 360/(6*2) ) * math.pi/180
+			local interval = ( 360/6 ) * math.pi/180
+			local k = i-1
+			local d = 400
+			local tri = {
+				{x,y},
+				{x + math.cos( clk + interval*k )*d, y+math.sin( clk + interval*k )*d},
+				{x + math.cos( clk + interval*k + arclength )*d, y+math.sin( clk + interval*k + arclength )*d},
+			}
+			draw.NoTexture()
+			surface.SetDrawColor( Color(255,0,255) )
+			surface.EasyPoly( tri )
+
+			surface.SetDrawColor( Color(0,255,255, math.sin(CurTime())*127 + 127) )
+			surface.EasyPoly( tri )
+		end
+
+	end
+
+	
+
 end

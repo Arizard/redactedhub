@@ -232,7 +232,7 @@ function RS:GetItemTable( id )
 	if res == false then print(sql.LastError()) return end
 
 	if res ~= nil then
-		return RS.Items[res[1]["class"]]
+		return RS.Items[res[1]["class"]], res[1]["class"]
 	end
 
 

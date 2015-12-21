@@ -3,6 +3,11 @@ include("shared.lua")
 
 
 local fontstandard = "Roboto"
+surface.CreateFont("Screen_XLarge", {
+	font = fontstandard.." Black",
+	size = 56,
+	antialias = true,
+})
 surface.CreateFont("Screen_Large", {
 	font = fontstandard.." Black",
 	size = 32,

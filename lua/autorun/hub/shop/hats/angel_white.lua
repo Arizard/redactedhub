@@ -1,6 +1,6 @@
 ITEM.Name = "Angel Wings"
 ITEM.Description = "Messenger of god."
-ITEM.StorePrice = 300
+ITEM.StorePrice = 800
 ITEM.HatModel = "models/sinful/angel_wings.mdl"
 ITEM.HatMat = ""
 ITEM.HatCol = Color(255,255,255)

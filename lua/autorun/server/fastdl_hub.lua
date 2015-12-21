@@ -318,3 +318,7 @@ resource.AddFile( "materials/models/player/shared/ice_player.vtf" )
 resource.AddFile( "materials/models/player/shared/ice_player_lightwarp.vtf" )
 resource.AddFile( "materials/models/player/shared/ice_player_warp.vtf" )
 resource.AddFile( "materials/models/weapons/c_items/c_xms_cold_shoulder_normal.vtf" )
+
+-- tf2 crate sounds
+resource.AddFile( "sound/crates/item_open_crate_short.ogg" )
+resource.AddFile( "sound/crates/killstreak.ogg" )
