@@ -1429,6 +1429,13 @@ function RS:CreateHubWindow( hubdata, opentab )
 				--icon:SetWide( store.Categories[ v.Category ]:GetWide()/6 - 7*4 )
 				--print(v.Category)
 				store.Categories[ v.Category ]:Add( icon )
+			else
+				local icon = vgui.Create("hub_icon")
+				icon:SetItem(v)
+				icon:SetStock( 0 )
+				if store.Categories[ v.Category ] then
+					store.Categories[ v.Category ]:Add( icon )
+				end
 			end
 		end
 	end
