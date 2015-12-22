@@ -8,7 +8,7 @@ RS.Currency = "VC" -- "VaporCredits"
 
 RS.RefundRatio = 0.5 -- percentage of cash refunded on sale
 
-RS.InventoryLimit = 48
+RS.InventoryLimit = 64
 
 RS.InfoHTML = [[
 	<style>
@@ -39,12 +39,12 @@ RS.InfoHTML = [[
 			Aliases: <b>None</b>.
 		</p>
 		<p>
-			<b>/juke NAME AMOUNT</b><br>
+			<b>/juke</b><br>
 			Opens the jukebox where you can play music. This can also be accessed by clicking on the Jukebox tab in the Hub.<br>
 			Aliases: <b>jukebox, music</b>.
 		</p>
 		<p>
-			<b>/shop NAME AMOUNT</b><br>
+			<b>/shop</b><br>
 			Opens your item inventory in the Hub. Can also be accessed by pressing F3.<br>
 			Aliases: <b>store, hub</b>.
 		</p>

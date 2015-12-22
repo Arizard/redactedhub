@@ -591,19 +591,22 @@ function ICON:PerformLayout()
 
 			self.m = vgui.Create("DMenu")
 			if self:GetParent().item.Category ~= "crates" then
-				self.m.e = self.m:AddOption( "Toggle", function() ToggleItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/user_green.png" )
+				self.m.e = self.m:AddOption( "Toggle", function() if self then ToggleItem( self:GetParent():GetID() ) end end ):SetIcon( "icon16/user_green.png" )
 			else
-				self.m.e = self.m:AddOption( "Open", function() if self:GetParent() then OpenCrate( self:GetParent():GetID() ) end end ):SetIcon( "icon16/briefcase.png" )
+				self.m.e = self.m:AddOption( "Open", function() if self then OpenCrate( self:GetParent():GetID() ) end end ):SetIcon( "icon16/briefcase.png" )
 			end
-			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() SellItem( self:GetParent():GetID() ) end ):SetIcon( "icon16/coins_add.png")
+			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() if self then SellItem( self:GetParent():GetID() ) end end ):SetIcon( "icon16/coins_add.png")
 
 			self.m.send = self.m:AddSubMenu("Send To")
 
 			for k,v in ipairs(player.GetAll()) do
 				if v ~= LocalPlayer() then
 					self.m.send:AddOption( v:Nick(), function() 
-						
-						RunConsoleCommand( "shop_senditem", string.Split(v:Nick(), " ")[1], tostring(self:GetParent():GetID()) )
+						if self ~= nil then
+							if self:GetParent() ~= nil then
+								RunConsoleCommand( "shop_senditem", v:Nick(), tostring(self:GetParent():GetID()) )
+							end
+						end
 					end):SetIcon("icon16/email_go.png")
 				end
 			end
