@@ -74,6 +74,9 @@ end
 function RS:HasInventorySpace( ply )
 	local id64 = ply:SteamID64()
 	local res = sql.Query( "SELECT ID FROM shop_items WHERE ( owner_id64 = '"..id64.."' )")
+	if not res then
+		return false
+	end
 	if #res < RS.InventoryLimit then
 		return true
 	else
@@ -398,3 +401,10 @@ hook.Add("PlayerInitialSpawn","SyncMoney",function( ply )
 	RS:SyncStoreMoney()
 	ply:SyncMoney()
 end)
+
+-- NEW PARADIGM -- Marketplace, not "shop"
+-- behaves like the steam marketplace
+-- players find items in crates or in random drops and create listings on the marketplace to buy and sell
+-- needs a database to store all the listings
+
+--sql.Query("CREATE TABLE IF NOT EXISTS shop_listings (id int, price int, ")

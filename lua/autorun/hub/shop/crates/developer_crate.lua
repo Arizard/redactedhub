@@ -1,17 +1,18 @@
-ITEM.Name = "Summer Lovin'"
+ITEM.Name = "Developer"
 ITEM.IsCrate = true
 ITEM.Description = "Crate"
 ITEM.CrateModel = "models/Items/item_item_crate_dynamic.mdl"
-ITEM.CrateMat = "models/player/shared/gold_player.vmt"
+ITEM.CrateMat = "debug/debugempty.vmt"
 ITEM.StorePrice = 100
 ITEM.Col = Color(241, 196, 15)
 ITEM.CrateContains = {
-	["col_blue"] = 75,
-	["col_red"] = 75,
-	["burgerhat"] = 5,
-	["chromemat"] = 2,
-	["angel_white"] = 1,
-	["goldmat"] = 1,
+	["col_yellow"] = 75,
+	["col_purple"] = 40,
+	["3dglasses"] = 5,
+	["trail_missing"] = 2,
+	["missingmat"] = 1,
+	["obsoletemat"] = 1,
+	["wireframe"] = 1,
 }
 
 function ITEM:OnEquip(ply, id)

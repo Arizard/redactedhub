@@ -1,8 +1,9 @@
 ITEM.Name = "Missing"
-ITEM.Description = "where can i get cs:s"
+ITEM.Description = "Developer Crate"
 ITEM.StorePrice = 120
 ITEM.Trail = "debug/debugempty.vmt"
 ITEM.Col = Color(255,255,255)
+ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)
 	if ply[self.Name] then

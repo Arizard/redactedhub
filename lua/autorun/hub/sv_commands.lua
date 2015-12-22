@@ -270,6 +270,28 @@ concommand.Add("shop_restock_if_empty", function(ply, cmd, args)
 
 end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
 
+concommand.Add("shop_restock", function(ply, cmd, args)
+
+	if AdminAccess( ply ) == false then 
+		RS:StoreChat( ply, "No Access." )
+		return false
+	end
+
+	if args[1] == nil then RS:StoreChat(ply, "Please specify class.") return end
+	if args[2] == nil then RS:StoreChat(ply, "Please specify amount.") return end
+	RS:StoreChat(ply, "Restocking..." )
+
+	local class = args[1]
+	
+	for i = 1, args[2] do
+		print("RedactedHub - Restocking "..class)
+		RS:CreateItemManual(RS.Items[class], "0","SERVER")
+	end
+
+	RS:StoreChat(ply, "Restocked "..class.." by "..tostring(args[1]).."." )
+
+end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
+
 concommand.Add("shop_clearstock", function(ply, cmd, args)
 
 	if AdminAccess( ply ) == false then 
@@ -470,6 +492,10 @@ RS:AddChatCommandAlias("hub","store")
 
 RS:AddChatCommand("restockempty", function(ply, args)
 	ply:ConCommand("shop_restock_if_empty "..(args[1] or ""))
+end)
+
+RS:AddChatCommand("restock", function(ply, args)
+	ply:ConCommand("shop_restock "..(args[1] or "").." "..(args[2] or ""))
 end)
 
 RS:AddChatCommand("addstorevc", function(ply, args)

@@ -1,7 +1,7 @@
-ITEM.Name = "Wireframe"
+ITEM.Name = "Download Failed"
 ITEM.Description = "Developer Crate"
-ITEM.StorePrice = 180
-ITEM.Material = "models/wireframe"
+ITEM.StorePrice = 310
+ITEM.Material = "debug/debugempty.vmt"
 ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)

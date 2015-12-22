@@ -1,7 +1,7 @@
-ITEM.Name = "Wireframe"
+ITEM.Name = "Obsolete"
 ITEM.Description = "Developer Crate"
-ITEM.StorePrice = 180
-ITEM.Material = "models/wireframe"
+ITEM.StorePrice = 310
+ITEM.Material = "root/materials/editor/obsolete"
 ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)
