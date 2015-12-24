@@ -81,7 +81,7 @@ concommand.Add("shop_sendpoints",function(ply, cmd, args)
 
 		local targ = targets[1]
 
-		if ply:GetMoney() >= amount then
+		if ply:GetMoney() >= amount and amount > 0 then
 			ply:SubMoney( amount )
 			targ:AddMoney( amount )
 			RS:StoreChat( ply, "You gave "..targ:Nick().." "..tostring(amount).." "..RS.Currency)
