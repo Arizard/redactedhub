@@ -1327,7 +1327,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 						ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
 
 						m:SetAngles(ang)
-						m:SetColor( m.col or Color(255,255,255) )						
+						m:SetColor( m.col or Color(255,255,255) )	
+						m:SetMaterial( m.mat )					
 						m:DrawModel()
 
 

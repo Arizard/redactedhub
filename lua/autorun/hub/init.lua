@@ -306,6 +306,8 @@ function ItemPlayerDeath( ply )
 			end
 		end
 	end
+
+
 end
 hook.Add("PlayerDeath", "RS:PlayerDeath", ItemPlayerDeath)
 
@@ -509,4 +511,15 @@ net.Receive("RS_JukeboxNowPlaying", function(len, ply)
 		RS:StoreBroadcast(ply:Nick().." is now listening to "..current[2].." by "..current[1].."! Type /juke to listen to more music!")
 
 	end
+end)
+
+util.AddNetworkString("RSPlayerKilled")
+
+hook.Add("PlayerDeath", "RSPlayerKilled", function( ply )
+	net.Start( "RSPlayerKilled" )
+	net.WriteString( ply:SteamID64() )
+	net.WriteString( ply.LastMaterial )
+	--print( ply.LastMaterial )
+	net.Broadcast()
+	--ply:GetRagdollEntity():SetMaterial( ply:GetMaterial() )
 end)

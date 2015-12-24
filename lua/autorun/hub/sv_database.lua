@@ -174,6 +174,9 @@ function RS:PlayerEquip( ply, id)
 		local item = RS.Items[class]
 		if item then
 			item:OnEquip( ply, id )
+			if item.Category == "materials" then
+				ply.LastMaterial = item.Material
+			end
 		end
 	end
 end

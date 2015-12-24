@@ -236,6 +236,7 @@ function RS:RenderClientModels()
 				ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
 
 				m:SetAngles(ang)
+				m:SetMaterial( m.mat )
 
 				if (m.IsToken == false) or (not m.IsToken) then
 					m:DrawModel()
@@ -340,11 +341,30 @@ end
 hook.Add("CreateMove", "RS:TauntKeys", RS.TauntKeys)
 
 -- materials on death
-hook.Add("CreateClientsideRagdoll", "RS:RagdollMaterials", function( ent, ragdoll )
+local deathmats = {}
+net.Receive("RSPlayerKilled", function()
+	local id64 = net.ReadString()
+	local mat = net.ReadString()
 
-	if ent:IsPlayer() then
-		if ragdoll:IsValid() then
-			ragdoll:SetMaterial( ent:GetMaterial() )
+	print( id64, mat)
+
+	for k,v in ipairs(player.GetAll()) do
+		if v:SteamID64() == id64 then
+			deathmats[v] = mat
+		end
+	end
+
+end)
+
+hook.Add("Tick", "DeadMaterials", function()
+	for ply, mat in pairs( deathmats ) do
+		if IsValid( ply ) then
+			if IsValid(ply:GetRagdollEntity()) then
+				ply:GetRagdollEntity():SetMaterial( mat )
+				deathmats[ply] = nil
+			end
+		else
+			deathmats[ply] = nil
 		end
 	end
 end)
