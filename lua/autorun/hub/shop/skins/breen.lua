@@ -1,7 +1,7 @@
-ITEM.Name = "Alyx Vance"
-ITEM.Description = [[Deuteragonist.]]
-ITEM.StorePrice = 400
-ITEM.PlayerModel = "models/player/alyx.mdl"
+ITEM.Name = "Wallace Breen"
+ITEM.Description = "It's safer here."
+ITEM.StorePrice = 290
+ITEM.PlayerModel = "models/player/breen.mdl"
 
 function ITEM:OnEquip(ply, id)
 	timer.Simple(1, function() ply:SetModel(self.PlayerModel) end)

@@ -735,6 +735,13 @@ function ICON:SetItem( tab )
 		self.model:SetLookAt(Vector(0,0,0))
 		self.model.Entity:SetMaterial( self.item.HatMat )
 		self.model.Entity:SetColor( self.item.HatCol )
+
+		if string.find( self.item.HatModel, "apb" ) then
+			--self.model:SetCamPos( self.model:GetCamPos() + Vector(0,0,70) )
+			self.model:SetLookAt( Vector(0,0,70) )
+			self.model:SetFOV( 20 )
+		end
+		--print(self.item.HatCol)
 	elseif self.item.Category == "crates" then
 		self.model:SetModel(self.item.CrateModel)
 		self.model:SetFOV(35)
@@ -1326,9 +1333,12 @@ function RS:CreateHubWindow( hubdata, opentab )
 						ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
 						ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
 
-						m:SetAngles(ang)
-						m:SetColor( m.col or Color(255,255,255) )	
-						m:SetMaterial( m.mat )					
+						m:SetAngles(ang)	
+						m:SetMaterial( m.mat )	
+						m:SetColor( m.col or Color(0,0,0) )
+						--if id == "apb_afro" then
+							--PrintTable(m:GetTable())
+						--end				
 						m:DrawModel()
 
 
