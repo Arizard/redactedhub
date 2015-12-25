@@ -1129,7 +1129,7 @@ function RS:ImproveScrollbar( vbar )
 	function vbar.btnUp:Paint(w, h) end
 	function vbar.btnDown:Paint(w, h) end
 	function vbar.btnGrip:Paint(w, h)
-		draw.RoundedBox(4, 0,0,w,h, Color(0,0,0,200) )
+		draw.RoundedBox(4, 0,0,w,h, Color(0,0,0,100) )
 	end
 end
 
