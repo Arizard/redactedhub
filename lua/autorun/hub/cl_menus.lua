@@ -561,7 +561,7 @@ function ICON:Init()
 	self.b = vgui.Create("hub_button", self)
 	self.b:SetSize(117, 22)
 	self.b:SetPos(2,196-24)
-	self.b:SetColors(Color(128,128,128), Color(255,75,75))
+	self.b:SetColors(Color(140,140,140), Color(255,75,75))
 	
 	
 	self.trail = Material(")") -- brank
@@ -577,7 +577,17 @@ function ICON:PerformLayout()
 
 			function self.b:DoClick()
 				self.m = vgui.Create("DMenu")
-				self.m.pur = self.m:AddOption("Purchase ("..tostring(self:GetParent().item.StorePrice).." "..RS.Currency..")", function() BuyItem( self:GetParent().item.Class ) end):SetIcon( "icon16/coins_delete.png")
+				self.m.pur = self.m:AddOption("Purchase ("..tostring(self:GetParent().item.StorePrice).." "..RS.Currency..")", 
+					function() 
+						BuyItem( self:GetParent().item.Class ) 
+					end):SetIcon( "icon16/coins_delete.png")
+				for i = 1, 4 do
+					self.m["restock_"..tostring(i)] = self.m:AddOption("Restock ("..tostring(i*8)..")", 
+						function() 
+							RunConsoleCommand( "shop_restock", self:GetParent().item.Class, i*8 )
+							self:GetParent():SetStock( self:GetParent():GetStock() + i*8 )
+						end):SetIcon( "icon16/coins_delete.png")
+				end
 			
 				self.m:Open()
 			end
@@ -615,7 +625,7 @@ function ICON:PerformLayout()
 
 		end
 
-		self.b:SetColors(Color(128,128,128), Color(75,255,75))
+		self.b:SetColors(Color(140,140,140), Color(75,255,75))
 	end
 
 	self.b:SetWide( self:GetWide()-4 )
@@ -623,8 +633,21 @@ function ICON:PerformLayout()
 
 end
 local eqmat = Material("icon16/user_green.png")
+
+ICON.RareColors = {
+	Color(160,160,160),
+	HexColor("#7081FF"),
+	HexColor("#70CDFF"),
+	HexColor("#86FF70"),
+	HexColor("#FFA270"),
+	HexColor("#E970FF"),
+}
+
 function ICON:Paint()
-	surface.SetDrawColor(Color(48,48,48,170))
+	surface.SetDrawColor( self.RareColors[ (self.item.Rarity or 0) +1 ] )
+	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
+
+	surface.SetDrawColor( Color(160,160,160, 150) )
 	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
 	if not self.item then return nil end
@@ -672,9 +695,9 @@ function ICON:Paint()
 	end
 
 	if (self.item.StorePrice <= LocalPlayer():GetMoney()) or self.inv == true then
-		self.b:SetColors(Color(128,128,128), Color(75,255,75))
+		self.b:SetColors(Color(140,140,140), Color(75,255,75))
 	else
-		self.b:SetColors(Color(128,128,128), Color(255,75,75))
+		self.b:SetColors(Color(140,140,140), Color(255,75,75))
 	end
 
 end
@@ -686,7 +709,7 @@ function ICON:SetItem( tab )
 		return false
 	end
 
-	self.b:SetColors(Color(128,128,128), Color(255,40,40))
+	self.b:SetColors(Color(140,140,140), Color(255,40,40))
 	
 	self.oldcol = VecToCol(LocalPlayer():GetPlayerColor())
 	self.oldmat = LocalPlayer():GetMaterial()
@@ -753,6 +776,9 @@ function ICON:SetItem( tab )
 end
 function ICON:SetStock( amt )
 	self.stock = amt
+end
+function ICON:GetStock( )
+	return self.stock
 end
 function ICON:OnCursorEntered2()
 
@@ -1032,12 +1058,11 @@ function RS:JukeboxStartPlayer( artist, song, link )
 
 	timer.Create("FixJukeboxVolumeStuff", 3,0, function()
 		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );")
-		
-		-- net.Start("RS_JukeboxNowPlaying")
-		-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
-		-- net.SendToServer()
 	end )
 
+	net.Start("RS_JukeboxNowPlaying")
+	net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+	net.SendToServer()
 	
 end
 

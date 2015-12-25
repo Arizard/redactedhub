@@ -3,6 +3,7 @@ ITEM.Description = "Summer Lovin' Crate"
 ITEM.StorePrice = 1000
 ITEM.Material = "models/player/shared/gold_player.vmt"
 ITEM.Buyable = false
+ITEM.Rarity = 4
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

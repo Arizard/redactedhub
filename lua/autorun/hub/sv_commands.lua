@@ -288,7 +288,7 @@ concommand.Add("shop_restock", function(ply, cmd, args)
 		RS:CreateItemManual(RS.Items[class], "0","SERVER")
 	end
 
-	RS:StoreChat(ply, "Restocked "..class.." by "..tostring(args[1]).."." )
+	RS:StoreChat(ply, "Restocked "..class.." by "..tostring(args[2]).."." )
 
 end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
 
@@ -528,3 +528,4 @@ end)
 
 RS:AddChatCommandAlias("jukebox","juke")
 RS:AddChatCommandAlias("jukebox","music")
+RS:AddChatCommandAlias("restock","stock")
