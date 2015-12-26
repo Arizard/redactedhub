@@ -633,6 +633,7 @@ function ICON:PerformLayout()
 
 end
 local eqmat = Material("icon16/user_green.png")
+local crossmat = Material("icon16/cancel.png")
 
 ICON.RareColors = {
 	Color(160,160,160),
@@ -692,6 +693,12 @@ function ICON:Paint()
 		surface.SetMaterial( eqmat )
 		surface.SetDrawColor(255,255,255)
 		surface.DrawTexturedRect(4,4,16,16)
+	end
+
+	if self.item.Buyable == false then
+		surface.SetMaterial( crossmat )
+		surface.SetDrawColor(255,255,255)
+		surface.DrawTexturedRect(self:GetWide()-4-16,4,16,16)
 	end
 
 	if (self.item.StorePrice <= LocalPlayer():GetMoney()) or self.inv == true then
@@ -1060,9 +1067,9 @@ function RS:JukeboxStartPlayer( artist, song, link )
 		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );")
 	end )
 
-	net.Start("RS_JukeboxNowPlaying")
-	net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
-	net.SendToServer()
+	-- net.Start("RS_JukeboxNowPlaying")
+	-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+	-- net.SendToServer()
 	
 end
 
@@ -1459,9 +1466,20 @@ function RS:CreateHubWindow( hubdata, opentab )
 	end
 
 	if RS.Items then
+		for k,v2 in pairs(RS.ItemsOrdered) do -- unbuyable items come first
+			v = RS.Items[v2] 
+			if v.IsToken ~= true and v.Buyable == false then
+				local icon = vgui.Create("hub_icon")
+				icon:SetItem(v)
+				icon:SetStock( hubdata.stock[v.Class] )
+				if store.Categories[ v.Category ] then
+					store.Categories[ v.Category ]:Add( icon )
+				end
+			end
+		end
 		for k,v2 in pairs(RS.ItemsOrdered) do
 			v = RS.Items[v2] -- some black magic to make it all ordered. I'm pretty sure i'm my own grandfather now.
-			if v.IsToken ~= true then
+			if v.IsToken ~= true and v.Buyable == true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
 				icon:SetStock( hubdata.stock[v.Class] )

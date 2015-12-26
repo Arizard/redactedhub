@@ -200,6 +200,9 @@
 		["By The Way"] = "https://www.youtube.com/watch?v=JnfyjwChuNU",
 		["Under The Bridge"] = "https://www.youtube.com/watch?v=lwlogyj7nFE",
 		["Scar Tissue"] = "https://www.youtube.com/watch?v=mzJj5-lubeM",
+	},
+	["Evanescence"] = {
+		["Bring Me To Life"] = "https://www.youtube.com/watch?v=SEy6WPB_txw",
 	}
 
 }
