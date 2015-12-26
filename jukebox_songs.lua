@@ -203,6 +203,10 @@
 	},
 	["Evanescence"] = {
 		["Bring Me To Life"] = "https://www.youtube.com/watch?v=SEy6WPB_txw",
+	},
+	["Jonathan Coulton"] = {
+		["Still Alive"] = "https://www.youtube.com/watch?v=Y6ljFaKRTrI",
+		["Want You Gone"] = "https://www.youtube.com/watch?v=dVVZaZ8yO6o",
 	}
 
 }
