@@ -207,6 +207,14 @@
 	["Jonathan Coulton"] = {
 		["Still Alive"] = "https://www.youtube.com/watch?v=Y6ljFaKRTrI",
 		["Want You Gone"] = "https://www.youtube.com/watch?v=dVVZaZ8yO6o",
+	},
+	["The Offspring"] = {
+		["You're Gonna Go Far Kid"] = "https://www.youtube.com/watch?v=XjW4_OlhKfo"
+	},
+	["Linkin Park"] = {
+		["Crawling"] = "https://www.youtube.com/watch?v=Gd9OhYroLN0",
+		["Numb"] = "https://www.youtube.com/watch?v=kXYiU_JCYtU",
+		["In The End"] = "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
 	}
 
 }
