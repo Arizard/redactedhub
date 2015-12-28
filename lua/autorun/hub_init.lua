@@ -95,6 +95,10 @@ for k,cat in ipairs(categories) do
 			util.PrecacheModel( ITEM.PlayerModel )
 		end
 
+		if cat == "hats" then
+			util.PrecacheModel( ITEM.HatModel )
+		end
+
 		RS.Items[itemname] = table.Copy(ITEM)
 		RS.ItemsOrdered[catnum + kk] = itemname
 	end
