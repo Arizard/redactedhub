@@ -418,3 +418,6 @@ if ( SERVER ) then
 	resource.AddFile( "models/zelpa/vhs7/ghelm.mdl" )
 	resource.AddFile( "models/zelpa/vhs7/shelm.mdl" )
 end
+
+-- speed 2 cruise control
+resource.AddFile("sound/taunts/speed2cruisecontrol.ogg")
