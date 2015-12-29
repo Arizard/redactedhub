@@ -12,7 +12,11 @@
 	},
 	["Daft Punk"] = {
 		["One More Time"] = "https://www.youtube.com/watch?v=jtQC8ChpUeg",
-		["Get Lucky"] = "https://www.youtube.com/watch?v=D2f6lNmmd1M"
+		["Get Lucky"] = "https://www.youtube.com/watch?v=D2f6lNmmd1M",
+		["Harder Better Faster Stronger"] = "https://www.youtube.com/watch?v=GDpmVUEjagg",
+		["Digital Love"] = "https://www.youtube.com/watch?v=QOngRDVtEQI",
+		["Around the World"] = "https://www.youtube.com/watch?v=yca6UsllwYs",
+		["Technologic"] = "https://www.youtube.com/watch?v=D8K90hX4PrE",
 	},
 	["Red"] = {
 		["Lost [Acoustic Version] (bhop_addict_v2 ending song)"] = "https://www.youtube.com/watch?v=2G7hfkGlgmc"
