@@ -221,6 +221,9 @@
 		["Numb"] = "https://www.youtube.com/watch?v=kXYiU_JCYtU",
 		["In The End"] = "https://www.youtube.com/watch?v=eVTXPUF4Oz4",
 	},
-
+	["AWOLNATION"] = {
+		["Sail"] = "https://www.youtube.com/watch?v=tgIqecROs5M",
+		["Run"] = "https://www.youtube.com/watch?v=mw2kKyJu9gY",
+	}
 
 }
