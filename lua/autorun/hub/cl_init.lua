@@ -374,3 +374,30 @@ local PLAYER = FindMetaTable("Player")
 function PLAYER:IsVip()
 	return self:GetNWBool("has_vip", false)
 end
+
+hook.Add("PreDrawPlayerHands", "HandMaterials", function( hands, vm, ply, wep )
+	hands:SetMaterial( ply:GetMaterial() or "" )
+	--hands:SetColor( ply:GetColor() or Color(255,255,255) )
+
+	local c = ply:GetColor()
+	render.SetColorModulation( c.r/255, c.g/255, c.b/255 )
+
+	--PrintTable( vm:GetMaterials() )
+end)
+
+hook.Add("PreDrawViewModel", "HandMaterials", function( vm, ply, wep )
+	--`PrintTable( vm:GetMaterials() )
+	if vm then
+		--print( vm:GetModel() )
+		PrintTable( vm:GetTable() )
+		if vm:GetMaterials()[1] == "models/weapons/v_hand/v_hand_sheet" then
+			vm:SetSubMaterial( 0, ply:GetMaterial() or "" )
+		else
+			vm:SetSubMaterial( 0, "" )
+		end
+	end
+end)
+
+hook.Add("PostDrawPlayerHands", "HandMaterials", function( hands, vm, ply, wep )
+	render.SetColorModulation( 1,1,1 )
+end)

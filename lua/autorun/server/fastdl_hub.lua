@@ -421,3 +421,7 @@ end
 
 -- speed 2 cruise control
 resource.AddFile("sound/taunts/speed2cruisecontrol.ogg")
+
+-- taunts
+resource.AddFile("sound/taunts/cantbelieveyouvedonethis.ogg")
+resource.AddFile("sound/taunts/thatsprettygood.ogg")

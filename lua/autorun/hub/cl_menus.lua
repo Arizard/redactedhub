@@ -777,6 +777,12 @@ function ICON:SetItem( tab )
 		self.model:SetFOV(35)
 		self.model:SetLookAt(Vector(0,0,5))
 		self.model.Entity:SetMaterial( self.item.CrateMat )
+	elseif self.item.Category == "weapons" then
+		self.model:SetModel(self.item.WeaponModel)
+		self.model:SetFOV(25)
+		self.model:SetLookAt(Vector(0,0,0))
+		self.model.Entity:SetMaterial( self.item.WeaponMat or "" )
+		self.model.Entity:SetColor( self.item.WeaponCol or Color(255,255,255) )
 	end
 
 	self:PerformLayout()

@@ -12,6 +12,8 @@ ITEM.CrateContains = {
 	["chromemat"] = 2,
 	["angel_white"] = 1,
 	["goldmat"] = 1,
+	["daftpunk_guy"] = 1,
+	["daftpunk_thomas"] = 1,
 }
 
 function ITEM:OnEquip(ply, id)

@@ -67,7 +67,7 @@ concommand.Add("shop_sendpoints",function(ply, cmd, args)
 
 	if args[1] and args[2] and IsValid( ply ) then
 		local targets = FindPlayersByName( args[1] )
-		local amount = tonumber( args[2] )
+		local amount = math.ceil( tonumber( args[2] ) )
 
 		if #targets > 1 then
 			RS:StoreChat( ply, "Too many targets! Try using a more specific name." )

@@ -4,7 +4,10 @@ ITEM.StorePrice = 100
 ITEM.PlayerModel = "models/player/group03/female_06.mdl"
 
 function ITEM:OnEquip(ply, id)
-	timer.Simple(1, function() ply:SetModel(self.PlayerModel) end)
+	timer.Simple(1, function() 
+		ply:SetModel(self.PlayerModel)
+		ply:SetupHands( ply )
+	end)
 end
 
 function ITEM:OnHolster(ply, id)
