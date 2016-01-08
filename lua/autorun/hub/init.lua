@@ -471,9 +471,9 @@ local PLAYER = FindMetaTable('Player')
 function PLAYER:IsVip()
 	local ug = self:GetNWString("usergroup", "user")
 
-	if ug == "owner" or ug == "superadmin" or string.sub(ug,1, 7) == "donator" or string.sub(ug,1,3) == "vip" or string.sub(ug,1,7) == "founder" or self:IsSuperAdmin() then
-		return true
-	end
+	-- if ug == "owner" or ug == "superadmin" or string.sub(ug,1, 7) == "donator" or string.sub(ug,1,3) == "vip" or string.sub(ug,1,7) == "founder" or self:IsSuperAdmin() then
+	-- 	return true
+	-- end
 
 	local has_vip = tobool( self:GetPData("has_vip", false) )
 
