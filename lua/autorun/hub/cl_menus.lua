@@ -1477,7 +1477,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 			if v.IsToken ~= true and v.Buyable == false then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
-				icon:SetStock( hubdata.stock[v.Class] )
+				icon:SetStock( hubdata.stock[v.Class] or 0 )
 				if store.Categories[ v.Category ] then
 					store.Categories[ v.Category ]:Add( icon )
 				end
@@ -1488,7 +1488,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 			if v.IsToken ~= true and v.Buyable == true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
-				icon:SetStock( hubdata.stock[v.Class] )
+				icon:SetStock( hubdata.stock[v.Class] or 0 )
 				if store.Categories[ v.Category ] then
 					store.Categories[ v.Category ]:Add( icon )
 				end

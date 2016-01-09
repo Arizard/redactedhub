@@ -144,6 +144,24 @@ function RS:GetStoreStock( class )
 	end
 end
 
+function RS:GetAllStocks()
+	
+	local res = sql.Query("SELECT class, COUNT(*) FROM shop_items WHERE owner_id64 = '0' GROUP BY class")
+	if res == false then print(sql.LastError()) return end
+	if res ~= nil then
+		local stocks = {}
+		for i = 1, #res do
+			row = res[i]
+			stocks[row["class"]] = row["COUNT(*)"]
+		end
+
+		return stocks
+	else
+		return {}
+	end
+
+end
+
 function RS:ToggleItem( ply, id )
 	if self:ItemEquipped( id ) == true then
 		self:HolsterItem( ply, id )

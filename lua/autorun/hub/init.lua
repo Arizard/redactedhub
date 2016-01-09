@@ -30,7 +30,7 @@ util.AddNetworkString("OpenHub")
 util.AddNetworkString("RS_JukeboxNowPlaying")
 
 concommand.Add("hub_open2", function(ply, cmd, args) 
-
+	--local start = SysTime()
 	if not ply.LastHubOpen then ply.LastHubOpen = 0 end
 
 	if ply.LastHubOpen < CurTime() then
@@ -38,7 +38,7 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 		net.Start("OpenHub")
 		local data = {}
 		data.owneditems = RS:GetOwnedItems(ply)
-		data.stock = {}
+		data.stock = RS:GetAllStocks() -- faster than doing it individually, less sql queries
 		data.opentab = tonumber(args[1] or 1)
 
 		--print(type(data.opentab), data.opentab)
@@ -47,9 +47,9 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 			data.opentab = args[1]
 		end
 
-		for k,v in pairs(RS.Items) do
-			data.stock[k] = RS:GetStoreStock(v.Class)
-		end
+		-- for k,v in pairs(RS.Items) do -- SUPER SLOW!!!
+		-- 	data.stock[k] = RS:GetStoreStock(v.Class)
+		-- end
 
 		--PrintTable(data.stock)
 
@@ -58,6 +58,21 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 
 		ply.LastHubOpen = CurTime() + 3
 	end
+	--print(SysTime() - start)
+
+	-- benchmarks
+	-- 197 items, 100 stock each = 197x100 items = 197000 items
+	-- RS:GetStoreStock(class) + for loop = 0.54s
+	-- RS:GetAllStocks() = 0.04s
+
+	-- as of writing the store has approx 7000 items
+	-- 7000/197
+	-- 36 stock each
+
+	-- 7000 items with RS:GetAllStocks() = 0.02s
+	-- 7000 items with RS:GetStoreStock( class ) + for loop = 0.2s
+
+	-- it seems that letting SQL do all the work will reduce the computation time by 90%.
 end)
 
 net.Receive("BuyItem", function(len, ply)
