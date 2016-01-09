@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	$basetexture "Models/jessev92/apb/loverboy1"
+	$bumpmap		"dev/flat_normal"
+	$nocull			1
+	
+	$phong 1
+	$phongexponent 5
+	$phongboost 1.0
+	$phongfresnelranges "[0 0.5 1]"
+	
+	$alphatest 1
+	
+}

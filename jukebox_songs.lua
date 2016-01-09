@@ -224,6 +224,13 @@
 	["AWOLNATION"] = {
 		["Sail"] = "https://www.youtube.com/watch?v=tgIqecROs5M",
 		["Run"] = "https://www.youtube.com/watch?v=mw2kKyJu9gY",
+	},
+	["Pink Guy"] = {
+		["PINK GUY COOKS RAMEN AND RAPS"] = "https://www.youtube.com/watch?v=4qKJS-8bzoA",
+		["RICE BALLS"] = "https://www.youtube.com/watch?v=LeMVDuIO3J0",
+		["KILL YOURSELF"] = "https://www.youtube.com/watch?v=2dbR2JZmlWo",
+		["FRANK SAYS"] = "https://www.youtube.com/watch?v=2G2dsk83eiE",
+		["MEME MACHINE"] = "https://www.youtube.com/watch?v=1pA2FKVQQmk",
 	}
 
 }
