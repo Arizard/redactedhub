@@ -231,6 +231,13 @@
 		["KILL YOURSELF"] = "https://www.youtube.com/watch?v=2dbR2JZmlWo",
 		["FRANK SAYS"] = "https://www.youtube.com/watch?v=2G2dsk83eiE",
 		["MEME MACHINE"] = "https://www.youtube.com/watch?v=1pA2FKVQQmk",
+	},
+	["Caesars"] = {
+		["Jerk It Out"] = "https://www.youtube.com/watch?v=4B1ZQcbSvdU",
+	},
+	["Franz Ferdinand"] = {
+		["Take Me Out"] = "https://www.youtube.com/watch?v=Ijk4j-r7qPA",
+		["Ulysses"] = "https://www.youtube.com/watch?v=w5CTu5RylCM",
 	}
 
 }
