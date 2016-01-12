@@ -238,6 +238,16 @@
 	["Franz Ferdinand"] = {
 		["Take Me Out"] = "https://www.youtube.com/watch?v=Ijk4j-r7qPA",
 		["Ulysses"] = "https://www.youtube.com/watch?v=w5CTu5RylCM",
-	}
+	},
+	["Rianna Corcoran"] = {
+		["Body Gold (Oh Wonder Cover)"] = "https://www.youtube.com/watch?v=rJuuLmfIQYY",
+		["Stay (Rihanna Cover)"] = "https://www.youtube.com/watch?v=T6sSZ_rVRoY",
+		["Sweater Weather (The Neighbourhood Cover)"] = "https://www.youtube.com/watch?v=gtO7uqi8YLw",
+		["God Bless The Internet (No Frills Cover)"] = "https://www.youtube.com/watch?v=mFR3iR6k-cw",
+		["Long Way Down (Tom Odell Cover)"] = "https://www.youtube.com/watch?v=FsOWDS9Rups",
+	},
+	["Flight Of The Concords"] = {
+		["Bowie"] = "https://www.youtube.com/watch?v=pGXhMU0iR70",
+	},
 
 }
