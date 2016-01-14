@@ -529,3 +529,7 @@ end)
 RS:AddChatCommandAlias("jukebox","juke")
 RS:AddChatCommandAlias("jukebox","music")
 RS:AddChatCommandAlias("restock","stock")
+
+RS:AddChatCommand("donate", function(ply)
+	ply:SendLua([[AdvertiseDonation(640,420)]])
+end)
