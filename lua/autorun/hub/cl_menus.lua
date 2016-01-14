@@ -37,18 +37,15 @@ function WINDOW:Init()
 	self:SetSize(self.w, self.h)
 	self:Center()
 
-	self.close = vgui.Create("DButton", self)
-	self.close:SetSize(32,16)
-	self.close:SetPos( self:GetWide() - 32 - self.padding, self.padding)
+	self.close = vgui.Create("hub_button", self)
+	self.close:SetSize(44,16)
+	
 	self.close:SetText("")
 
-	function self.close.Paint()
+	function self.close:PaintOver(w,h)
 		surface.SetDrawColor( 215,0,0 )
-		surface.DrawRect(0,0,32,16)
-		--surface.SetDrawColor( 0,0,0,50 )
-		--surface.DrawRect(0,10,32,6)
-		--surface.SetDrawColor(255,0,0)
-		--surface.DrawOutlinedRect(0,0,32,16)
+		surface.DrawRect(0,0,w,h)
+		
 	end
 
 	function self.close.DoClick( self2 )
@@ -59,16 +56,16 @@ function WINDOW:Init()
 end
 
 function WINDOW:PerformLayout()
-	self.close:SetPos( self:GetWide() - 32 - self.padding, self.padding)
+	self.close:SetPos( self:GetWide() - self.close:GetWide() - self.padding, self.padding)
 end
 
 function WINDOW:Paint()
 	HubDrawBlur(self, 6)
 
-	surface.SetDrawColor( HexColor("#ecf0f1") )
+	surface.SetDrawColor( AuColors.New.B )
 	surface.DrawRect(0,0, self:GetWide(), self:GetTall())
 
-	draw.ShadowText( self.Title, "Screen_Medium", self.padding, self.padding/4, HexColor("#2ecc71"), TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1 )
+	draw.ShadowText( self.Title, "Screen_Medium", self.padding, self.padding/4, AuColors.New.E, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1 )
 
 end
 
@@ -99,8 +96,12 @@ function BUTTN:Init()
 
 	self.b = vgui.Create("DButton", self)
 
+	self.ax, self.ay = 0,0
+	self.frac = 0
+
 	self.b.OnCursorEntered = function()
 		self.hover = true
+		self.ax, self.ay = self:LocalCursorPos()
 	end
 
 	self.b.OnCursorExited = function()
@@ -119,7 +120,7 @@ function BUTTN:Init()
 	self.textshad = 1
 	--self.b.DoClick = function() self:DoClick() end
 
-	self:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	self:SetColors( AuColors.New.E, AuColors.New.D )
 
 end
 
@@ -135,15 +136,29 @@ function BUTTN:PerformLayout()
 	self.b:SetSize(self:GetWide(),self:GetTall())
 end
 
-function BUTTN:PaintOver()
+function BUTTN:PaintOver(w,h)
 	if self.hover == true or self.active == true then
 		surface.SetDrawColor(self.color.hover)
 	elseif self.hover == false then
 		surface.SetDrawColor(self.color.up)
 	end
-	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
+	surface.DrawRect(0,0,w,h)
 
-	draw.ShadowText(self.text,self.font,self:GetWide()/2 , self:GetTall()/2 , self.textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, self.textshad)
+	if self.hover or self.frac > 0 then -- cool animation
+		self.frac = self.frac + FrameTime()*1.6
+		self.frac = math.max( math.min(self.frac, 1), 0 )
+
+		surface.SetDrawColor(255,255,255,70*QuadLerp(self.frac,1,0) )
+		local cx, cy = self.ax, self.ay
+		draw.NoTexture()
+		surface.DrawCircle(cx, cy, w*QuadLerp(self.frac,0,1))
+	end
+
+	if not self.hover and self.frac >= 0.7 then
+		self.frac = 0
+	end
+
+	draw.ShadowText(self.text,self.font,w/2 , h/2 , self.textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, self.textshad)
 end
 
 function BUTTN:SetFont(fo)
@@ -221,7 +236,7 @@ function MPANEL:Init()
 	self.tabs = {}
 
 	self.color = {
-		HexColor("#2ecc71"), HexColor("#3ad87d")
+		AuColors.New.E, AuColors.New.D
 	}
 
 	self:PerformLayout()
@@ -387,7 +402,7 @@ function M2PANEL:Init()
 	self.tabs = {}
 
 	self.color = {
-		HexColor("#2ecc71"), HexColor("#3ad87d")
+		AuColors.New.E, AuColors.New.D
 	}
 
 	self:PerformLayout()
@@ -605,6 +620,11 @@ function ICON:PerformLayout()
 			else
 				self.m.e = self.m:AddOption( "Open", function() if IsValid( self ) then OpenCrate( self:GetParent():GetID() ) end end ):SetIcon( "icon16/briefcase.png" )
 			end
+
+			if self:GetParent().item.CustomOptionsName ~= nil then
+				self.m.custom = self.m:AddOption( self:GetParent().item.CustomOptionsName, function() self:GetParent().item:DoCustomOptions( self:GetParent().item.id ) end ):SetIcon("icon16/wrench.png")
+			end
+
 			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() if IsValid( self ) then SellItem( self:GetParent():GetID() ) end end ):SetIcon( "icon16/coins_add.png")
 
 			self.m.send = self.m:AddSubMenu("Send To")
@@ -636,7 +656,7 @@ local eqmat = Material("icon16/user_green.png")
 local crossmat = Material("icon16/cancel.png")
 
 ICON.RareColors = {
-	Color(160,160,160),
+	Color(255,255,255),
 	HexColor("#7081FF"),
 	HexColor("#70CDFF"),
 	HexColor("#86FF70"),
@@ -645,20 +665,22 @@ ICON.RareColors = {
 }
 
 function ICON:Paint()
+	self.RareColors[1] = AuColors.New.B
+
 	surface.SetDrawColor( self.RareColors[ (self.item.Rarity or 0) +1 ] )
 	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-	surface.SetDrawColor( Color(160,160,160, 150) )
+	surface.SetDrawColor( Color(160,160,160, 50) )
 	surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
 	if not self.item then return nil end
 
-	draw.ShadowText(self.item.Name, "Screen_Small", self:GetWide()/2, 121, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
-	draw.ShadowText(self.item.Description, "Screen_Tiny", self:GetWide()/2, 121+18, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
+	draw.ShadowText(self.item.Name, "Screen_Small2", self:GetWide()/2, 121, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
+	draw.ShadowText(self.item.Description, "Screen_Tiny", self:GetWide()/2, 121+18, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
 	if self.inv == false then
-		draw.ShadowText(tostring(self.stock).." In Stock", "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
+		draw.ShadowText(tostring(self.stock).." In Stock", "Screen_Tiny", self:GetWide()/2, 121+17*2, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
 	else
-		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
+		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
 	end
 	--draw.ShadowText("No. "..tostring(self.id), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
 	--image/color/model size: 117/117
@@ -685,8 +707,8 @@ function ICON:Paint()
 	end
 
 	if self.item.Category == "taunts" then
-		draw.ShadowText("Click to listen.", "Screen_Tiny", self:GetWide()/2, 80, Color(0,255,0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,1)
-		draw.ShadowText("Press B to taunt.", "Screen_Tiny", self:GetWide()/2, 90, Color(0,255,0),TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,1)
+		draw.ShadowText("Click to listen.", "Screen_Tiny", self:GetWide()/2, 80, AuColors.New.A,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,0)
+		draw.ShadowText("Press B to taunt.", "Screen_Tiny", self:GetWide()/2, 90, AuColors.New.A,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,0)
 	end
 
 	if self.equipped == true then
@@ -698,7 +720,8 @@ function ICON:Paint()
 	if self.item.Buyable == false then
 		surface.SetMaterial( crossmat )
 		surface.SetDrawColor(255,255,255)
-		surface.DrawTexturedRect(self:GetWide()-4-16,4,16,16)
+		--surface.DrawTexturedRect(self:GetWide()-4-16,4,16,16)
+		draw.ShadowText("NO PURCHASE", "Screen_Tiny", self:GetWide()/2, 12, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.A,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER,0)
 	end
 
 	if (self.item.StorePrice <= LocalPlayer():GetMoney()) or self.inv == true then
@@ -731,7 +754,7 @@ function ICON:SetItem( tab )
 	elseif self.item.Category == "materials" then
 		self.model:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
 		self.model:SetLookAt(Vector(0,0,0))
-		self.model:SetFOV(25)
+		self.model:SetFOV(30)
 		self.model.Entity:SetMaterial( self.item.Material )
 		--print("Material is",self.item.Material)
 	elseif self.item.Category == "trails" then
@@ -821,12 +844,17 @@ function ICON:OnCursorEntered2()
 		RS:InvalidatePlayerColor()
 	end
 
+	
+	if self.item.Category == "particles" then
+		--self.item:OnEquip( RS.PlayerModelPreview.Entity )
+	end
+
 end
 
 function ICON:OnCursorExited2()
 
 	--print("Exited",self.item.Category)
-
+	RS.PlayerModelPreview.Entity:StopParticleEmission()
 	if not self.item then return end
 	if self.item.Category == "colours" then
 		RS.PlayerModelPreview:SetColor( LocalPlayer():GetColor() or Color(255,255,255) )
@@ -849,6 +877,8 @@ function ICON:OnCursorExited2()
 		if type(idtouse) == "string" or self.equipped == false then
 			self.item:OnHolster( LocalPlayer(), idtouse )
 		end
+	elseif self.item.Category == "particles" then
+		RS.PlayerModelPreview.Entity:StopParticlesNamed( self.item.ParticleSystem )
 	end
 
 end
@@ -1093,7 +1123,7 @@ function RS:UpdateJukeQueue()
 	lb:SetSize(self.JukeQueueList:GetWide(), 64)
 	lb:SetText( "Queued Songs" )
 	lb:SetFont("Screen_Medium")
-	lb:SetColor(HexColor("#2ecc71"))
+	lb:SetColor(AuColors.New.E)
 	lb:SetOffsets( 0,0 )
 
 	for i=1,#RS.JukeQueue do
@@ -1290,7 +1320,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	moneybg:SetPos(0,previewcon:GetTall()-64)
 
 	function moneybg:Paint()
-		surface.SetDrawColor( HexColor("#2ecc71") )
+		surface.SetDrawColor( AuColors.New.E )
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
 		draw.ShadowText("You have "..tostring(LocalPlayer():GetMoney()).." "..RS.Currency, "Screen_Medium", self:GetWide()/2, self:GetTall()/2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
@@ -1301,10 +1331,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 	smoneybg:SetPos(0,0)
 
 	function smoneybg:Paint()
-		surface.SetDrawColor( HexColor("#2ecc71") )
+		surface.SetDrawColor( AuColors.New.E )
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 
-		draw.ShadowText("The Store has "..tostring(GetGlobalInt("StoreMoney")).." "..RS.Currency, "Screen_Medium", self:GetWide()/2, self:GetTall()/2, HexColor("#ecf0f1"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText("The Store has "..tostring(GetGlobalInt("StoreMoney")).." "..RS.Currency, "Screen_Medium", self:GetWide()/2, self:GetTall()/2, AuColors.New.B, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 	end
 
 	RS.PlayerModelPreview = vgui.Create("DModelPanel",previewcon)
@@ -1319,10 +1349,13 @@ function RS:CreateHubWindow( hubdata, opentab )
 	RS.PlayerModelPreview.rotmod = 0
 	RS.PlayerModelPreview.ox = 0
 	RS.PlayerModelPreview.nx = 0
+
+	RS.PlayerModelPreview.oy = 0
+	RS.PlayerModelPreview.ny = 0
+
 	RS.PlayerModelPreview.dragging = false
 	function RS.PlayerModelPreview:LayoutEntity(ent)
 		ent:SetAngles(Angle(0,self.rot + self.rotmod,0))
-		
 	end
 	function RS.PlayerModelPreview:OnMousePressed( key )
 		if key == MOUSE_LEFT then
@@ -1340,8 +1373,13 @@ function RS:CreateHubWindow( hubdata, opentab )
 		if self.dragging then
 			self.nx = cx
 			self.rot = self.rot + self.nx - self.ox
+
+			self.ny = cy
+			self:SetFOV( math.Clamp( self:GetFOV() + (self.ny - self.oy)/5, 20, 100 ) )
+			--self.oy = self.ny
 		end
 			self.ox = cx
+			self.oy = cy
 
 		--print(self.rot,self.ox,self.nx,self.dragging)
 	end
@@ -1563,7 +1601,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.play:SetPos(2, juke.browse:GetTall()-106)
 	juke.play:SetFont("Screen_Large")
 	juke.play:SetText("▶")
-	juke.play:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.play:SetColors( AuColors.New.E, AuColors.New.D )
 	juke.play:SetOffsets(0,0)
 	function juke.play:DoClick()
 		RS.JukePlayer:OpenURL(RS.JukeCurrent[3])
@@ -1579,7 +1617,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.stop:DoClick()
 		RS.JukePlayer:OpenURL("http://gameredacted.net/deathrun")
 	end
-	juke.stop:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.stop:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.prev = vgui.Create("hub_button", juke.browse)
 	juke.prev:SetSize(92,92)
@@ -1590,7 +1628,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.prev:DoClick()
 		RS:JukeboxPlayPrevious()
 	end
-	juke.prev:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.prev:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.nxt = vgui.Create("hub_button", juke.browse)
 	juke.nxt:SetSize(92,92)
@@ -1601,7 +1639,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.nxt:DoClick()
 		RS:JukeboxPlayNext();
 	end
-	juke.nxt:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.nxt:SetColors( AuColors.New.E, AuColors.New.D )
 
 	-- cycle modes
 	juke.cycleall = vgui.Create("hub_button", juke.browse)
@@ -1613,7 +1651,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.cycleall:DoClick()
 		RS.JukeState = "cycleall"
 	end
-	juke.cycleall:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.cycleall:SetColors( AuColors.New.E, AuColors.New.D )
 	
 	juke.cyclequeue = vgui.Create("hub_button", juke.browse)
 	juke.cyclequeue:SetSize(92,92/4)
@@ -1624,7 +1662,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.cyclequeue:DoClick()
 		RS.JukeState = "cyclequeue"
 	end
-	juke.cyclequeue:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.cyclequeue:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.shuffleall = vgui.Create("hub_button", juke.browse)
 	juke.shuffleall:SetSize(92,92/4)
@@ -1635,7 +1673,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.shuffleall:DoClick()
 		RS.JukeState = "shuffleall"
 	end
-	juke.shuffleall:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.shuffleall:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.shufflequeue = vgui.Create("hub_button", juke.browse)
 	juke.shufflequeue:SetSize(92,92/4)
@@ -1646,7 +1684,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.shufflequeue:DoClick()
 		RS.JukeState = "shufflequeue"
 	end
-	juke.shufflequeue:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.shufflequeue:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.displaymode = vgui.Create("hub_button", juke.browse)
 	juke.displaymode:SetSize(juke.browse:GetWide() - (92+2)*5 - 4,92)
@@ -1657,7 +1695,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.displaymode:Think()
 		self:SetText(JukeStates[ RS.JukeState ])
 	end
-	juke.displaymode:SetColors( HexColor("#2ecc71"), HexColor("#3ad87d") )
+	juke.displaymode:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.browse.scroll = vgui.Create("DScrollPanel",juke.browse)
 	juke.browse.scroll:SetSize( juke.browse:GetWide(), juke.browse:GetTall()-108 )
@@ -1678,7 +1716,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		lb:SetSize(juke.browse.list:GetWide(), 64)
 		lb:SetText( artist )
 		lb:SetFont("Screen_Medium")
-		lb:SetColor( HexColor("#2ecc71") )
+		lb:SetColor( AuColors.New.E )
 		lb:SetOffsets( 0,0 )
 
 		for kk,vv in orderedPairs(v) do
@@ -1730,7 +1768,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.info:SetSize((queue:GetWide()-4)*0.66666 -1, 92)
 	juke.info:SetPos(2, queue:GetTall()-106)
 	function juke.info:Paint()
-		surface.SetDrawColor(HexColor("#2ecc71"))
+		surface.SetDrawColor(AuColors.New.E)
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 		
 		draw.ShadowText("Now Playing: "..RS.JukeCurrent[2],"Screen_Large",16,8,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM,1)
@@ -1740,7 +1778,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.volume:SetSize((queue:GetWide()-4)*0.33333, 92)
 	juke.volume:SetPos(2 + (queue:GetWide()-4)*0.66666 +1, queue:GetTall()-106)
 	function juke.volume:Paint()
-		surface.SetDrawColor(HexColor("#2ecc71"))
+		surface.SetDrawColor(AuColors.New.E)
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 		draw.ShadowText("Volume: "..tostring( math.floor(RS.JukeVolume) ), "Screen_Medium", self:GetWide()/2, 10, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
 	end
@@ -1898,11 +1936,14 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 	local crate = RS.Items[class]
 	local item = RS.Items[result]
 
-	local frame = vgui.Create("hub_window")
+	local frame = vgui.Create("AuFrame")
 	frame:SetSize( 640,360 )
-	frame:Center()
+	--frame:Center()
+	frame:SetPos( ScrW()/2 - frame:GetWide()/2, ScrH()*2)
+	frame:MoveTo( ScrW()/2 - frame:GetWide()/2, ScrH()/2 - frame:GetTall()/2, 2, 0, 0.2)
 	frame:MakePopup()
 	frame:SetTitle("Opening "..crate.Name.." Crate")
+	frame.health = 10 -- live for 10 seconds
 
 	function frame:PaintOver(w,h)
 		local x, y = 320-40 + math.sin(CurTime()*4)*7, 170
@@ -1914,9 +1955,14 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 		}
 
 		draw.NoTexture()
-		surface.SetDrawColor( HexColor("#2ecc71") )
+		surface.SetDrawColor( AuColors.New.E )
 		surface.DrawRect(x,y,41,40)
 		surface.EasyPoly( tri )
+
+		self.health = self.health - FrameTime()
+		if self.health < 0 then
+			self:Remove()
+		end
 	end
 
 	local cratepanel = vgui.Create("DPanel", frame)
@@ -1924,8 +1970,8 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 	cratepanel:SetTall(cratepanel:GetWide())
 	cratepanel:SetPos(8,cratepanel:GetParent():GetTall() - cratepanel:GetTall()-8)
 	function cratepanel:Paint( w, h )
-		surface.SetDrawColor(48,48,48,170)
-		--surface.DrawRect(0,0,w,h)
+		surface.SetDrawColor(AuColors.New.C)
+		surface.DrawRect(0,0,w,h)
 	end
 
 	local cratemodel = vgui.Create("DModelPanel", cratepanel)
@@ -1981,28 +2027,34 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 
 		if self.countdown <= 0 then return end
 
-		surface.SetDrawColor( HexColor("#ecf0f1") )
+		surface.SetDrawColor( AuColors.New.B )
 		surface.DrawRect(0,0,w,h)
 
 		local m = Matrix()
-		m:Translate( Vector( self:LocalToScreen( w/2 ), self:LocalToScreen( -h-20 ) ) )
-		--m:Scale( Vector(1,1,1)*1.1 )
-		m:Rotate( Angle(0, math.sin(CurTime()*16)*7, 0) )
-		m:Translate( -Vector( self:LocalToScreen( w/2 ), self:LocalToScreen( -h-20 ) ) )
+
+		local wx, wy = self:LocalToScreen( w/2, h/2 )
+
+		m:Translate( Vector( wx, wy ) )
+		m:Scale( Vector(1,1)*(2-self.clk) )
+		--m:Rotate( Angle(0, math.sin(CurTime()*16)*7, 0) )
+		m:Translate( -Vector( wx, wy ) )
 
 		cam.PushModelMatrix( m )
 
-		draw.ShadowText( tostring(self.countdown).."...", "Screen_XLarge", w/2, h/2-8, HexColor("#2ecc71"), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		draw.ShadowText( tostring(self.countdown).."...", "Screen_XLarge", w/2, h/2-8, AuColors.New.E, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
 		
 		cam.PopModelMatrix()
 	end
 
 	function resultpanel:Paint(w,h) -- pinwheel animation
 
+		surface.SetDrawColor(AuColors.New.C)
+		surface.DrawRect(0,0,w,h)
+
 		local clk = CurTime()
 		local x, y = w/2, h/2
 
-		surface.SetDrawColor( HexColor("#2ecc71") )
+		surface.SetDrawColor( AuColors.New.E )
 		surface.DrawRect(0,0,w,h)
 
 		surface.SetDrawColor( HexColor("#ecf0f1", math.sin(CurTime() + math.pi/2)*127 + 127) )
@@ -2030,4 +2082,76 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 
 	
 
+end
+
+net.Receive("TextHatMenu", function()
+	OpenTextHatMenu( util.JSONToTable( net.ReadString() ) )
+end)
+
+function OpenTextHatMenu( data )
+	local frame = vgui.Create("AuFrame")
+	frame:SetSize(640,434)
+	frame:Center()
+
+	frame:SetTitle("Configure Text Hat")
+	--DrawTextHatText( text, font, color, offset, fx )
+	frame.pv = vgui.Create("DPanel", frame)
+	frame.pv:SetSize( frame:GetWide()-8, 68)
+	frame.pv:SetPos(4,32)
+
+	function frame.pv:Paint(w,h)
+
+		surface.SetDrawColor( HexColor("#303030") )
+		surface.DrawRect(0,0,w,h)
+
+		local x, y = self:LocalToScreen( w/2, h/2 )
+
+		DrawTextHatText( frame.text:GetValue(), frame.font:GetValue().."_preview", frame.mix:GetColor(), w/2, h/2, frame.fx:GetValue() )
+
+	end
+
+	frame.mix = vgui.Create("DColorMixer", frame)
+	frame.mix:SetSize( frame:GetWide()-8, 210)
+	frame.mix:SetPos(4,32 + 64 + 8)
+	frame.mix:SetAlphaBar( false )
+
+	frame.mix:SetColor( data.col )
+
+	frame.font = vgui.Create("DComboBox", frame)
+	frame.font:SetSize( (frame:GetWide()-12)/2, 24 )
+	frame.font:SetPos( 4, 32 + 64 + 8 + frame.mix:GetTall()+4)
+
+	frame.font:SetValue( Base64Decode(data.font) )
+
+
+	for k,v in ipairs( RS.TextHatFonts ) do
+		frame.font:AddChoice( v[1] )
+	end
+
+	frame.fx = vgui.Create("DComboBox", frame)
+	frame.fx:SetSize( (frame:GetWide()-12)/2, 24 )
+	frame.fx:SetPos( 8 + frame.fx:GetWide(), 32 + 64 + 8 + frame.mix:GetTall()+4)
+
+	frame.fx:SetValue( Base64Decode(data.fx) )
+
+	for k,v in ipairs( RS.TextHatEffects ) do
+		frame.fx:AddChoice( v )
+	end
+
+	frame.text = vgui.Create("DTextEntry", frame)
+	frame.text:SetSize( frame:GetWide()-8, 28 )
+	frame.text:SetPos( 4, 32 + 64 + 8 + frame.mix:GetTall() + 4 + frame.fx:GetTall() + 4)
+
+	frame.text:SetValue( Base64Decode(data.msg) )
+
+	frame.submit = vgui.Create("AuButton", frame)
+	frame.submit:SetSize( (frame:GetWide()-8), 32 )
+	frame.submit:SetText("Submit")
+	frame.submit:SetPos( frame:GetWide()-4 -frame.submit:GetWide(), 16 + 32 + 64 + 8 + frame.mix:GetTall() + 4 + frame.fx:GetTall() + 4 + frame.text:GetTall() + 4)
+
+	function frame.submit:DoClick()
+		local f = self:GetParent()
+		self:SetText("✔ Submitted!")
+		RunConsoleCommand("hub_texthat_update", 2, f.font:GetValue(), f.fx:GetValue(), f.mix:GetColor().r, f.mix:GetColor().g, f.mix:GetColor().b, f.text:GetValue() )
+	end
 end

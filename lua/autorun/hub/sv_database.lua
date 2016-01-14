@@ -423,9 +423,39 @@ hook.Add("PlayerInitialSpawn","SyncMoney",function( ply )
 	ply:SyncMoney()
 end)
 
--- NEW PARADIGM -- Marketplace, not "shop"
--- behaves like the steam marketplace
--- players find items in crates or in random drops and create listings on the marketplace to buy and sell
--- needs a database to store all the listings
+--sql.Query("DROP TABLE shop_texthats")
+sql.Query("CREATE TABLE IF NOT EXISTS shop_texthats (sid STRING, size INTEGER, font STRING, fx STRING, r INTEGER, g INTEGER, b INTEGER, msg STRING)")
 
---sql.Query("CREATE TABLE IF NOT EXISTS shop_listings (id int, price int, ")
+
+function RS:UpdateTextHat( ply, size, font, fx, col, msg )
+	RS:UpdateTextHatManual( ply:SteamID64(), size, font, fx, col, msg )
+end
+
+function RS:UpdateTextHatManual( sid, size, font, fx, col, msg )
+	local res = sql.Query("SELECT * FROM shop_texthats WHERE sid = '"..sid.."'")
+	if res ~= nil then
+		sql.Query("UPDATE shop_texthats SET size = "..tostring(size)..", font = '"..font.."', fx = '"..fx.."', r = "..tostring(col.r)..", g = "..tostring(col.g)..", b = "..tostring(col.b)..", msg = '"..msg.."' WHERE sid = '"..sid.."'")
+	else
+		sql.Query("INSERT INTO shop_texthats ( sid, size, font, fx, r, g, b, msg ) VALUES ( '"..sid.."', "..tostring(size)..", '"..font.."', '"..fx.."', "..tostring(col.r)..", "..tostring(col.g)..", "..tostring(col.b)..", '"..msg.."'  )")
+	end
+end
+
+function RS:GetTextHat( ply )
+	return RS:GetTextHatManual( ply:SteamID64() )
+end
+
+function RS:GetTextHatManual( sid )
+	local res = sql.Query("SELECT * FROM shop_texthats WHERE sid = '"..sid.."'")
+	if res ~= nil then
+		return {
+			size = res[1]["size"],
+			font = res[1]["font"],
+			fx = res[1]["fx"],
+			col = Color(res[1]["r"],res[1]["g"],res[1]["b"]),
+			msg = res[1]["msg"]
+		}
+	else
+		RS:UpdateTextHatManual( sid, 1, Base64Encode("texthat_coolvetica"), Base64Encode("none"), HexColor("#2ecc71"), Base64Encode("I AM "..sid) )
+		return RS:GetTextHatManual( sid ) -- recurse!
+	end
+end

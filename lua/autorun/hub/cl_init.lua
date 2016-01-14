@@ -24,6 +24,11 @@ surface.CreateFont("Screen_Small", {
 	size = 20,
 	antialias = true,
 })
+surface.CreateFont("Screen_Small2", {
+	font = "Roboto Condensed",
+	size = 20,
+	antialias = true,
+})
 surface.CreateFont("Screen_Tiny", {
 	font = "Roboto Condensed",
 	size = 14,
@@ -42,7 +47,7 @@ end
 net.Receive("RS:StoreChat", function()
 
 	local msg = net.ReadString()
-	chat.AddText( Color(255,255,255),"[",Color(231, 76, 60),"HUB",Color(255,255,255),"] ", msg )
+	chat.AddText( Color(255,255,255),"[",AuColors.New.E,"HUB",Color(255,255,255),"] ", msg )
 
 end)
 
@@ -400,4 +405,194 @@ end)
 
 hook.Add("PostDrawPlayerHands", "HandMaterials", function( hands, vm, ply, wep )
 	render.SetColorModulation( 1,1,1 )
+end)
+
+--text hats
+
+local hatfonts = {
+	{"texthat_comic_sans","Comic Sans MS"},
+	{"texthat_coolvetica","Coolvetica"},
+	{"texthat_roboto", "Roboto Black"},
+	{"texthat_system","System"},
+	{"texthat_impact","Impact"},
+	{"texthat_greek", "Symbol"},
+	{"texthat_oldenglish","Old English Text MT"},
+	{"texthat_bodoni","Bodoni MT"}
+}
+
+local validfonts = {}
+
+RS.TextHatFonts = hatfonts
+
+for k,v in ipairs( hatfonts ) do
+	surface.CreateFont( v[1],
+	{
+		font = v[2],
+		size = 60,
+		antialias = true,
+		outline = true,
+	})
+
+	surface.CreateFont( v[1].."_preview",
+	{
+		font = v[2],
+		size = 28,
+		antialias = true,
+		outline = true,
+	})
+
+	table.insert( validfonts, v[1] )
+end
+
+local textHatCache = {
+	["76561198020843439"] = {
+		col = Color(255,0,255),
+		effect	=	"wave",
+		font	=	"texthat_comic_sans",
+		frac	=	0,
+		size	=	0.050000000745058,
+		text	=	"If you can read this, I'm going too slow!"
+	}
+}
+
+net.Receive("UpdateTextHat", function()
+	local id = net.ReadString()
+	textHatCache[ id ] = {
+		col = net.ReadColor(),
+		text = net.ReadString(),
+		font = net.ReadString(),
+		size = math.Clamp( net.ReadFloat(), 0, 0.075),
+		effect = net.ReadString(),
+		frac = 0,
+	}
+
+	if not table.HasValue( validfonts, textHatCache[ id ].font ) then
+		textHatCache[ id ].font = "texthat_comic_sans"
+	end
+
+	--PrintTable( textHatCache )
+end)
+
+function DrawTextHatText( text, font, color, offset, y, fx )
+	if fx == "wave" then
+		local chars = string.Split(text, "")
+		local tracking = 1
+		surface.SetFont( font )
+		local widthcount = 0
+		local tw, ch = surface.GetTextSize( text )
+		cw = tw / #chars
+		for i = 1, #chars do
+			local char = chars[i]
+			
+
+			draw.SimpleText( char, font, offset + widthcount - tw/2, 16*(ch/70)*math.sin(-CurTime()*5 + i*(180/math.pi)) + y, color, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+
+			widthcount = widthcount + cw * tracking
+
+		end
+	elseif string.sub(fx,1,4) == "glow" then
+		local glows = {
+			["glow1"] = {Color(255,255,255), Color(255,0,0) },
+			["glow2"] = {Color(0,0,255), Color(0,255,255)},
+			["glow3"] = {Color(255,0,255), Color(0,255,255)},
+			["glow4"] = {Color(255,0,0), Color(255,255,0)}
+		}
+
+		if glows[fx] then
+			local col1 = table.Copy( glows[fx][1] )
+			local col2 = table.Copy( glows[fx][2] )
+
+			col2.a = 255*( math.max( math.sin(CurTime()*0.75), 0 ) )
+			col1.a = 255 - 255*( math.max( math.sin(CurTime()*0.75), 0 ) )
+
+			draw.SimpleText( text, font, offset, y, col1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			draw.SimpleText( text, font, offset, y, col2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		end
+	elseif string.sub(fx,1,5) == "flash" then
+		local flashs = {
+			["flash1"] = {Color(255,255,255), Color(255,0,0) },
+			["flash2"] = {Color(0,0,255), Color(0,255,255)},
+			["flash3"] = {Color(255,0,255), Color(0,255,255)},
+			["flash4"] = {Color(255,0,0), Color(255,255,0)}
+		}
+
+		if flashs[fx] then
+			local col1 = table.Copy( flashs[fx][1] )
+			local col2 = table.Copy( flashs[fx][2] )
+
+			col2.a = 255*( math.floor((CurTime()*2)%2) )
+			col1.a = 255 - 255*( math.floor((CurTime()*2)%2) )
+
+			draw.SimpleText( text, font, offset, y, col1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			draw.SimpleText( text, font, offset, y, col2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		end
+	elseif fx == "rainbow" then
+		local col1 = HSVToColor( (CurTime()*100)%360, 1, 1 )
+		draw.SimpleText( text, font, offset, y, col1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	else
+		draw.SimpleText( text, font, offset, y, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	end
+end
+
+RS.TextHatEffects = {
+	"none","glow1","glow2","glow3","glow4","flash1","flash2","flash3","flash4", "wave", "rainbow"
+}
+
+hook.Add("PostPlayerDraw", "TextHats", function(ply)
+	if textHatCache[ply:SteamID64()] then
+		if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and textHatCache[ply:SteamID64()].col.a > 0 then
+			local tx = textHatCache[ply:SteamID64()]
+			local pos = ply:GetPos() + Vector(0,0,ply:Crouching() and 65 or 80)
+			local ang = LocalPlayer():EyeAngles()
+			ang:RotateAroundAxis( LocalPlayer():EyeAngles():Right(), 90 )
+			ang:RotateAroundAxis( LocalPlayer():EyeAngles():Forward(), 90 )
+
+			ang.roll = 90
+
+			cam.Start3D2D( pos, ang, 0.03 + tx.size )
+				surface.SetFont( tx.font )
+				local tw, th = surface.GetTextSize( tx.text )
+				tw = tw + 32
+				local marquee_w = 600
+				local ox = -tx.frac
+
+				tx.frac = tx.frac + FrameTime()*60
+
+				if ox <= -tw then
+					tx.frac = 0
+				end
+
+				if tw < marquee_w then 
+					tx.frac = 0
+					marquee_w = tw 
+				end
+
+				-- https://facepunch.com/showthread.php?t=1274569&p=40851965&viewfull=1#post40851965
+
+				render.ClearStencil()
+				render.SetStencilEnable(true)
+
+				render.SetStencilFailOperation(STENCILOPERATION_KEEP)
+				render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
+				render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
+				render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
+				render.SetStencilReferenceValue(1)
+
+				surface.SetDrawColor(Color(0,0,0,1))
+				surface.DrawRect( -marquee_w/2, -200, marquee_w, 400 )
+
+				render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_LESSEQUAL)
+				render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
+
+				if tx.effect ~= nil then
+					DrawTextHatText( tx.text, tx.font, tx.col, ox, 0, tx.effect )
+					DrawTextHatText( tx.text, tx.font, tx.col, ox - tw, 0, tx.effect )
+					DrawTextHatText( tx.text, tx.font, tx.col, ox + tw, 0, tx.effect )
+				end
+				
+				render.SetStencilEnable(false)
+				
+			cam.End3D2D()
+		end
+	end
 end)

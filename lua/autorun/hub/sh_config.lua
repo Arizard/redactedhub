@@ -14,16 +14,17 @@ RS.InfoHTML = [[
 	<style>
 
 	b {
-		color: #2ecc71;
+		color: #FF5150;
 	}
 
 	body {
 		max-width: 85%;
 		margin-left: 24px;
+		background-color: #FFFDE6;
 	}
 	</style>
 
-	<body style="font-family: Roboto; background: #ecf0f1; color: #333;">
+	<body style="font-family: Roboto; color: #333;">
 
 		<h1>Help & Commands</h1>
 		<p>Welcome to the VHS-7 Server Hub. From here you can purchase cosmetics for your player using our ingame 

@@ -425,3 +425,5 @@ resource.AddFile("sound/taunts/speed2cruisecontrol.ogg")
 -- taunts
 resource.AddFile("sound/taunts/cantbelieveyouvedonethis.ogg")
 resource.AddFile("sound/taunts/thatsprettygood.ogg")
+
+resource.AddFile("sound/taunts/prankpatrol.ogg")

@@ -538,3 +538,72 @@ hook.Add("PlayerDeath", "RSPlayerKilled", function( ply )
 	net.Broadcast()
 	--ply:GetRagdollEntity():SetMaterial( ply:GetMaterial() )
 end)
+
+util.AddNetworkString("UpdateTextHat")
+
+-- concommand.Add("test_text_hat", function( ply )
+-- 	net.Start("UpdateTextHat")
+-- 	net.WriteString( ply:SteamID64() )
+-- 	net.WriteColor( Color(255,0,255) )
+-- 	net.WriteString( "Nice Meme Bobbis" )
+-- 	net.WriteString( "texthat_comic_sans" )
+-- 	net.Send( ply )
+-- end)
+
+local texthats = {}
+
+function ReloadTextHatData( ply )
+	if not texthats[ ply:SteamID64() ] then
+		texthats[ ply:SteamID64() ] = RS:GetTextHat( ply )
+	else
+		if texthats[ ply:SteamID64() ] ~= RS:GetTextHat( ply ) then
+			texthats[ ply:SteamID64() ] = RS:GetTextHat( ply )
+		end
+	end
+end
+
+function GetTextHatColor( ply )
+	ReloadTextHatData( ply )
+	return texthats[ ply:SteamID64() ].col
+end
+
+function GetTextHatMessage( ply )
+	ReloadTextHatData( ply )
+	return Base64Decode(texthats[ ply:SteamID64() ].msg)
+end
+
+function GetTextHatFont( ply )
+	ReloadTextHatData( ply )
+	return Base64Decode(texthats[ ply:SteamID64() ].font)
+end
+
+function GetTextHatSize( ply )
+	ReloadTextHatData( ply )
+	return 0.05*texthats[ ply:SteamID64() ].size
+end
+
+function GetTextHatEffect( ply )
+	ReloadTextHatData( ply )
+	return Base64Decode(texthats[ ply:SteamID64() ].fx)
+end
+
+util.AddNetworkString("TextHatMenu")
+concommand.Add("hub_texthat_edit", function(ply)
+	net.Start("TextHatMenu")
+	net.WriteString( util.TableToJSON( RS:GetTextHat( ply ) ) )
+	net.Send( ply )
+end)
+
+concommand.Add("hub_texthat_update", function(ply, cmd, args)
+	if #args == 7 then
+		RS:UpdateTextHat( ply, args[1], Base64Encode(args[2]), Base64Encode(args[3]), Color(args[4], args[5], args[6]), Base64Encode( string.sub(args[7], 1, 128) ) )
+		net.Start("UpdateTextHat")
+		net.WriteString( ply:SteamID64() )
+		net.WriteColor( GetTextHatColor( ply ) )
+		net.WriteString( GetTextHatMessage( ply ) )
+		net.WriteString( GetTextHatFont( ply ) )
+		net.WriteFloat( GetTextHatSize( ply ) )
+		net.WriteString( GetTextHatEffect( ply ) )
+		net.Broadcast()
+	end
+end)
