@@ -53,6 +53,8 @@ concommand.Add("shop_senditem",function(ply, cmd, args)
 			RS:StoreChat(ply, "You sent "..itable.Name.." to "..targ:Nick().."!")
 			RS:StoreChat(targ, "You received "..itable.Name.." from "..ply:Nick().."!")
 
+			RS:GiftNotify( targ, "NEW ITEM: "..itable.Name.." from "..ply:Nick().."!")
+
 			RS:UpdateInventory(ply)
 			RS:UpdateInventory(targ)
 		end

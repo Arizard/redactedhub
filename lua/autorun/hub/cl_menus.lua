@@ -1216,6 +1216,34 @@ function RS:CreateHubWindow( hubdata, opentab )
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 	end
 	
+	local tools = hub.largemulti:AddTab( "Options" )
+
+	tools.list = vgui.Create("AuList", tools)
+	tools.list:SetSize( (tools:GetWide()-4)/2, tools:GetTall()-4 )
+	tools.list:SetPos( 2,2 )
+
+	for i = 1, #RS.Options do
+		local op = RS.Options[i]
+		if op[1] == "h1" then
+			local lb = vgui.Create("DLabel")
+			lb:SetText( op[2] or "Label" )
+			lb:SetFont("Screen_Medium")
+			lb:SetTextColor( AuColors.New.E )
+			lb:SetSize( tools.list:GetWide(), 48 )
+
+			tools.list:Add( lb )
+		else
+			if op[1] == "bool" then
+				local tg = vgui.Create("AuToggle")
+				tg:SetText( op[3] or op[2] or "???")
+				tg:SetConVar( op[2] or "" )
+				tg:SetWide( tools.list:GetWide() )
+				tg:SizeToContentsY()
+				tools.list:Add(tg)
+			end
+		end
+	end
+
 	if LocalPlayer():IsSuperAdmin() then
 		local adm = hub.largemulti:AddTab("Admin")
 
@@ -1236,9 +1264,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 		adm.list:AddColumn("SteamID")
 		adm.list:AddColumn("Balance")
 		adm.list:AddColumn("Is Admin")
+		adm.list:AddColumn("Is VIP")
 
 		for k,v in ipairs( player.GetAll() ) do
-			local line = adm.list:AddLine( v:Nick(), v:SteamID(), v:GetMoney(), v:IsSuperAdmin() and "Super Admin" or "" )
+			local line = adm.list:AddLine( v:Nick(), v:SteamID(), v:GetMoney(), v:IsSuperAdmin() and "Super Admin" or "", v:IsVip() and "VIP" or "" )
 		end
 
 		function adm.list:OnClickLine( li, is )
@@ -2011,7 +2040,11 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 					icon:SetIsToken( item.IsToken )
 				end
 
-				surface.PlaySound("crates/killstreak.ogg")
+				if (item.Rarity or 0) > 0 then
+					surface.PlaySound("crates/killstreak.ogg")
+				else
+					surface.PlaySound("crates/percussion_"..tostring(math.random(1,4))..".ogg" )
+				end
 
 				function icon.b:OnMousePressed() end
 				function icon.b:Paint() end

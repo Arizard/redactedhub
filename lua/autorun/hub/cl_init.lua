@@ -35,6 +35,17 @@ surface.CreateFont("Screen_Tiny", {
 	antialias = true,
 })
 
+local drawhats = CreateClientConVar("hub_hats",1,true,false)
+local drawgifts = CreateClientConVar("hub_gift_notif", 1, true, false)
+local drawtexthats = CreateClientConVar("hub_texthats", 1, true, false)
+
+RS.Options = { -- gets drawn in the options tab
+	{"h1", "Options"},
+	{"bool","hub_hats","Hats Visible"},
+	{"bool","hub_gift_notif", "Gift Notifications"},
+	{"bool","hub_texthats", "Texthats Visible"}
+}
+
 function RS:ReceiveVip()
 	surface.PlaySound("buttons/bell1.wav")
 end
@@ -198,60 +209,60 @@ end
 RS.InPreview = false
 
 function RS:RenderClientModels()
-	
-	for id, m in pairs(RS.ClientSideModels) do
-		if (m.ply == nil or not IsValid(m.ply)) and m.id64 then
-			local found = nil
-			for k,v in ipairs(player.GetAll()) do
-				if m.id64 ~= nil then
-					if m.id64 == v:SteamID64() then
-						found = v
+	if drawhats:GetBool() == true then
+		for id, m in pairs(RS.ClientSideModels) do
+			if (m.ply == nil or not IsValid(m.ply)) and m.id64 then
+				local found = nil
+				for k,v in ipairs(player.GetAll()) do
+					if m.id64 ~= nil then
+						if m.id64 == v:SteamID64() then
+							found = v
+						end
 					end
 				end
+				if found ~= nil then m.ply = found else return end
 			end
-			if found ~= nil then m.ply = found else return end
-		end
-		if IsValid(m) and IsValid(m.ply) and RS.InPreview == false then
+			if IsValid(m) and IsValid(m.ply) and RS.InPreview == false then
 
-			if ((LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
-				if LocalPlayer():GetObserverTarget() == m.ply then
-					if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
-						return 
+				if ((LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
+					if LocalPlayer():GetObserverTarget() == m.ply then
+						if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
+							return 
+						end
 					end
-				end
 
-				if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
-				if not m.ply:Alive() then return end
+					if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
+					if not m.ply:Alive() then return end
 
-				local atid = m.ply:LookupAttachment(m.att)
-				local attach = m.ply:GetAttachment(atid)
+					local atid = m.ply:LookupAttachment(m.att)
+					local attach = m.ply:GetAttachment(atid)
 
-				if attach == nil then return end
-				
-				local x = m.posoff.x * attach.Ang:Right()
-				local y = m.posoff.y * attach.Ang:Forward()
-				local z = m.posoff.z * attach.Ang:Up()
-				--print(x,y,z)
-				--print( Vector(x,y,z) )
-				--print(posoff2)
-				m:SetPos(attach.Pos + x + y + z)
-				local ang = attach.Ang
-				ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
-				ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
-				ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
+					if attach == nil then return end
+					
+					local x = m.posoff.x * attach.Ang:Right()
+					local y = m.posoff.y * attach.Ang:Forward()
+					local z = m.posoff.z * attach.Ang:Up()
+					--print(x,y,z)
+					--print( Vector(x,y,z) )
+					--print(posoff2)
+					m:SetPos(attach.Pos + x + y + z)
+					local ang = attach.Ang
+					ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
+					ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
+					ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
 
-				m:SetAngles(ang)
-				m:SetMaterial( m.mat )
+					m:SetAngles(ang)
+					m:SetMaterial( m.mat )
 
-				if (m.IsToken == false) or (not m.IsToken) then
-					m:DrawModel()
+					if (m.IsToken == false) or (not m.IsToken) then
+						m:DrawModel()
+					end
+
 				end
 
 			end
-
 		end
 	end
-
 end
 hook.Add("PreDrawTranslucentRenderables","RS:RenderClientModels", RS.RenderClientModels)
 
@@ -539,7 +550,7 @@ RS.TextHatEffects = {
 }
 
 hook.Add("PostPlayerDraw", "TextHats", function(ply)
-	if textHatCache[ply:SteamID64()] then
+	if textHatCache[ply:SteamID64()] and drawtexthats:GetBool() == true then
 		if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and textHatCache[ply:SteamID64()].col.a > 0 then
 			local tx = textHatCache[ply:SteamID64()]
 			local pos = ply:GetPos() + Vector(0,0,ply:Crouching() and 65 or 80)
@@ -596,3 +607,63 @@ hook.Add("PostPlayerDraw", "TextHats", function(ply)
 		end
 	end
 end)
+
+-- gifts
+
+net.Receive("GiftNotify", function()
+	RS:GiftNotify( net.ReadString() )
+end)
+
+function RS:GiftNotify( msg )
+	if drawgifts:GetBool() == true then
+		RS.Gifts.show = true
+		RS.Gifts.timer = 6
+		RS.Gifts.msg = msg
+		surface.PlaySound( "garrysmod/save_load3.wav" )
+	end
+end
+
+local gifts = {}
+RS.Gifts = gifts
+gifts.show = false
+gifts.dy = -100
+gifts.frac = 0
+gifts.msg = "Meme"
+gifts.timer = 0
+hook.Add("HUDPaint","drawgifts", function()
+
+	if gifts.timer > 0 then
+		gifts.frac = gifts.frac + FrameTime()*4
+	else
+		gifts.frac = gifts.frac - FrameTime()*2
+	end
+
+	gifts.frac = math.Clamp( gifts.frac, 0, 1 )
+
+	gifts.timer = gifts.timer - FrameTime()
+
+	gifts.timer = math.Clamp( gifts.timer, 0, 60 )
+
+	local x,y = ScrW()/2, ScrH() + 50 + QuadLerp( gifts.frac, 0, gifts.dy)
+
+	surface.SetFont( "Screen_Small" )
+	local tw, th = surface.GetTextSize( gifts.msg )
+	tw = tw + 32
+
+	local m = Matrix()
+	m:Translate( Vector(x,y) )
+	m:Rotate( Angle(0,4*math.sin(CurTime()*7),0) )
+	m:Translate( -Vector(x,y) )
+
+	cam.PushModelMatrix( m )
+
+	surface.SetDrawColor( AuColors.New.E )
+	surface.DrawRect(x-tw/2, y-16, tw, 32 )
+
+	AuShadowText( gifts.msg, "Screen_Small", x,y, AuColors.New.B, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+
+	cam.PopModelMatrix()
+
+end)
+
+--RS:GiftNotify("Clientside lua refreshed!")

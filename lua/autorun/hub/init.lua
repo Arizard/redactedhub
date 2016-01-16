@@ -27,6 +27,14 @@ util.AddNetworkString("DestroyClientModel")
 
 util.AddNetworkString("OpenHub")
 
+util.AddNetworkString("GiftNotify")
+
+function RS:GiftNotify( ply, msg )
+	net.Start("GiftNotify")
+	net.WriteString( msg )
+	net.Send( ply )
+end
+
 util.AddNetworkString("RS_JukeboxNowPlaying")
 
 concommand.Add("hub_open2", function(ply, cmd, args) 

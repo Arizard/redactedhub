@@ -427,3 +427,10 @@ resource.AddFile("sound/taunts/cantbelieveyouvedonethis.ogg")
 resource.AddFile("sound/taunts/thatsprettygood.ogg")
 
 resource.AddFile("sound/taunts/prankpatrol.ogg")
+
+resource.AddFile("sound/taunts/timetoduel.ogg")
+
+resource.AddFile("sound/crates/percussion_1.ogg")
+resource.AddFile("sound/crates/percussion_2.ogg")
+resource.AddFile("sound/crates/percussion_3.ogg")
+resource.AddFile("sound/crates/percussion_4.ogg")
