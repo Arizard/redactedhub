@@ -1,0 +1,7 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vhs7/particles/quinnface"
+	"$nocull" 1
+	"$translucent" 1
+	"$vertexalpha" 1
+}

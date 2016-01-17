@@ -691,6 +691,10 @@ function ICON:Paint()
 		surface.SetMaterial( self.trail )
 		surface.SetDrawColor(self.item.Col)
 		surface.DrawTexturedRect(self:GetWide()/2 - 117/2,2,117,117)
+	elseif self.item.EffectIcon then
+		surface.SetMaterial( self.effecticon )
+		surface.SetDrawColor(Color(255,255,255))
+		surface.DrawTexturedRect(self:GetWide()/2 - 117/2,2,117,117)
 	end
 
 	if self.isToken == true then
@@ -806,6 +810,9 @@ function ICON:SetItem( tab )
 		self.model:SetLookAt(Vector(0,0,0))
 		self.model.Entity:SetMaterial( self.item.WeaponMat or "" )
 		self.model.Entity:SetColor( self.item.WeaponCol or Color(255,255,255) )
+	elseif self.item.EffectIcon then
+		self.model:SetVisible(false)
+		self.effecticon = Material(self.item.EffectIcon)
 	end
 
 	self:PerformLayout()
@@ -844,10 +851,6 @@ function ICON:OnCursorEntered2()
 		RS:InvalidatePlayerColor()
 	end
 
-	
-	if self.item.Category == "particles" then
-		--self.item:OnEquip( RS.PlayerModelPreview.Entity )
-	end
 
 end
 
@@ -877,8 +880,6 @@ function ICON:OnCursorExited2()
 		if type(idtouse) == "string" or self.equipped == false then
 			self.item:OnHolster( LocalPlayer(), idtouse )
 		end
-	elseif self.item.Category == "particles" then
-		RS.PlayerModelPreview.Entity:StopParticlesNamed( self.item.ParticleSystem )
 	end
 
 end
@@ -2040,7 +2041,7 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 					icon:SetIsToken( item.IsToken )
 				end
 
-				if (item.Rarity or 0) > 0 then
+				if (item.Rarity or 0) > 1 then
 					surface.PlaySound("crates/killstreak.ogg")
 				else
 					surface.PlaySound("crates/percussion_"..tostring(math.random(1,4))..".ogg" )

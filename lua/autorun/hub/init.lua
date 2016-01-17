@@ -615,3 +615,36 @@ concommand.Add("hub_texthat_update", function(ply, cmd, args)
 		net.Broadcast()
 	end
 end)
+
+concommand.Add("effects_test3", function(ply, cmd, args)
+	--if ply:IsSuperAdmin() then
+		--if args[1] then
+			RS:AddEffect( ply, "effect_vhs7")
+			--local ed = EffectData()
+			--ed:SetEntity( ply )
+			--util.Effect( "vhs7_red", ed )
+		--end
+	--end
+end)
+
+util.AddNetworkString("SendHubEffect")
+
+function RS:AddEffect( ply, class )
+	
+	net.Start("SendHubEffect")
+	net.WriteString( ply:SteamID64() )
+	net.WriteString( class )
+	net.WriteBit( true )
+	net.Broadcast()
+
+end
+
+function RS:RemoveEffect( ply, class )
+	
+	net.Start("SendHubEffect")
+	net.WriteString( ply:SteamID64() )
+	net.WriteString( class )
+	net.WriteBit( false )
+	net.Broadcast()
+
+end

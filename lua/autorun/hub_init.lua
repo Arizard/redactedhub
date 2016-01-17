@@ -1,4 +1,11 @@
 print("loaded hub_init.lua")
+local oldhubwindow = nil
+
+if RS then
+	if RS.HubWindow then
+		oldhubwindow = RS.HubWindow
+	end
+end
 
 RS = {} -- Redacted Shop aka hub
 
@@ -106,6 +113,13 @@ for k,cat in ipairs(categories) do
 end
 
 RS:Initialize()
+
+if CLIENT then
+	if oldhubwindow ~= nil and IsValid(oldhubwindow) then 
+		oldhubwindow:Remove()
+		RunConsoleCommand("hub_open2")
+	end
+end
 
 --PrintTable(RS.Items)
 

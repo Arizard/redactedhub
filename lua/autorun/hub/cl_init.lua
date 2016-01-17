@@ -667,3 +667,143 @@ hook.Add("HUDPaint","drawgifts", function()
 end)
 
 --RS:GiftNotify("Clientside lua refreshed!")
+
+-- effects
+
+hook.Add("PostPlayerDraw","EffectCreator", function( ply )
+	if not ply.Effects then
+		ply.Effects = {}
+	end
+	if ply:Alive() then
+		for k,v in pairs( ply.Effects ) do
+			--if #v > 0 then
+				if v.enabled and v.last then
+					if (CurTime() - v.last) > RS.Items[k].Interval then
+						local ed = EffectData()
+						ed:SetEntity( ply )
+						util.Effect( RS.Items[k].Effect, ed )
+						v.last = CurTime()
+					end
+				end
+			--end
+		end
+	end
+end)
+
+net.Receive("SendHubEffect", function()
+	local id64 = net.ReadString()
+	local eff = net.ReadString()
+	local add = tobool(net.ReadBit())
+
+	local ply = player.GetBySteamID64( id64 )
+	if IsValid( ply ) then
+		if not ply.Effects then
+			ply.Effects = {}
+		end
+		if add then
+			ply.Effects[eff] = { enabled = true, last = CurTime() }
+		else
+			ply.Effects[eff] = { enabled = false, last = CurTime() }
+		end
+
+		--print(ply)
+		--PrintTable( ply.Effects )
+	end
+end)
+
+-- 3d stereoscopy effect
+
+local RenderedIT = CreateMaterial("StereoSuperMat","UnlitTwoTexture",{["$basetexture"] = "dev/dev_measuregeneric01",["$texture2"] = "dev/dev_measuregeneric01"})
+tex_LeftEye = render.GetMorphTex0()
+tex_RightEye = render.GetMorphTex1()
+
+local tabr = {}
+	tabr[ "$pp_colour_addr" ] = 0
+	tabr[ "$pp_colour_addg" ] = 255
+	tabr[ "$pp_colour_addb" ] = 255
+	tabr[ "$pp_colour_brightness" ] = 0
+	tabr[ "$pp_colour_contrast" ] = 1
+	tabr[ "$pp_colour_colour" ] = 1
+	tabr[ "$pp_colour_mulr" ] = 1
+	tabr[ "$pp_colour_mulg" ] = 0
+	tabr[ "$pp_colour_mulb" ] = 0
+local tabb = {}
+	tabb[ "$pp_colour_addr" ] = 255
+	tabb[ "$pp_colour_addg" ] = 0
+	tabb[ "$pp_colour_addb" ] = 0
+	tabb[ "$pp_colour_brightness" ] = 0
+	tabb[ "$pp_colour_contrast" ] = 1
+	tabb[ "$pp_colour_colour" ] = 1
+	tabb[ "$pp_colour_mulr" ] = 0
+	tabb[ "$pp_colour_mulg" ] = 1
+	tabb[ "$pp_colour_mulb" ] = 1
+
+function RS:RenderStereoscopy( ViewOrigin, ViewAngles )
+	
+	
+	
+	local OldRT = render.GetRenderTarget()
+
+	--render.Clear( 0, 0, 0, 255 )
+	
+	local w = ScrW()
+	local h = ScrH()
+	
+	local Right = ViewAngles:Right() * 1
+	
+	local view = {}
+	
+	view.y = ScrH() / 2 - h / 2
+	view.w = w
+	view.h = h
+	view.angles = ViewAngles
+	view.drawhud = true
+
+
+	
+	--Left
+	view.origin = ViewOrigin + Right
+	render.SetRenderTarget( tex_LeftEye )
+	render.Clear(0,0,0,255)
+	--
+	render.RenderView( view )
+	DrawColorModify( tabb )
+	
+	RenderedIT:SetTexture( "$basetexture",tex_LeftEye )
+
+	-- Right
+	view.origin = ViewOrigin - Right
+	render.SetRenderTarget( tex_RightEye )
+	render.Clear(0,0,0,255)
+	--DrawColorModify( tabr )
+	render.RenderView( view )
+	DrawColorModify( tabr )
+	
+	RenderedIT:SetTexture( "$texture2",tex_RightEye )
+	
+	render.SetRenderTarget(OldRT)
+	render.Clear(0,0,0,255)
+	render.SetMaterial(RenderedIT)
+	render.DrawScreenQuad()
+
+	render.RenderHUD( 0, 0, ScrW(), ScrH() )
+	
+end
+
+
+
+--[[---------------------------------------------------------
+   The function to draw the bloom (called from the hook)
+-----------------------------------------------------------]]
+local function DrawInternal( ViewOrigin, ViewAngles, ViewFOV )
+
+	if RS.GlassesEffect then
+		RS:RenderStereoscopy( ViewOrigin, ViewAngles )
+		-- Return true to override drawing the scene
+		return true
+	end
+
+end
+hook.Add("InitPostEntity","CoolEffects", function()
+	hook.Add( "RenderScene", "RenderStereoscopyMeme", DrawInternal )
+end)

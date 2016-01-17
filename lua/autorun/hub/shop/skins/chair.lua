@@ -2,6 +2,7 @@ ITEM.Name = "Chair"
 ITEM.Description = [[For Sitting.]]
 ITEM.StorePrice = 300
 ITEM.PlayerModel = "models/props/cs_office/chair_office.mdl"
+ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)
 	timer.Simple(1, function() 

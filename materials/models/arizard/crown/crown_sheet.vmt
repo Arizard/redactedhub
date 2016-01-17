@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/arizard/crown/crown"
+	"$surfaceprop" "metal"
+	"$envmap" "env_cubemap"
+	"$bumpmap" "models/arizard/crown/crown_normal"
+	"$normalmapalphaenvmapmask" "1"
+}
