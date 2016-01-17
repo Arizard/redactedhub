@@ -165,7 +165,7 @@ net.Receive("SendClientModelsOnSpawn", function()
 end)
 
 net.Receive("DestroyClientModel", function()
-	RS:DestroyClientModel( net.ReadInt(32) )
+	RS:DestroyClientModel( tostring(net.ReadInt(32)) )
 end)
 
 function RS:DestroyClientModel(id)
@@ -187,7 +187,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 	cmod.scl = scl
 	cmod.mat = mat
 	cmod.col = col or Color(255,255,255)
-	cmod.ply = ply
+	cmod.ply = player.GetBySteamID64( id64 )
 	cmod.id = id
 	cmod:SetNoDraw( true )
 	cmod.isToken = token
@@ -196,7 +196,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 
 	
 
-	print("RedactedHub - Creating model for",cmod.id64)
+	print("RedactedHub - Creating model for",player.GetBySteamID64(cmod.id64), mdl, cmod.id)
 
 	cmod:SetModelScale( scl, 0 )
 
@@ -206,58 +206,77 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 
 end
 
+concommand.Add("hub_dump_clientmodels", function()
+	for k,v in pairs(RS.ClientSideModels) do
+		print(k, type(k),(IsValid(v) and v:GetModel() or "destroyed"), v.ply)
+	end
+end)
+
+concommand.Add("hub_dump_lastrenderedmodels", function()
+	for k,v in pairs(RS.LastRenderedModels) do
+		print(k, type(k),(IsValid(v) and v:GetModel() or "destroyed"), v.ply)
+	end
+end)
+
 RS.InPreview = false
+RS.LastRenderedModels = {}
 
 function RS:RenderClientModels()
+	RS.LastRenderedModels = {}
 	if drawhats:GetBool() == true then
 		for id, m in pairs(RS.ClientSideModels) do
-			if (m.ply == nil or not IsValid(m.ply)) and m.id64 then
-				local found = nil
-				for k,v in ipairs(player.GetAll()) do
-					if m.id64 ~= nil then
-						if m.id64 == v:SteamID64() then
-							found = v
-						end
-					end
+			if (m.ply == nil or (not IsValid(m.ply)) ) and m.id64 then
+				local newply = player.GetBySteamID64( m.id64 )
+				if newply ~= false and IsValid( newply ) then
+					m.ply = newply
+				else
+					m.ply = nil
 				end
-				if found ~= nil then m.ply = found else return end
 			end
-			if IsValid(m) and IsValid(m.ply) and RS.InPreview == false then
+			if IsValid(m) and RS.InPreview == false then
+				
+				if IsValid(m.ply) then
+					if ( (LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer() ) then
+						-- 
 
-				if ((LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer()) then
-					if LocalPlayer():GetObserverTarget() == m.ply then
-						if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
-							return 
+						-- if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
+						-- if not m.ply:Alive() then return end
+
+						local draw = true
+						if LocalPlayer():GetObserverTarget() == m.ply then
+							if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
+								draw = false
+							end
+						end
+
+
+						local atid = m.ply:LookupAttachment(m.att)
+						local attach = m.ply:GetAttachment(atid)
+
+						if attach == nil then draw = false end
+						
+						if draw then
+							local x = m.posoff.x * attach.Ang:Right()
+							local y = m.posoff.y * attach.Ang:Forward()
+							local z = m.posoff.z * attach.Ang:Up()
+							--print(x,y,z)
+							--print( Vector(x,y,z) )
+							--print(posoff2)
+							m:SetPos(attach.Pos + x + y + z)
+							local ang = attach.Ang
+							ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
+							ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
+							ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
+
+							m:SetAngles(ang)
+							m:SetMaterial( m.mat )
+
+							if (m.IsToken == false) or (not m.IsToken) then
+								m:DrawModel()
+							end
+							table.insert( RS.LastRenderedModels, m )
 						end
 					end
-
-					if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
-					if not m.ply:Alive() then return end
-
-					local atid = m.ply:LookupAttachment(m.att)
-					local attach = m.ply:GetAttachment(atid)
-
-					if attach == nil then return end
-					
-					local x = m.posoff.x * attach.Ang:Right()
-					local y = m.posoff.y * attach.Ang:Forward()
-					local z = m.posoff.z * attach.Ang:Up()
-					--print(x,y,z)
-					--print( Vector(x,y,z) )
-					--print(posoff2)
-					m:SetPos(attach.Pos + x + y + z)
-					local ang = attach.Ang
-					ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
-					ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
-					ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
-
-					m:SetAngles(ang)
-					m:SetMaterial( m.mat )
-
-					if (m.IsToken == false) or (not m.IsToken) then
-						m:DrawModel()
-					end
-
 				end
 
 			end

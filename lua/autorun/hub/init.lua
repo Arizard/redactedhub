@@ -170,7 +170,7 @@ end
 
 net.Receive("SellItem", function(len, ply)
 
-	local id  = net.ReadInt(32)
+	local id  = tostring(net.ReadInt(32))
 	--ply:ChatPrint( "Received sale id "..tostring(id) )
 
 	RS:SellItem( ply, id )
@@ -219,7 +219,7 @@ end)
 
 net.Receive("ToggleItem", function(len, ply)
 
-	local n = net.ReadInt( 32 )
+	local n = tostring(net.ReadInt( 32 ))
 	print("Toggling item",n,"for",ply:Nick())
 	--print("Is Item Equipped?",RS:ItemEquipped( n ))
 	RS:ToggleItem( ply, n )
@@ -229,7 +229,7 @@ net.Receive("ToggleItem", function(len, ply)
 end)
 
 net.Receive("OpenCrate", function(len, ply)
-	local n = net.ReadInt( 32 )
+	local n = tostring(net.ReadInt( 32 ))
 	RS:OpenCrate( ply, n )
 	RS:UpdateInventory( ply )
 end)
@@ -288,24 +288,31 @@ function ItemEquipAll( ply )
 				RS:PlayerEquip( ply, tonumber(v["ID"]) )
 			end
 		end
+	else
+		print( "could not get equippables for", ply )
 	end
+
+	return eq
 end
 
 function ItemPlayerSpawn( ply )
 	ply:SetRenderMode( RENDERMODE_TRANSALPHA )
 	--print(ply:SteamID64())
 	--get equipped items
-	ItemEquipAll( ply )
-
-	if ply:Team() == TEAM_SPECTATOR then return end
-	local eq = RS:GetEquippedItems( ply )
-	if eq ~= nil then
-		for k,v in ipairs(eq) do
-			if RS.Items[ v["class"] ] then
-				RS.Items[v["class"]]:OnSpawn( ply, tonumber(v["ID"]) )
+	timer.Simple(0.0, function()
+		if ply:Team() == TEAM_SPECTATOR then return end
+		local eq = ItemEquipAll( ply )
+		if eq ~= nil then
+			print("sent equippables to ", ply)
+			for k,v in ipairs(eq) do
+				if RS.Items[ v["class"] ] then
+					RS.Items[v["class"]]:OnSpawn( ply, tonumber(v["ID"]) )
+				end
 			end
+		else
+			print( "could not get equippables for", ply )
 		end
-	end
+	end)
 
 end
 hook.Add("PlayerLoadout", "RS:PlayerSpawn", ItemPlayerSpawn)
@@ -348,7 +355,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id 
 	cmod.mat = mat
 	cmod.col = col
 	cmod.ply = ply
-	cmod.id = id
+	cmod.id = tostring(id)
 	cmod.isToken = false
 	cmod.id64 = ply:SteamID64()
 
@@ -372,7 +379,7 @@ function RS:CreateClientToken( ply, id, class )
 	cmod.mat = ""
 	cmod.col = Color(255,255,255)
 	cmod.ply = ply
-	cmod.id = id
+	cmod.id = tostring(id)
 	cmod.isToken = true
 	cmod.class = class
 	cmod.id64 = ply:SteamID64()
@@ -394,7 +401,7 @@ function RS:DestroyClientModel( id )
 	end
 
 	net.Start("DestroyClientModel")
-	net.WriteInt( id, 32 )
+	net.WriteInt( tonumber(id), 32 )
 	net.Broadcast()
 end
 
