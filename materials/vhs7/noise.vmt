@@ -1,0 +1,14 @@
+"VertexlitGeneric"
+{
+	"$baseTexture" "vhs7/noise"
+	"$surfaceprop" "Glass"
+	"Proxies"
+	{
+		"AnimatedTexture"
+		{
+			"animatedTextureVar" "$basetexture"
+			"animatedTextureFrameNumVar" "$frame"
+			"animatedTextureFrameRate" "24"
+		}
+	}
+}

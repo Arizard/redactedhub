@@ -788,10 +788,16 @@ function ICON:SetItem( tab )
 		self.model:SetLookAt(Vector(0,0,0))
 	elseif self.item.Category == "hats" then
 		self.model:SetModel(self.item.HatModel)
-		self.model:SetFOV(25)
-		self.model:SetLookAt(Vector(0,0,0))
+		self.model:SetFOV(self.item.IconFOV or 25)
+		self.model:SetLookAt( self.item.PosOff - (self.item.IconPosOff or Vector(0,0,0) ) )
+		self.model.Entity:SetPos( self.item.PosOff )
+		self.model.Entity:SetModelScale( self.item.Scl, 0)
 		self.model.Entity:SetMaterial( self.item.HatMat )
 		self.model.Entity:SetColor( self.item.HatCol )
+
+		if self.item.IconLayoutEntity then
+			self.model.LayoutEntity = self.item.IconLayoutEntity
+		end
 
 		if string.find( self.item.HatModel, "apb" ) then
 			--self.model:SetCamPos( self.model:GetCamPos() + Vector(0,0,70) )
@@ -917,7 +923,7 @@ end
 
 function ICON:SetID( num )
 	--print("Attempting to set id "..tostring(num))
-	self.id = num
+	self.id = tonumber(num)
 	self:PerformLayout()
 end
 
@@ -925,7 +931,7 @@ function ICON:GetID()
 	if self.id == 0 then
 		return self.item.Class
 	else
-		return self.id
+		return tonumber(self.id)
 	end
 end
 
@@ -1413,11 +1419,12 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 		--print(self.rot,self.ox,self.nx,self.dragging)
 	end
+
 	function RS.PlayerModelPreview:DrawModel()
 		local x, y = self:LocalToScreen( 0, 0 )	
 
 		if not LocalPlayer():Alive() or LocalPlayer():GetObserverMode() ~= OBS_MODE_NONE then return else self.Entity:DrawModel() end
-
+		lastrender = {}
 		for id, m in pairs(RS.ClientSideModels) do
 			if IsValid(m) then
 
@@ -1590,7 +1597,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 			if worked ~= false then
 				icon:SetInventoryItem( true )
 				icon:SetEquipped( tobool(v["equipped"]) )
-				icon:SetID( tonumber(v["ID"]) )
+				icon:SetID( (v["ID"]) )
 
 				icon:SetIsToken( RS.Items[v["class"]].IsToken )
 
@@ -1914,7 +1921,7 @@ net.Receive("UpdateInventory", function()
 			icon:SetItem(RS.Items[v["class"]])
 			icon:SetInventoryItem( true )
 			icon:SetEquipped( tobool(v["equipped"]) )
-			icon:SetID( tonumber(v["ID"]) )
+			icon:SetID( v["ID"] )
 			if RS.Items[v["class"]] then
 				icon:SetIsToken( RS.Items[v["class"]].IsToken )
 			end

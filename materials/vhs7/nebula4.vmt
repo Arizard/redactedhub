@@ -1,0 +1,8 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "vhs7/nebula4"
+	"$surfaceprop" "Water"
+	"$nocull" 1
+	
+	"$vertexcolor" 1
+}

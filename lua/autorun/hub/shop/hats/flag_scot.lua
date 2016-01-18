@@ -1,8 +1,8 @@
-ITEM.Name = "USSR Flag"
-ITEM.Description = "Cyka Blyat my friend"
-ITEM.StorePrice = 150
+ITEM.Name = "Scottish Flag"
+ITEM.Description = "FREEDOM!"
+ITEM.StorePrice = 120
 ITEM.HatModel = "models/weapons/arizard/c_buffbanner/c_buffbanner.mdl"
-ITEM.HatMat = "models/weapons/arizard/flag_ussr.vmt"
+ITEM.HatMat = "models/weapons/arizard/flag_scot.vmt"
 ITEM.HatCol = Color(0,0,0)
 ITEM.Att = "chest"
 ITEM.PosOff = Vector(12,-8,-65)

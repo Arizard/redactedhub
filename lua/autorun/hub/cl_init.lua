@@ -38,12 +38,14 @@ surface.CreateFont("Screen_Tiny", {
 local drawhats = CreateClientConVar("hub_hats",1,true,false)
 local drawgifts = CreateClientConVar("hub_gift_notif", 1, true, false)
 local drawtexthats = CreateClientConVar("hub_texthats", 1, true, false)
+local drawparticles = CreateClientConVar("hub_particles", 1, true, false)
 
 RS.Options = { -- gets drawn in the options tab
 	{"h1", "Options"},
 	{"bool","hub_hats","Hats Visible"},
 	{"bool","hub_gift_notif", "Gift Notifications"},
-	{"bool","hub_texthats", "Texthats Visible"}
+	{"bool","hub_texthats", "Texthats Visible"},
+	{"bool","hub_particles", "Particle Effects Visible"}
 }
 
 function RS:ReceiveVip()
@@ -165,7 +167,7 @@ net.Receive("SendClientModelsOnSpawn", function()
 end)
 
 net.Receive("DestroyClientModel", function()
-	RS:DestroyClientModel( tostring(net.ReadInt(32)) )
+	RS:DestroyClientModel( net.ReadInt(32) )
 end)
 
 function RS:DestroyClientModel(id)
@@ -187,16 +189,14 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 	cmod.scl = scl
 	cmod.mat = mat
 	cmod.col = col or Color(255,255,255)
-	cmod.ply = player.GetBySteamID64( id64 )
+	cmod.ply = ply
 	cmod.id = id
 	cmod:SetNoDraw( true )
 	cmod.isToken = token
 	cmod.class = class
-	cmod.id64 = id64
-
+	cmod.id64 = id64 or ply:SteamID64()
 	
-
-	print("RedactedHub - Creating model for",player.GetBySteamID64(cmod.id64), mdl, cmod.id)
+	print("RedactedHub - Creating model for",player.GetBySteamID64(cmod.id64) or cmod.id64, mdl, cmod.id)
 
 	cmod:SetModelScale( scl, 0 )
 
@@ -474,16 +474,7 @@ for k,v in ipairs( hatfonts ) do
 	table.insert( validfonts, v[1] )
 end
 
-local textHatCache = {
-	["76561198020843439"] = {
-		col = Color(255,0,255),
-		effect	=	"wave",
-		font	=	"texthat_comic_sans",
-		frac	=	0,
-		size	=	0.050000000745058,
-		text	=	"If you can read this, I'm going too slow!"
-	}
-}
+local textHatCache = {}
 
 net.Receive("UpdateTextHat", function()
 	local id = net.ReadString()
@@ -693,18 +684,20 @@ hook.Add("PostPlayerDraw","EffectCreator", function( ply )
 	if not ply.Effects then
 		ply.Effects = {}
 	end
-	if ply:Alive() then
-		for k,v in pairs( ply.Effects ) do
-			--if #v > 0 then
-				if v.enabled and v.last then
-					if (CurTime() - v.last) > RS.Items[k].Interval then
-						local ed = EffectData()
-						ed:SetEntity( ply )
-						util.Effect( RS.Items[k].Effect, ed )
-						v.last = CurTime()
+	if drawparticles:GetBool() == true then
+		if ply:Alive() then
+			for k,v in pairs( ply.Effects ) do
+				--if #v > 0 then
+					if v.enabled and v.last then
+						if (CurTime() - v.last) > RS.Items[k].Interval then
+							local ed = EffectData()
+							ed:SetEntity( ply )
+							util.Effect( RS.Items[k].Effect, ed )
+							v.last = CurTime()
+						end
 					end
-				end
-			--end
+				--end
+			end
 		end
 	end
 end)

@@ -10,6 +10,7 @@ ITEM.CrateContains = {
 	["col_purple"] = 90,
 	["3dglasses"] = 5,
 	["trail_missing"] = 2,
+	["noisemat"] = 1,
 	["missingmat"] = 1,
 	["obsoletemat"] = 1,
 	["wireframe"] = 1,

@@ -3,7 +3,6 @@ ITEM.Description = "Colours you yellow."
 ITEM.StorePrice = 30
 ITEM.Col = Color(241, 196, 15)
 
-
 function ITEM:OnEquip(ply, id)
 	local col = self.Col
 
@@ -13,8 +12,12 @@ function ITEM:OnEquip(ply, id)
 
 	local c = Vector( r,g,b )
 	
-	ply:SetColor(self.Col)
+	
 	ply:SetPlayerColor(c)
+
+	if ply:GetMaterial() ~= "" then
+		ply:SetColor(self.Col)
+	end
 end
 
 function ITEM:OnHolster(ply, id)

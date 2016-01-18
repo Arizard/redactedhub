@@ -249,5 +249,8 @@
 	["Flight Of The Concords"] = {
 		["Bowie"] = "https://www.youtube.com/watch?v=pGXhMU0iR70",
 	},
-
+	["David Bowie"] = {
+		["Space Oddity"] = "https://www.youtube.com/watch?v=nP6xBFyA_aw",
+		["Life On Mars"] = "https://www.youtube.com/watch?v=v--IqqusnNQ",
+	}
 }

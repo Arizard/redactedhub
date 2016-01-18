@@ -170,7 +170,7 @@ end
 
 net.Receive("SellItem", function(len, ply)
 
-	local id  = tostring(net.ReadInt(32))
+	local id  = net.ReadInt(32)
 	--ply:ChatPrint( "Received sale id "..tostring(id) )
 
 	RS:SellItem( ply, id )
@@ -219,7 +219,7 @@ end)
 
 net.Receive("ToggleItem", function(len, ply)
 
-	local n = tostring(net.ReadInt( 32 ))
+	local n = net.ReadInt( 32 )
 	print("Toggling item",n,"for",ply:Nick())
 	--print("Is Item Equipped?",RS:ItemEquipped( n ))
 	RS:ToggleItem( ply, n )
@@ -229,7 +229,7 @@ net.Receive("ToggleItem", function(len, ply)
 end)
 
 net.Receive("OpenCrate", function(len, ply)
-	local n = tostring(net.ReadInt( 32 ))
+	local n = net.ReadInt( 32 )
 	RS:OpenCrate( ply, n )
 	RS:UpdateInventory( ply )
 end)
@@ -355,7 +355,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id 
 	cmod.mat = mat
 	cmod.col = col
 	cmod.ply = ply
-	cmod.id = tostring(id)
+	cmod.id = id
 	cmod.isToken = false
 	cmod.id64 = ply:SteamID64()
 
@@ -379,7 +379,7 @@ function RS:CreateClientToken( ply, id, class )
 	cmod.mat = ""
 	cmod.col = Color(255,255,255)
 	cmod.ply = ply
-	cmod.id = tostring(id)
+	cmod.id = id
 	cmod.isToken = true
 	cmod.class = class
 	cmod.id64 = ply:SteamID64()

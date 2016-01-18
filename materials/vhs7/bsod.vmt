@@ -1,0 +1,7 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "vhs7/bsod"
+	"$surfaceprop" "Glass"
+	"$nocull" 1
+	"$vertexcolor" 1
+}
