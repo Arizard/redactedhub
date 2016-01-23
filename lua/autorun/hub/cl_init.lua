@@ -281,6 +281,10 @@ function RS:RenderClientModels()
 							shouldDraw = false
 						end
 
+						if m.ply == LocalPlayer() and LocalPlayer():ShouldDrawLocalPlayer() then
+							shouldDraw = true
+						end
+
 						if true then
 							-- 
 
