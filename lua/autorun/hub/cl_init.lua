@@ -231,19 +231,19 @@ local maxAng = fov/2
 local maxDot = math.cos( maxAng * math.pi/180 )
 
 
-hook.Add("HUDPaint", "testingFrustrum", function()
-	draw.SimpleText( "frustrum FOV: "..tostring( fov ), "default", 16, 64, Color(0,255,0) )
-	draw.SimpleText( "maxDot: "..tostring(maxDot), "default", 16, 64 + 16, Color(0,255,0) )
-	draw.SimpleText( "Num Rendering: "..tostring(#RS.LastRenderedModels), "default", 16, 64 + 32, Color(0,255,0) )
-	for k,v in ipairs(player.GetAll()) do
-		if v ~= LocalPlayer() then
-			local hatDir = ( v:EyePos() - LocalPlayer():EyePos() )
-			hatDir:Normalize()
-			local cosine = EyeVector():Dot( hatDir )
-			draw.SimpleText( v:Nick().."(eye to eye dot): "..tostring(cosine), "default", 16, 64 + 16*k + 16, Color(255,0,0) )
-		end
-	end
-end)
+-- hook.Add("HUDPaint", "testingFrustrum", function()
+-- 	draw.SimpleText( "frustrum FOV: "..tostring( fov ), "default", 16, 64, Color(0,255,0) )
+-- 	draw.SimpleText( "maxDot: "..tostring(maxDot), "default", 16, 64 + 16, Color(0,255,0) )
+-- 	draw.SimpleText( "Num Rendering: "..tostring(#RS.LastRenderedModels), "default", 16, 64 + 32, Color(0,255,0) )
+-- 	for k,v in ipairs(player.GetAll()) do
+-- 		if v ~= LocalPlayer() then
+-- 			local hatDir = ( v:EyePos() - LocalPlayer():EyePos() )
+-- 			hatDir:Normalize()
+-- 			local cosine = EyeVector():Dot( hatDir )
+-- 			draw.SimpleText( v:Nick().."(eye to eye dot): "..tostring(cosine), "default", 16, 64 + 16*k + 16, Color(255,0,0) )
+-- 		end
+-- 	end
+-- end)
 
 function RS:RenderClientModels()
 	RS.LastRenderedModels = {}
