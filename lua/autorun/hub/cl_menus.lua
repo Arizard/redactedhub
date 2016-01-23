@@ -765,8 +765,10 @@ function ICON:SetItem( tab )
 		self.trail = Material(self.item.Trail)
 	elseif self.item.Category == "skins" then
 		self.model:SetModel(self.item.PlayerModel)
-		self.model:SetFOV(20)
-		self.model:SetLookAt(Vector(0,0,60))
+		self.model.Entity:SetMaterial( self.item.PlayerMat or "" )
+		self.model:SetFOV(self.item.IconFOV or 20)
+		self.model:SetLookAt( Vector(0,0,60) - (self.item.IconPosOff or Vector(0,0,0) ) )
+		
 
 		function self.model:LayoutEntity(ent)
 			ent:SetAngles(Angle(0,20,0))
@@ -836,6 +838,7 @@ function ICON:OnCursorEntered2()
 	
 	if self.item.Category == "skins" then
 		RS.PlayerModelPreview:SetModel(self.item.PlayerModel)
+		RS.PlayerModelPreview.Entity:SetMaterial( self.item.PlayerMat or "" )
 	end
 
 	if self.item.Category == "hats" then
@@ -948,7 +951,7 @@ RS.JukeQueue_Played = {}
 RS.JukeSongs_Played = {}
 
 RS.JukeQueueIndex = 1
-RS.JukeState = "cyclequeue"
+RS.JukeState = "shuffleall"
 local JukeStates = {
 	["shuffleall"] = "Shuffle All",
 	["shufflequeue"] = "Shuffle Queue",

@@ -18,6 +18,7 @@ ITEM.CrateContains = {
 	["wireframe"] = 1,
 	["fiddlesticks"] = 1,
 	["3dglasses_shiny"] = 1,
+	["infoplayerstart"] = 1,
 }
 
 function ITEM:OnEquip(ply, id)

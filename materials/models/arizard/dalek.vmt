@@ -1,0 +1,17 @@
+"VertexlitGeneric"
+{
+	"$baseTexture"	"models/arizard/dalek"
+	"$bumpmap"	"models/arizard/dalek_normal"
+
+	//phong
+	"$phong" "1"
+	"$phongboost"   "2"
+	//"$phongfresnelranges" "[1 2.5 5]"
+	"$phongfresnelranges"	"[0.4 4 8]"
+
+	"$phongexponent"	"7"
+
+	//misc
+	"$selfillum"	 "1"
+}
+

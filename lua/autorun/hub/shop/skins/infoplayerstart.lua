@@ -1,7 +1,7 @@
-ITEM.Name = "Chair"
-ITEM.Description = [[For Sitting.]]
-ITEM.StorePrice = 900
-ITEM.PlayerModel = "models/props/cs_office/chair_office.mdl"
+ITEM.Name = "info_player_start"
+ITEM.Description = [[Fuck hammer, dude.]]
+ITEM.StorePrice = 800
+ITEM.PlayerModel = "models/player/infoplayerstart.mdl"
 ITEM.Buyable = false
 
 function ITEM:OnEquip(ply, id)

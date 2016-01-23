@@ -40,6 +40,7 @@ local drawgifts = CreateClientConVar("hub_gift_notif", 1, true, false)
 local drawtexthats = CreateClientConVar("hub_texthats", 1, true, false)
 local drawparticles = CreateClientConVar("hub_particles", 1, true, false)
 local drawtrails = CreateClientConVar("hub_trails", 1, true, false)
+local drawdistance = CreateClientConVar("hub_drawdistance", 1024, true, false)
 
 RS.Options = { -- gets drawn in the options tab
 	{"h1", "Options"},
@@ -200,6 +201,7 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 	print("RedactedHub - Creating model for",player.GetBySteamID64(cmod.id64) or cmod.id64, mdl, cmod.id)
 
 	cmod:SetModelScale( scl, 0 )
+	cmod:SetRenderMode( RENDERMODE_TRANSALPHA )
 
 	RS.ClientSideModels[id] = cmod
 
@@ -222,6 +224,27 @@ end)
 RS.InPreview = false
 RS.LastRenderedModels = {}
 
+-- implement view culling
+local fov = 110 -- give it 10 more degrees than max fov to prevent popping
+
+local maxAng = fov/2
+local maxDot = math.cos( maxAng * math.pi/180 )
+
+
+hook.Add("HUDPaint", "testingFrustrum", function()
+	draw.SimpleText( "frustrum FOV: "..tostring( fov ), "default", 16, 64, Color(0,255,0) )
+	draw.SimpleText( "maxDot: "..tostring(maxDot), "default", 16, 64 + 16, Color(0,255,0) )
+	draw.SimpleText( "Num Rendering: "..tostring(#RS.LastRenderedModels), "default", 16, 64 + 32, Color(0,255,0) )
+	for k,v in ipairs(player.GetAll()) do
+		if v ~= LocalPlayer() then
+			local hatDir = ( v:EyePos() - LocalPlayer():EyePos() )
+			hatDir:Normalize()
+			local cosine = EyeVector():Dot( hatDir )
+			draw.SimpleText( v:Nick().."(eye to eye dot): "..tostring(cosine), "default", 16, 64 + 16*k + 16, Color(255,0,0) )
+		end
+	end
+end)
+
 function RS:RenderClientModels()
 	RS.LastRenderedModels = {}
 	if drawhats:GetBool() == true then
@@ -238,44 +261,65 @@ function RS:RenderClientModels()
 				
 				if IsValid(m.ply) then
 					if ( (LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer() ) then
-						-- 
-
-						-- if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
-						-- if not m.ply:Alive() then return end
-
-						local draw = true
-						if LocalPlayer():GetObserverTarget() == m.ply then
-							if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
-								draw = false
-							end
+						local shouldDraw = true
+						
+						local dist = 0
+						local drawdist = drawdistance:GetInt()
+						local alpha = 255
+						dist = m.ply:EyePos():Distance( LocalPlayer():EyePos() )
+						if dist > drawdist then
+							--print("out of range")
+							shouldDraw = false
 						end
 
+						local hatDir = ( m.ply:EyePos() - LocalPlayer():EyePos() )
+						hatDir:Normalize()
+						local cosine = EyeVector():Dot( hatDir )
+						--print( math.abs( math.acos( cosine ) )  )
+						if cosine < maxDot then
+							--print( cosine, maxDot )
+							shouldDraw = false
+						end
 
-						local atid = m.ply:LookupAttachment(m.att)
-						local attach = m.ply:GetAttachment(atid)
+						if true then
+							-- 
 
-						if attach == nil then draw = false end
-						
-						if draw then
-							local x = m.posoff.x * attach.Ang:Right()
-							local y = m.posoff.y * attach.Ang:Forward()
-							local z = m.posoff.z * attach.Ang:Up()
-							--print(x,y,z)
-							--print( Vector(x,y,z) )
-							--print(posoff2)
-							m:SetPos(attach.Pos + x + y + z)
-							local ang = attach.Ang
-							ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
-							ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
-							ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
+							-- if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
+							-- if not m.ply:Alive() then return end
 
-							m:SetAngles(ang)
-							m:SetMaterial( m.mat )
-
-							if (m.IsToken == false) or (not m.IsToken) then
-								m:DrawModel()
+							
+							if LocalPlayer():GetObserverTarget() == m.ply then
+								if LocalPlayer():GetObserverMode() == OBS_MODE_IN_EYE then
+									shouldDraw = false
+								end
 							end
-							table.insert( RS.LastRenderedModels, m )
+
+							local atid = m.ply:LookupAttachment(m.att)
+							local attach = m.ply:GetAttachment(atid)
+
+							if attach == nil then shouldDraw = false end
+							
+							if shouldDraw then
+								local x = m.posoff.x * attach.Ang:Right()
+								local y = m.posoff.y * attach.Ang:Forward()
+								local z = m.posoff.z * attach.Ang:Up()
+								--print(x,y,z)
+								--print( Vector(x,y,z) )
+								--print(posoff2)
+								m:SetPos(attach.Pos + x + y + z)
+								local ang = attach.Ang
+								ang:RotateAroundAxis( attach.Ang:Right(), m.angoff.pitch )
+								ang:RotateAroundAxis( attach.Ang:Up(), m.angoff.yaw )
+								ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
+
+								m:SetAngles(ang)
+								m:SetMaterial( m.mat )
+
+								if (m.IsToken == false) or (not m.IsToken) then
+									m:DrawModel()
+								end
+								table.insert( RS.LastRenderedModels, m )
+							end
 						end
 					end
 				end
@@ -687,17 +731,25 @@ hook.Add("PostPlayerDraw","EffectCreator", function( ply )
 	end
 	if drawparticles:GetBool() == true then
 		if ply:Alive() then
-			for k,v in pairs( ply.Effects ) do
-				--if #v > 0 then
-					if v.enabled and v.last then
-						if (CurTime() - v.last) > RS.Items[k].Interval then
-							local ed = EffectData()
-							ed:SetEntity( ply )
-							util.Effect( RS.Items[k].Effect, ed )
-							v.last = CurTime()
-						end
+			if ply:GetPos():Distance( LocalPlayer():GetPos() ) < drawdistance:GetInt() then
+				local plyDir = ( ply:EyePos() - LocalPlayer():EyePos() )
+				plyDir:Normalize()
+				local cosine = EyeVector():Dot( plyDir )
+				--print( math.abs( math.acos( cosine ) )  )
+				if cosine > maxDot then
+					for k,v in pairs( ply.Effects ) do
+						--if #v > 0 then
+							if v.enabled and v.last then
+								if (CurTime() - v.last) > RS.Items[k].Interval then
+									local ed = EffectData()
+									ed:SetEntity( ply )
+									util.Effect( RS.Items[k].Effect, ed )
+									v.last = CurTime()
+								end
+							end
+						--end
 					end
-				--end
+				end
 			end
 		end
 	end

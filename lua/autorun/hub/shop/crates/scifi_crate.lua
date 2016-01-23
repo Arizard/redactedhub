@@ -28,6 +28,9 @@ ITEM.CrateContains = {
 	["noisemat"] = 5,
 	["xencrystal"] = 5,
 
+	["dalek_black"] = 2,
+	["dalek_brass"] = 2, -- 4 skins LOL
+
 	["astronauthelmet_shiny"] = 1,
 	["antlionhat_shiny"] = 1,
 	["skullhat_shiny"] = 1,
