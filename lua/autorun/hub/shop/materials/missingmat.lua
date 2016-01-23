@@ -3,6 +3,7 @@ ITEM.Description = "Developer Crate"
 ITEM.StorePrice = 310
 ITEM.Material = "debug/debugempty.vmt"
 ITEM.Buyable = false
+ITEM.Rarity = 3
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

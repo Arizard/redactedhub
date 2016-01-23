@@ -147,7 +147,7 @@ function RS:BuyItem( ply, class )
 	end
 
 	if not RS:HasInventorySpace( ply ) then
-		RS:StoreMessage(ply, "Your inventory is full.")
+		RS:StoreMessage(ply, "Your inventory is full. Considered donating?")
 		ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 		return
 	end
@@ -273,7 +273,7 @@ function RS:OpenCrate( ply, id )
 					RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
 				end )
 			else
-				RS:StoreMessage(ply, "Your inventory is full.")
+				RS:StoreMessage(ply, "Your inventory is full. Considered donating?")
 				ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 			end
 		end

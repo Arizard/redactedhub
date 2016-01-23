@@ -6,14 +6,17 @@ ITEM.CrateMat = "vhs7/nebula4.vmt"
 ITEM.StorePrice = 100
 ITEM.Col = Color(241, 196, 15)
 ITEM.CrateContains = {
-	["col_spaceblue"] = 50,
-	["col_stardustpink"] = 50,
-	["col_emeraldgreen"] = 50, -- 150 paints
+	["col_spaceblue"] = 40,
+	["col_stardustpink"] = 40,
+	["col_emeraldgreen"] = 40, -- 120 paints
 
 	["antlionhat"] = 15,
 	["astronauthelmet"] = 15,
 	["cakehat"] = 15,
-	["cpmask"] = 15, -- 60 normal hats
+	["cpmask"] = 20, -- 95 normal hats
+	["headcrab"] = 10,
+	["gmanmask"] = 10,
+	["starglasses"] = 10,
 
 	["bsodmat"] = 5,
 	["matrixmat"] = 1,

@@ -3,6 +3,7 @@ ITEM.Description = "Spaceee"
 ITEM.StorePrice = 510
 ITEM.Material = "vhs7/nebula2.vmt"
 ITEM.Buyable = false
+ITEM.Rarity = 4
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )
 end

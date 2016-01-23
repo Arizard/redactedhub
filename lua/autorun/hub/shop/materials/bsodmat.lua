@@ -3,6 +3,7 @@ ITEM.Description = "Of Death."
 ITEM.StorePrice = 210
 ITEM.Material = "vhs7/bsod.vmt"
 ITEM.Buyable = false
+ITEM.Rarity = 3
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

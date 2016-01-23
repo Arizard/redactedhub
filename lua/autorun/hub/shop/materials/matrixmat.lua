@@ -3,6 +3,7 @@ ITEM.Description = "Stay in Wonderland."
 ITEM.StorePrice = 1210
 ITEM.Material = "vhs7/matrix.vmt"
 ITEM.Buyable = false
+ITEM.Rarity = 5
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

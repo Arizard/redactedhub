@@ -79,7 +79,7 @@ function RS:HasInventorySpace( ply )
 	end
 	print( #res, RS.InventoryLimit )
 	PrintTable( res )
-	if #res <= RS.InventoryLimit then
+	if #res < RS.InventoryLimit then
 		return true
 	else
 		return ply:IsVip()
