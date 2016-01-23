@@ -633,7 +633,7 @@ function ICON:PerformLayout()
 					self.m.send:AddOption( v:Nick(), function() 
 						if self ~= nil then
 							if self:GetParent() ~= nil then
-								RunConsoleCommand( "shop_senditem", v:Nick(), tostring(self:GetParent():GetID()) )
+								RunConsoleCommand( "shop_senditem_sid", v:SteamID64(), tostring(self:GetParent():GetID()) )
 							end
 						end
 					end):SetIcon("icon16/email_go.png")

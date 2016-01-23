@@ -39,11 +39,46 @@ concommand.Add("shop_senditem",function(ply, cmd, args)
 		end
  
 		if #targets < 1 then
-			RS:StoreChat( ply, "No players found with that name." )
+			RS:StoreChat( ply, "No players found with that name. ("..args[1]..")" )
 			return false
 		end
 
 		local targ = targets[1]
+
+		if RS:DoesPlayerOwn( ply, itemid ) then
+			RS:ChangeItemOwner( itemid, targ )
+
+			local itable = RS:GetItemTable( itemid )
+
+			RS:StoreChat(ply, "You sent "..itable.Name.." to "..targ:Nick().."!")
+			RS:StoreChat(targ, "You received "..itable.Name.." from "..ply:Nick().."!")
+
+			RS:GiftNotify( targ, "NEW ITEM: "..itable.Name.." from "..ply:Nick().."!")
+
+			RS:UpdateInventory(ply)
+			RS:UpdateInventory(targ)
+		end
+
+	else
+		RS:StoreChat(ply, "An Error Occured.")
+	end
+
+end, nil, nil, FCVAR_SERVER_CAN_EXECUTE )
+
+concommand.Add("shop_senditem_sid",function(ply, cmd, args)
+
+	PrintTable( args )
+
+	if args[1] and args[2] and IsValid( ply ) then
+		local target = player.GetBySteamID64( args[1] )
+		local itemid = tonumber( args[2] )
+ 
+		if target == nil or not IsValid( target ) then
+			RS:StoreChat( ply, "No players found with that steamid. ("..args[1]..")" )
+			return false
+		end
+
+		local targ = target
 
 		if RS:DoesPlayerOwn( ply, itemid ) then
 			RS:ChangeItemOwner( itemid, targ )
