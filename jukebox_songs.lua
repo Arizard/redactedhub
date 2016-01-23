@@ -252,5 +252,8 @@
 	["David Bowie"] = {
 		["Space Oddity"] = "https://www.youtube.com/watch?v=nP6xBFyA_aw",
 		["Life On Mars"] = "https://www.youtube.com/watch?v=v--IqqusnNQ",
+	},
+	["Vera Blue"] = {
+		["Hold"] = "https://www.youtube.com/watch?v=3Cv6JEjevKQ",
 	}
 }

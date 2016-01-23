@@ -5,6 +5,7 @@ RS.UseStock = false -- if true, you will need to manually add stock for items.
 
 RS.HubTitle = "VHS-7 / Server Hub"
 RS.Currency = "VC" -- "VaporCredits"
+RS.CurrencyFull = "Vapor Credits"
 
 RS.RefundRatio = 0.5 -- percentage of cash refunded on sale
 

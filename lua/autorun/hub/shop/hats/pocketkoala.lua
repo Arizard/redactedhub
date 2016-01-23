@@ -12,7 +12,11 @@ ITEM.Effect = "pocketkoala"
 ITEM.Interval = 0.08
 ITEM.Buyable = false
 ITEM.Rarity = 5
-ITEM.IconPosOff = Vector(0,0,-17)
+ITEM.IconPosOff = Vector(0,-4,-27)
+ITEM.IconFOV = 8
+ITEM.IconLayoutEntity = function( self, ent )
+	ent:SetAngles(Angle(0,160,0))
+end
 
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )

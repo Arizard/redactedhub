@@ -12,6 +12,8 @@ ITEM.Effect = "smallflames"
 ITEM.Interval = 0.08
 ITEM.Buyable = false
 ITEM.Rarity = 5
+ITEM.IconFOV = 14
+ITEM.IconPosOff = Vector(0,0,0)
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )
 	if SERVER then

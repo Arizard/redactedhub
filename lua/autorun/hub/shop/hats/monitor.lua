@@ -9,6 +9,8 @@ ITEM.PosOff = Vector(0,-5,-10)
 ITEM.AngOff = Angle(0,0,0)
 ITEM.Scl = 0.8
 ITEM.Rarity = 2
+ITEM.IconFOV = 18
+ITEM.IconPosOff = Vector(0,0,-10)
 
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )

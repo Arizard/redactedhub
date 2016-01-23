@@ -14,7 +14,7 @@ function EFFECT:Init( data )
 	end
 
 	local data = self.data
-	local vOffset = data:GetEntity():GetPos() + Vector( 0, 0, 80 )
+	local vOffset = data:GetEntity():GetPos() + Vector( 0, 0, 75 )
 
 	local emitter = ParticleEmitter( vOffset, false )
 		for i=1, self.particles do
@@ -22,11 +22,12 @@ function EFFECT:Init( data )
 			if particle then
 				local vel = VectorRand()*20
 				vel.z = 0
+				particle:SetPos( vOffset + VectorRand()*5 )
 				particle:SetAngles(Angle(0,0,180))
 				particle:SetVelocity( vel )
 				particle:SetAirResistance( 100 )
 				particle:SetLifeTime( 0 )
-				particle:SetDieTime( 3 )
+				particle:SetDieTime( 1 )
 				particle:SetStartAlpha( 255 )
 				particle:SetEndAlpha( 0 )
 				particle:SetStartSize( 3 + math.random()*3 )

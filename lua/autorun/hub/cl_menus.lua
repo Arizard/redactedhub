@@ -799,11 +799,6 @@ function ICON:SetItem( tab )
 			self.model.LayoutEntity = self.item.IconLayoutEntity
 		end
 
-		if string.find( self.item.HatModel, "apb" ) then
-			--self.model:SetCamPos( self.model:GetCamPos() + Vector(0,0,70) )
-			self.model:SetLookAt( Vector(0,0,70) )
-			self.model:SetFOV( 20 )
-		end
 		--print(self.item.HatCol)
 	elseif self.item.Category == "crates" then
 		self.model:SetModel(self.item.CrateModel)
@@ -1305,7 +1300,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 
 	supp.html = vgui.Create("DHTML", supp)
-	supp.html:OpenURL("http://steamcommunity.com/groups/vhs7")
+	supp.html:OpenURL("http://vhs7.tv/donate.php")
 	supp.html:SetSize(supp:GetWide(),supp:GetTall())
 	--we need to create a button over the screen, so that when they click it opens through the steam overlay.
 	supp.butt = vgui.Create("DButton", supp)
@@ -1316,7 +1311,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		surface.DrawRect(0,0,w,h)
 		draw.ShadowText("Click to view in Steam Overlay", "Screen_Large", w/2, h/2-32, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER,1)
 	end
-	supp.butt.DoClick = function() gui.OpenURL("http://steamcommunity.com/groups/vhs7") end
+	supp.butt.DoClick = function() gui.OpenURL("http://vhs7.tv/donate.php") end
 
 	--hub.largemulti:DisableTab( 6 )
 	--hub.largemulti:DisableTab( 2 )
@@ -1971,7 +1966,7 @@ end)
 function RS:OpenCrateGUI( result, class ) -- class as in crate class
 
 	local crate = RS.Items[class]
-	local item = RS.Items[result]
+	local item = RS.Items[result] and RS.Items[result] or result
 
 	local frame = vgui.Create("AuFrame")
 	frame:SetSize( 640,360 )
@@ -2039,28 +2034,51 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 		if self.clk > 1 then
 			self.countdown = self.countdown - 1
 			if self.countdown == 0 then
-				local icon = vgui.Create("hub_icon", self)
-				icon:SetItem( item )
-				icon:SetInventoryItem( false)
-				icon:SetEquipped( false )
-				icon:SetStock( 1 )
-				if item then
-					icon:SetIsToken( item.IsToken )
-				end
+				if type(item) == "table" then
+					local icon = vgui.Create("hub_icon", self)
+					icon:SetItem( item )
+					icon:SetInventoryItem( false)
+					icon:SetEquipped( false )
+					icon:SetStock( 1 )
+					if item then
+						icon:SetIsToken( item.IsToken )
+					end
 
-				if (item.Rarity or 0) > 1 then
-					surface.PlaySound("crates/killstreak.ogg")
+					if (item.Rarity or 0) > 1 then
+						surface.PlaySound("crates/killstreak.ogg")
+					else
+						surface.PlaySound("crates/percussion_"..tostring(math.random(1,4))..".ogg" )
+					end
+
+					function icon.b:OnMousePressed() end
+					function icon.b:Paint() end
+					icon.b.text = "Woohoo!"
+					icon:Center()
+					icon.ox, icon.oy = icon:GetPos()
+					function icon:Think()
+						self:SetPos( self.ox, self.oy + math.sin(CurTime()*2)*8 )
+					end
 				else
-					surface.PlaySound("crates/percussion_"..tostring(math.random(1,4))..".ogg" )
-				end
-
-				function icon.b:OnMousePressed() end
-				function icon.b:Paint() end
-				icon.b.text = "Woohoo!"
-				icon:Center()
-				icon.ox, icon.oy = icon:GetPos()
-				function icon:Think()
-					self:SetPos( self.ox, self.oy + math.sin(CurTime()*2)*8 )
+					if string.sub( result,1,7 ) == "points_" then
+						local amt = string.sub( result, 8, -1)
+						amt = tonumber( amt or "0" ) or 0
+						if (amt or 0) >= 50 then
+							surface.PlaySound("crates/killstreak.ogg")
+						else
+							surface.PlaySound("crates/percussion_"..tostring(math.random(1,4))..".ogg" )
+						end
+						local icon = vgui.Create("DPanel", self)
+						icon:SetSize( self:GetSize() )
+						icon.amt = amt
+						icon.washcol = table.Copy( AuColors.New.A )
+						icon.washcol.a = 220
+						function icon:Paint(w,h)
+							surface.SetDrawColor( self.washcol )
+							surface.DrawRect(0,0,w,h)
+							AuShadowText( tostring(self.amt), "Screen_XLarge", w/2, h/2 - 16, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 )
+							AuShadowText( RS.CurrencyFull.."!", "Screen_Medium", w/2, h/2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1 )
+						end
+					end
 				end
 			end
 			self.clk = 0

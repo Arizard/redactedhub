@@ -8,6 +8,8 @@ ITEM.Att = "eyes"
 ITEM.PosOff = Vector(0,-2.8,2.5)
 ITEM.AngOff = Angle(25,0,0)
 ITEM.Scl = 1
+ITEM.IconFOV = 15
+ITEM.IconPosOff = Vector(0,0,-9)
 
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )

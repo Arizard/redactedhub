@@ -10,6 +10,7 @@ ITEM.AngOff = Angle(0,0,0)
 ITEM.Scl = 1
 ITEM.Buyable = false
 ITEM.Rarity = 3
+ITEM.IconFOV = 10
 
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )

@@ -39,7 +39,7 @@ function EFFECT:Init( data ) -- unusual effect for hats
 				particle:SetVelocity( vel )
 				particle:SetAirResistance( 100 )
 				particle:SetLifeTime( 0 )
-				particle:SetDieTime( 0.4 )
+				particle:SetDieTime( 0.2 )
 				particle:SetStartAlpha( 255 )
 				particle:SetEndAlpha( 0 )
 				particle:SetStartSize( 2 + math.random()*3 )

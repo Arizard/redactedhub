@@ -39,6 +39,7 @@ local drawhats = CreateClientConVar("hub_hats",1,true,false)
 local drawgifts = CreateClientConVar("hub_gift_notif", 1, true, false)
 local drawtexthats = CreateClientConVar("hub_texthats", 1, true, false)
 local drawparticles = CreateClientConVar("hub_particles", 1, true, false)
+local drawtrails = CreateClientConVar("hub_trails", 1, true, false)
 
 RS.Options = { -- gets drawn in the options tab
 	{"h1", "Options"},
@@ -819,3 +820,9 @@ end
 hook.Add("InitPostEntity","CoolEffects", function()
 	hook.Add( "RenderScene", "RenderStereoscopyMeme", DrawInternal )
 end)
+
+-- timer.Create("RemoveTrails", 1, 0, function()
+-- 	if drawtrails:GetBool() == false then
+-- 		for k,v in ipairs( ents.FindByClass)
+-- 	end
+-- end)

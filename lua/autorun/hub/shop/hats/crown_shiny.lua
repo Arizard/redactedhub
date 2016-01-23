@@ -12,6 +12,8 @@ ITEM.Buyable = false
 ITEM.Rarity = 5
 ITEM.Effect = "smallflare"
 ITEM.Interval = 0.08
+ITEM.IconPosOff = Vector(0,0,-5)
+ITEM.IconFOV = 12
 
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )

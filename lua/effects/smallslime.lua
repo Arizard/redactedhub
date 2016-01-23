@@ -28,16 +28,16 @@ function EFFECT:Init( data ) -- unusual effect for hats
 				local vel = Vector(0,0,0)
 				vel.z = vel.z*0.5
 				particle:SetAngles(Angle(0,0,180))
-				particle:SetPos( particle:GetPos() + VectorRand()*10 )
+				particle:SetPos( particle:GetPos() + VectorRand()*16 )
 				particle:SetVelocity( vel )
 				particle:SetAirResistance( 100 )
 				particle:SetLifeTime( 0 )
-				particle:SetDieTime( 0.4 )
+				particle:SetDieTime( 0.2 )
 				particle:SetStartAlpha( 255 )
 				particle:SetEndAlpha( 0 )
 				particle:SetStartSize( 1 + math.random()*2 )
 				particle:SetEndSize( 2 )
-				particle:SetGravity( Vector(0,0,-70) )
+				particle:SetGravity( Vector(0,0,-170) )
 			end
 		end
 	emitter:Finish()

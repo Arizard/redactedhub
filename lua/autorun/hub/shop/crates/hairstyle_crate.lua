@@ -27,9 +27,9 @@ ITEM.CrateContains = {
 	["apb_slickedback"] = 3,
 	["apb_afro"] = 10,
 
-	["becareful01"] = 20,
-	["wombocombo"] = 20,
-	["airhorn"] = 20,
+	["becareful01"] = 15,
+	["wombocombo"] = 15,
+	["airhorn"] = 15,
 }
 
 function ITEM:OnEquip(ply, id)
