@@ -238,39 +238,44 @@ function RS:OpenCrate( ply, id )
 	if RS:DoesPlayerOwn( ply, id ) then
 		local data, class = RS:GetItemTable( id )
 		if data.IsCrate == true then
-			local tab = {}
-			for k,v in pairs( data.CrateContains ) do
-				for i = 1, v do
-					table.insert( tab, k )
-				end
-			end
-			local result = table.Random( tab )
-			net.Start("OpenCrateGUI")
-			net.WriteString( result )
-			net.WriteString( class )
-			net.Send( ply )
-
-			RS:DestroyItem( id )
-			RS:UpdateInventory( ply )
-
-			timer.Simple(3, function() 
-				local itemname = "Nil"
-				if string.sub( result, 1,7 ) == "points_" then
-					local amt = string.sub( result, 8, -1)
-					amt = tonumber( amt or "0" ) or 0
-					if amt ~= nil then
-						ply:AddMoney( amt )
-						RS:UpdateInventory( ply )
-						itemname = tostring(amt).." "..RS.Currency
+			if RS:HasInventorySpace( ply ) then
+				local tab = {}
+				for k,v in pairs( data.CrateContains ) do
+					for i = 1, v do
+						table.insert( tab, k )
 					end
-				else
-					RS:CreateItem( RS.Items[result], ply )
-					RS:UpdateInventory( ply )
-					itemname = RS.Items[result].Name
 				end
+				local result = table.Random( tab )
+				net.Start("OpenCrateGUI")
+				net.WriteString( result )
+				net.WriteString( class )
+				net.Send( ply )
 
-				RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
-			end )
+				RS:DestroyItem( id )
+				RS:UpdateInventory( ply )
+
+				timer.Simple(3, function() 
+					local itemname = "Nil"
+					if string.sub( result, 1,7 ) == "points_" then
+						local amt = string.sub( result, 8, -1)
+						amt = tonumber( amt or "0" ) or 0
+						if amt ~= nil then
+							ply:AddMoney( amt )
+							RS:UpdateInventory( ply )
+							itemname = tostring(amt).." "..RS.Currency
+						end
+					else
+						RS:CreateItem( RS.Items[result], ply )
+						RS:UpdateInventory( ply )
+						itemname = RS.Items[result].Name
+					end
+
+					RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
+				end )
+			else
+				RS:StoreMessage(ply, "Your inventory is full.")
+				ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
+			end
 		end
 	end
 end

@@ -73,14 +73,16 @@ end
 
 function RS:HasInventorySpace( ply )
 	local id64 = ply:SteamID64()
-	local res = sql.Query( "SELECT ID FROM shop_items WHERE ( owner_id64 = '"..id64.."' )")
+	local res = sql.Query( "SELECT ID, class FROM shop_items WHERE ( owner_id64 = '"..id64.."' )")
 	if not res then
 		return true
 	end
-	if #res < RS.InventoryLimit then
+	print( #res, RS.InventoryLimit )
+	PrintTable( res )
+	if #res <= RS.InventoryLimit then
 		return true
 	else
-		return false
+		return ply:IsVip()
 	end
 end
 

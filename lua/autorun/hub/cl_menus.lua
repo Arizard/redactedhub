@@ -21,7 +21,6 @@ function HubDrawBlur(panel, amount)
 end
 
 
-
 local WINDOW = {}
 
 function WINDOW:Init()
@@ -802,8 +801,8 @@ function ICON:SetItem( tab )
 		--print(self.item.HatCol)
 	elseif self.item.Category == "crates" then
 		self.model:SetModel(self.item.CrateModel)
-		self.model:SetFOV(35)
-		self.model:SetLookAt(Vector(0,0,5))
+		self.model:SetFOV(40)
+		self.model:SetLookAt(Vector(0,0,10))
 		self.model.Entity:SetMaterial( self.item.CrateMat )
 	elseif self.item.Category == "weapons" then
 		self.model:SetModel(self.item.WeaponModel)
@@ -1484,7 +1483,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 		local w, h = self:GetWide()*0.95, 30
 		local x = self:GetWide()/2 - w/2
-		local y = 16
+		local y = 16 - math.abs( math.sin( CurTime()*5) )*5*( a/255 )
 
 		surface.SetDrawColor(HexColor("#E74C3C",a))
 		surface.DrawRect(x,y, w, h)

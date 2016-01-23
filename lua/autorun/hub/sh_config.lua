@@ -9,7 +9,7 @@ RS.CurrencyFull = "Vapor Credits"
 
 RS.RefundRatio = 0.5 -- percentage of cash refunded on sale
 
-RS.InventoryLimit = 100
+RS.InventoryLimit = 4
 
 RS.InfoHTML = [[
 	<style>
