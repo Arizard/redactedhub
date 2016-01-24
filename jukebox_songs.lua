@@ -319,5 +319,8 @@
 	},
 	["Paces"] = {
 		["1993 (No Chill) ft. Jess Kent"] = "https://www.youtube.com/watch?v=zcQXipSleYY",
+	},
+	["Nintento Wii"] = {
+		["Mii Channel Theme"] = "https://www.youtube.com/watch?v=po-0n1BKW2w",
 	}
 }
