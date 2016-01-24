@@ -255,5 +255,9 @@
 	},
 	["Vera Blue"] = {
 		["Hold"] = "https://www.youtube.com/watch?v=3Cv6JEjevKQ",
+	},
+	["Shannon Noll"] = {
+		["What About Me"] = "https://www.youtube.com/watch?v=pXCaEU-zSYQ",
+		["Lift"] = "https://www.youtube.com/watch?v=fQIfBJVFTWE"
 	}
 }

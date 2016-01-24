@@ -317,7 +317,9 @@ function RS:RenderClientModels()
 								ang:RotateAroundAxis( attach.Ang:Forward(), m.angoff.roll )
 
 								m:SetAngles(ang)
-								m:SetMaterial( m.mat )
+								if m:GetMaterial() ~= m.mat then
+									m:SetMaterial( m.mat )
+								end
 
 								if (m.IsToken == false) or (not m.IsToken) then
 									m:DrawModel()
@@ -405,7 +407,8 @@ function RS:RenderClientTokens()
 
 end
 
-hook.Add("PostDrawTranslucentRenderables", "RS:RenderClientTokens", RS.RenderClientTokens)
+-- unhook for now
+--hook.Add("PostDrawTranslucentRenderables", "RS:RenderClientTokens", RS.RenderClientTokens) 
 
 local TauntKey = KEY_B
 
@@ -460,7 +463,9 @@ function PLAYER:IsVip()
 end
 
 hook.Add("PreDrawPlayerHands", "HandMaterials", function( hands, vm, ply, wep )
-	hands:SetMaterial( ply:GetMaterial() or "" )
+	if hands:GetMaterial() ~= ply:GetMaterial() then
+		hands:SetMaterial( ply:GetMaterial() or "" )
+	end
 	--hands:SetColor( ply:GetColor() or Color(255,255,255) )
 
 	local c = ply:GetColor()
@@ -473,7 +478,7 @@ hook.Add("PreDrawViewModel", "HandMaterials", function( vm, ply, wep )
 	--`PrintTable( vm:GetMaterials() )
 	if vm then
 		--print( vm:GetModel() )
-		PrintTable( vm:GetTable() )
+		--PrintTable( vm:GetTable() )
 		if vm:GetMaterials()[1] == "models/weapons/v_hand/v_hand_sheet" then
 			vm:SetSubMaterial( 0, ply:GetMaterial() or "" )
 		else
@@ -703,25 +708,28 @@ hook.Add("HUDPaint","drawgifts", function()
 
 	gifts.timer = math.Clamp( gifts.timer, 0, 60 )
 
-	local x,y = ScrW()/2, ScrH() + 50 + QuadLerp( gifts.frac, 0, gifts.dy)
+	if gifts.frac > 0 then
 
-	surface.SetFont( "Screen_Small" )
-	local tw, th = surface.GetTextSize( gifts.msg )
-	tw = tw + 32
+		local x,y = ScrW()/2, ScrH() + 50 + QuadLerp( gifts.frac, 0, gifts.dy)
 
-	local m = Matrix()
-	m:Translate( Vector(x,y) )
-	m:Rotate( Angle(0,4*math.sin(CurTime()*7),0) )
-	m:Translate( -Vector(x,y) )
+		surface.SetFont( "Screen_Small" )
+		local tw, th = surface.GetTextSize( gifts.msg )
+		tw = tw + 32
 
-	cam.PushModelMatrix( m )
+		local m = Matrix()
+		m:Translate( Vector(x,y) )
+		m:Rotate( Angle(0,4*math.sin(CurTime()*7),0) )
+		m:Translate( -Vector(x,y) )
 
-	surface.SetDrawColor( AuColors.New.E )
-	surface.DrawRect(x-tw/2, y-16, tw, 32 )
+		cam.PushModelMatrix( m )
 
-	AuShadowText( gifts.msg, "Screen_Small", x,y, AuColors.New.B, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+		surface.SetDrawColor( AuColors.New.E )
+		surface.DrawRect(x-tw/2, y-16, tw, 32 )
 
-	cam.PopModelMatrix()
+		AuShadowText( gifts.msg, "Screen_Small", x,y, AuColors.New.B, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+
+		cam.PopModelMatrix()
+	end
 
 end)
 

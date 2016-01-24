@@ -35,7 +35,7 @@ function RS:GiftNotify( ply, msg )
 	net.Send( ply )
 end
 
-util.AddNetworkString("RS_JukeboxNowPlaying")
+util.AddNetworkString("RS_JukeboxNowPlaying2")
 
 concommand.Add("hub_open2", function(ply, cmd, args) 
 	--local start = SysTime()
@@ -548,7 +548,7 @@ hook.Add("PlayerLoadout", "UpdateDonatorStatus", UpdateDonatorStatus)
 -- jukebox notification functionality
 local lastJukeboxUpdate = 0
 local jukeUpdateInterval = 60
-net.Receive("RS_JukeboxNowPlaying", function(len, ply)
+net.Receive("RS_JukeboxNowPlaying2", function(len, ply)
 	local current = util.JSONToTable( net.ReadString() )
 
 	if not ( lastJukeboxUpdate+jukeUpdateInterval > CurTime() ) then

@@ -938,6 +938,114 @@ end
 
 vgui.Register("hub_icon",ICON)
 
+local EXPAND = {}
+
+function EXPAND:Init()
+	self.lb = vgui.Create("hub_label", self)
+	self.lb:SetTall( 32 )
+	self.b = vgui.Create("DButton", self)
+	self.b:SetAlpha( 0 )
+	self.b:SetText("Don't see this!")
+	self.frac = 0
+	self.open = false
+	self.songs = {}
+	self.songcount = 0
+
+	function self.b:DoClick()
+		self:GetParent().open = not self:GetParent().open
+	end
+end
+
+function EXPAND:CountSongs()
+	return self.songcount
+end
+
+function EXPAND:AddSong( artist, song, url )
+	local jb = vgui.Create( "hub_button", self )
+	jb:SetSize(self:GetWide()-8, 24)
+	jb:SetText(song)
+	jb:SetTextColor( AuColors.New.E )
+	jb:SetTextShadow( 0 )
+	jb:SetColors(Color(128,128,128, 90), AuColors.New.C )
+	jb.link = url
+	jb.name = song
+	jb.artist = artist
+
+	function jb:DoClick()
+		local mn = vgui.Create("DMenu", self)
+		mn:AddOption("Play Song", function()
+			RS:JukeboxStartPlayer( self.artist, self.name, self.link )
+		end):SetIcon("icon16/control_play_blue.png")
+		mn:AddOption("Queue Song", function()
+			table.insert(RS.JukeQueue, {self.artist, self.name, self.link} )
+			RS:UpdateJukeQueue()
+		end):SetIcon("icon16/script_add.png")
+
+		mn:Open()
+	end
+
+	function jb:DoRightClick(mousekey)
+		
+	end
+
+	jb:SetPos(4, 32 + self.songcount*28 )
+	self.songcount = self.songcount + 1
+end
+
+function EXPAND:SetText( str )
+	self.lb:SetText( str )
+end
+
+function EXPAND:SetColor( col )
+	self.lb:SetColor( col )
+end
+
+function EXPAND:SetFont( fnt )
+	self.lb:SetFont( fnt )
+end
+
+function EXPAND:SetOffsets( x,y )
+	self.lb:SetOffsets( x,y )
+end
+
+function EXPAND:PerformLayout()
+	self.lb:SetWide( self:GetWide() )
+	self.b:SetSize( self:GetSize() )
+end
+
+function EXPAND:Paint(w,h)
+	surface.SetDrawColor( AuColors.New.E )
+	surface.DrawOutlinedRect( 0,0,w,h )
+
+	if self.open then
+		self.frac = self.frac + FrameTime()*4
+	else
+		self.frac = self.frac - FrameTime()*4
+	end
+
+	self.frac = math.Clamp( self.frac, 0, 1 )
+
+	local height = self.songcount*28
+
+	self:SetTall( 32 + ( self.open and QuadLerp( self.frac, 0, height ) or QuadLerp( 1-self.frac, height, 0 ) ) )
+	if self.frac > 0 or self.frac < 1 then
+		self:GetParent():Layout()
+	end
+
+	local m = Matrix()
+	local wx, wy = self:LocalToScreen( w - 16, 16 )
+	m:Translate( Vector(wx,wy) )
+	m:Rotate( Angle(0, ( self.open and QuadLerp( self.frac, 0, 180 ) or QuadLerp( 1-self.frac, 180, 0 ) ) ,0) )
+	m:Translate( -Vector(wx,wy) )
+
+	cam.PushModelMatrix( m )
+	draw.SimpleText("▼", "Screen_Medium", w-16, 16, AuColors.New.E, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	cam.PopModelMatrix()
+
+end
+
+vgui.Register("hub_jukebox_expand", EXPAND)
+
 function RS:StoreMessage( msg )
 	RS.PlayerModelPreview.LastMsg = msg
 	RS.PlayerModelPreview.Alpha = 700
@@ -1026,6 +1134,18 @@ function RS:JukeboxPlayNext()
 
 		if #RS.JukeQueue == 0 then return false end
 
+		--print( "JukeQueueIndex", RS.JukeQueueIndex )
+
+		-- find index
+		--PrintTable( RS.JukeQueue )
+		for k,v in pairs(RS.JukeQueue) do
+			--print( v[2], RS.JukeCurrent[2] )
+			if v[2] == RS.JukeCurrent[2] then
+				print( v[2], RS.JukeCurrent[2] )
+				RS.JukeQueueIndex = k
+			end
+		end
+
 		RS.JukeQueueIndex = RS.JukeQueueIndex +1
 		if RS.JukeQueueIndex > #RS.JukeQueue then RS.JukeQueueIndex = 1 end
 		local data = RS.JukeQueue[RS.JukeQueueIndex]
@@ -1107,9 +1227,9 @@ function RS:JukeboxStartPlayer( artist, song, link )
 		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );")
 	end )
 
-	-- net.Start("RS_JukeboxNowPlaying")
-	-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
-	-- net.SendToServer()
+	net.Start("RS_JukeboxNowPlaying2")
+	net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+	net.SendToServer()
 	
 end
 
@@ -1124,7 +1244,7 @@ function RS:UpdateJukeQueue()
 	self.JukeQueueList:Clear()
 
 	local lb = self.JukeQueueList:Add("hub_label")
-	lb:SetSize(self.JukeQueueList:GetWide(), 64)
+	lb:SetSize(self.JukeQueueList:GetWide()-12, 64)
 	lb:SetText( "Queued Songs" )
 	lb:SetFont("Screen_Medium")
 	lb:SetColor(AuColors.New.E)
@@ -1138,11 +1258,11 @@ function RS:UpdateJukeQueue()
 		local link = track[3]
 
 		local jb = self.JukeQueueList:Add( "hub_button" )
-		jb:SetSize(self.JukeQueueList:GetWide()-1, 28)
+		jb:SetSize(self.JukeQueueList:GetWide()-8, 24)
 		jb:SetText(artist.." - "..song)
-		jb:SetTextColor( HexColor("#606060") )
+		jb:SetTextColor( AuColors.New.E )
 		jb:SetTextShadow( 0 )
-		jb:SetColors(Color(128,128,128, 90), Color(52, 152, 219, 90))
+		jb:SetColors(Color(128,128,128, 90), AuColors.New.C )
 		jb.link = link
 		jb.name = song
 		jb.artist = artist
@@ -1626,7 +1746,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke:SetSize(juke:GetParent():GetWide()/2 - 4,juke:GetParent():GetTall())
 
 
-	juke.browse = juke:AddTab("Tracklist")
+	juke.browse = juke:AddTab("Artists")
 
 
 	--jukebox controls size: parentwidth, 100
@@ -1649,7 +1769,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.stop:SetText("■")
 	juke.stop:SetOffsets(0,-10)
 	function juke.stop:DoClick()
-		RS.JukePlayer:OpenURL("http://gameredacted.net/deathrun")
+		RS.JukePlayer:OpenURL("http://vhs7.tv/about.php")
 	end
 	juke.stop:SetColors( AuColors.New.E, AuColors.New.D )
 
@@ -1732,8 +1852,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.displaymode:SetColors( AuColors.New.E, AuColors.New.D )
 
 	juke.browse.scroll = vgui.Create("DScrollPanel",juke.browse)
-	juke.browse.scroll:SetSize( juke.browse:GetWide(), juke.browse:GetTall()-108 )
-	juke.browse.scroll:SetPos(0,0)
+	juke.browse.scroll:SetSize( juke.browse:GetWide(), juke.browse:GetTall()-108-2 )
+	juke.browse.scroll:SetPos(0,2)
 
 	RS:ImproveScrollbar( juke.browse.scroll:GetVBar() )
 
@@ -1746,42 +1866,15 @@ function RS:CreateHubWindow( hubdata, opentab )
 	for k,v in orderedPairs(RS.JukeSongs) do
 		local artist = k
 		local songs = v
-		local lb = juke.browse.list:Add("hub_label")
-		lb:SetSize(juke.browse.list:GetWide(), 64)
+		local lb = juke.browse.list:Add("hub_jukebox_expand")
+		lb:SetSize(juke.browse.list:GetWide()-12, 32)
 		lb:SetText( artist )
 		lb:SetFont("Screen_Medium")
 		lb:SetColor( AuColors.New.E )
 		lb:SetOffsets( 0,0 )
 
 		for kk,vv in orderedPairs(v) do
-
-			local jb = juke.browse.list:Add( "hub_button" )
-			jb:SetSize(juke.browse:GetWide(), 28)
-			jb:SetText(kk)
-			jb:SetTextColor( HexColor("#606060") )
-			jb:SetTextShadow( 0 )
-			jb:SetColors(Color(128,128,128, 90), Color(52, 152, 219, 90))
-			jb.link = vv
-			jb.name = kk
-			jb.artist = artist
-
-			function jb:DoClick()
-				local mn = vgui.Create("DMenu", self)
-				mn:AddOption("Play Song", function()
-					RS:JukeboxStartPlayer( self.artist, self.name, self.link )
-				end):SetIcon("icon16/control_play_blue.png")
-				mn:AddOption("Queue Song", function()
-					table.insert(RS.JukeQueue, {self.artist, self.name, self.link} )
-					RS:UpdateJukeQueue()
-				end):SetIcon("icon16/script_add.png")
-
-				mn:Open()
-			end
-
-			function jb:DoRightClick(mousekey)
-				
-			end
-
+			lb:AddSong( artist, kk, vv )
 		end
 	end
 
@@ -1865,7 +1958,7 @@ cvars.AddChangeCallback("grhub_jukebox_volume", function(cname, cold, cnew)
 
 end)
 
-RS.JukeCurrent = {"No Artist","No Song", "http://gameredacted.net/deathrun"}
+RS.JukeCurrent = {"No Artist","No Song", "http://vhs7.tv/about.php"}
 
 hook.Add("InitPostEntity", "CreatePlayWindow",function()
 	if RS.JukePlayer then
