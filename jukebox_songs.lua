@@ -269,7 +269,7 @@
 	["Radiohead"] = {
 		["Paranoid Android"] = "https://www.youtube.com/watch?v=sPLEbAVjiLA",
 		["Karma Police"] = "https://www.youtube.com/watch?v=IBH97ma9YiI",
-		["No Surprises"] = "https://www.youtube.com/watch?v=u5CVsCnxyXg"
+		["No Surprises"] = "https://www.youtube.com/watch?v=u5CVsCnxyXg",
 		["Spectre"] = "https://www.youtube.com/watch?v=Zv-w0zPSsTs",
 	},
 	["Tame Impala"] = {
@@ -318,6 +318,6 @@
 		["All My Friends ft. Tinashe, Chance The Rapper"] = "https://www.youtube.com/watch?v=I3mrYxPLSH4",
 	},
 	["Paces"] = {
-		["1993 (No Chill) ft. Jess Kent"] = "https://www.youtube.com/watch?v=zcQXipSleYY"
+		["1993 (No Chill) ft. Jess Kent"] = "https://www.youtube.com/watch?v=zcQXipSleYY",
 	}
 }
