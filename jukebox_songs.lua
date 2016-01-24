@@ -8,7 +8,7 @@
 	},
 	["Bon Jovi"] = {
 		["It's My Life"] = "https://www.youtube.com/watch?v=D7oSQ6wV5vU",
-		["Livin' on a Prayer"] = "https://www.youtube.com/watch?v=9VxCFCQqI24",
+		["Livin' on a Prayer"] = "https://www.youtube.com/watch?v=lDK9QqIzhwk",
 	},
 	["Daft Punk"] = {
 		["One More Time"] = "https://www.youtube.com/watch?v=jtQC8ChpUeg",
