@@ -248,6 +248,12 @@
 	},
 	["Flight Of The Concords"] = {
 		["Bowie"] = "https://www.youtube.com/watch?v=pGXhMU0iR70",
+		["Sugalumps"] = "https://www.youtube.com/watch?v=NycPoXzHiIs",
+		["Hurt Feelings"] = "https://www.youtube.com/watch?v=xm_Ie0VRv7k",
+		["Inner City Pressure"] = "https://www.youtube.com/watch?v=WUAcN9UCnbU",
+		["Think About It"] = "https://www.youtube.com/watch?v=KIICPgW8xUw",
+		["Robots"] = "https://www.youtube.com/watch?v=BNC61-OOPdA",
+		["Hiphopopotamus vs Rhymenocerous"] = "https://www.youtube.com/watch?v=aUDtE3P8xVg",
 	},
 	["David Bowie"] = {
 		["Space Oddity"] = "https://www.youtube.com/watch?v=nP6xBFyA_aw",
@@ -259,5 +265,59 @@
 	["Shannon Noll"] = {
 		["What About Me"] = "https://www.youtube.com/watch?v=pXCaEU-zSYQ",
 		["Lift"] = "https://www.youtube.com/watch?v=fQIfBJVFTWE"
+	},
+	["Radiohead"] = {
+		["Paranoid Android"] = "https://www.youtube.com/watch?v=sPLEbAVjiLA",
+		["Karma Police"] = "https://www.youtube.com/watch?v=IBH97ma9YiI",
+		["No Surprises"] = "https://www.youtube.com/watch?v=u5CVsCnxyXg"
+		["Spectre"] = "https://www.youtube.com/watch?v=Zv-w0zPSsTs",
+	},
+	["Tame Impala"] = {
+		["Feels Like We Only Go Backwards"] = "https://www.youtube.com/watch?v=wycjnCCgUes",
+		["Let It Happen"] = "https://www.youtube.com/watch?v=odeHP8N4LKc",
+		["The Less I Know The Better"] = "https://www.youtube.com/watch?v=sBzrzS1Ag_g",
+	},
+	["Gorillaz"] = {
+		["Dirty Harry"] = "https://www.youtube.com/watch?v=hBie-xdbLeM",
+		["Kids With Guns"] = "https://www.youtube.com/watch?v=VCkFSe3voRc",
+		["Feel Good Inc."] = "https://www.youtube.com/watch?v=H8Qp38qT-xI",
+		["November Has Come"] = "https://www.youtube.com/watch?v=IrdI2iC-sYY",
+		["DARE"] = "https://www.youtube.com/watch?v=DNG_lFShmkE",
+		["Fire Coming Out Of The Monkey's Head"] = "https://www.youtube.com/watch?v=4nxMrRXHqpo",
+		["Welcome To The World Of The Plastic Beach"] = "https://www.youtube.com/watch?v=p0OVD0_YJnU",
+		["Stylo"] = "https://www.youtube.com/watch?v=kj7PGkYX1xk",
+		["Superfast Jellyfish"] = "https://www.youtube.com/watch?v=G6zPvkP5uVI",
+		["Empire Ants"] = "https://www.youtube.com/watch?v=8566UtalG_o",
+		["Some Kind Of Nature"] = "https://www.youtube.com/watch?v=bvjjc18nB14",
+		["On Melancholy Hill"] = "https://www.youtube.com/watch?v=04mfKJWDSzI",
+	},
+	["Kavinsky & Lovefoxxx"] = {
+		["Nightcall"] = "https://www.youtube.com/watch?v=MV_3Dpw-BRY",
+	},
+	["Sticky Fingers"] = {
+		["Land Of Pleasure"] = "https://www.youtube.com/watch?v=60Uev-p406I",
+		["Gold Snafu"] = "https://www.youtube.com/watch?v=ER5a393loPs",
+		["Velvet Skies"] = "https://www.youtube.com/watch?v=wYonmy_ZwMA",
+	},
+	["Tyler, The Creator"] = {
+		["IFHY"] = "https://www.youtube.com/watch?v=3lDqMx4rmFU",
+		["Yonkers"] = "https://www.youtube.com/watch?v=XSbZidsgMfw",
+	},
+	["The XX"] = {
+		["Crystalised"] = "https://www.youtube.com/watch?v=Pib8eYDSFEI",
+		["Islands"] = "https://www.youtube.com/watch?v=PElhV8z7I60",
+		["Fantasy"] = "https://www.youtube.com/watch?v=SZ26_buhHfI",
+		["Shelter"] = "https://www.youtube.com/watch?v=UfTfHTUUee4",
+	},
+	["Two Door Cinema Club"] = {
+		["Cigarettes In The Theatre"] = "https://www.youtube.com/watch?v=r_sERAnqHng",
+		["Something Good Can Work"] = "https://www.youtube.com/watch?v=Wxu02vp_Vm0",
+		["What You Know"] = "https://www.youtube.com/watch?v=YXwYJyrKK5A",
+	},
+	["Snakehips"] = {
+		["All My Friends ft. Tinashe, Chance The Rapper"] = "https://www.youtube.com/watch?v=I3mrYxPLSH4",
+	},
+	["Paces"] = {
+		["1993 (No Chill) ft. Jess Kent"] = "https://www.youtube.com/watch?v=zcQXipSleYY"
 	}
 }

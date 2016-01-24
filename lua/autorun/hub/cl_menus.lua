@@ -1230,6 +1230,8 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	net.Start("RS_JukeboxNowPlaying2")
 	net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
 	net.SendToServer()
+
+	RS:GiftNotify( "NOW PLAYING: "..artist.." - "..song, true )
 	
 end
 

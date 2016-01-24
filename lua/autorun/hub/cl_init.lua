@@ -678,12 +678,14 @@ net.Receive("GiftNotify", function()
 	RS:GiftNotify( net.ReadString() )
 end)
 
-function RS:GiftNotify( msg )
+function RS:GiftNotify( msg, supp )
 	if drawgifts:GetBool() == true then
 		RS.Gifts.show = true
 		RS.Gifts.timer = 6
 		RS.Gifts.msg = msg
-		surface.PlaySound( "garrysmod/save_load3.wav" )
+		if not supp then
+			surface.PlaySound( "garrysmod/save_load3.wav" )
+		end
 	end
 end
 
