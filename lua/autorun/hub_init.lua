@@ -67,6 +67,7 @@ blank_item.Col = Color(255,255,255)
 blank_item.Material = nil
 blank_item.Buyable = true
 blank_item.IsToken = false
+blank_item.Visible = true
 
 function blank_item:OnSpawn()
 end

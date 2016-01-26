@@ -1538,20 +1538,23 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 		--print(self.rot,self.ox,self.nx,self.dragging)
 	end
-
+	RS.PlayerModelPreview.NumModels = 0
 	function RS.PlayerModelPreview:DrawModel()
 		local x, y = self:LocalToScreen( 0, 0 )	
 
 		if not LocalPlayer():Alive() or LocalPlayer():GetObserverMode() ~= OBS_MODE_NONE then return else self.Entity:DrawModel() end
 		lastrender = {}
+		self.NumModels = 0
 		for id, m in pairs(RS.ClientSideModels) do
 			if IsValid(m) then
 
 				if m.ply == LocalPlayer() and RS.InPreview == true then
+					self.NumModels = self.NumModels + 1
+
 					local atid = self.Entity:LookupAttachment(m.att)
 					local attach = self.Entity:GetAttachment(atid)
 
-					if attach then
+					if attach and self.NumModels <= RS.ModelsPerPlayer then
 					
 						local x = m.posoff.x * attach.Ang:Right()
 						local y = m.posoff.y * attach.Ang:Forward()
@@ -1600,7 +1603,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	RS.PlayerModelPreview.LastMsg = "Initialized Preview."
 	RS.PlayerModelPreview.Alpha = 700
 
-	function RS.PlayerModelPreview:PaintOver()
+	function RS.PlayerModelPreview:PaintOver(pw,ph)
 		local m = self.LastMsg
 		local a = self.Alpha
 
@@ -1630,6 +1633,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 		-- 	cam.End3D2D()
 		-- cam.End3D()
 		-- cam.IgnoreZ( false )
+
+		AuShadowText("Maximum "..tostring( RS.ModelsPerPlayer ).." hats.", "Screen_Small2", 4, ph-4, AuColors.New.E, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1 )
 
 	end
 
@@ -1668,7 +1673,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	if RS.Items then
 		for k,v2 in pairs(RS.ItemsOrdered) do -- unbuyable items come first
 			v = RS.Items[v2] 
-			if v.IsToken ~= true and v.Buyable == false then
+			if v.IsToken ~= true and v.Buyable == false and v.Visible == true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
 				icon:SetStock( hubdata.stock[v.Class] or 0 )
@@ -1679,7 +1684,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		end
 		for k,v2 in pairs(RS.ItemsOrdered) do
 			v = RS.Items[v2] -- some black magic to make it all ordered. I'm pretty sure i'm my own grandfather now.
-			if v.IsToken ~= true and v.Buyable == true then
+			if v.IsToken ~= true and v.Buyable == true and v.Visible == true then
 				local icon = vgui.Create("hub_icon")
 				icon:SetItem(v)
 				icon:SetStock( hubdata.stock[v.Class] or 0 )

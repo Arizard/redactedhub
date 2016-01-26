@@ -506,6 +506,9 @@ concommand.Add("shop_taunt", function(ply, cmd, args) -- handle taunts
 			if ply.NextTaunt < CurTime() then
 				ply:EmitSound( ply.ChoiceTaunt, 500, 100, 1 )
 				ply.NextTaunt = CurTime() + 15
+				if ply.ChoiceTaunt == "taunts/prankpatrol.ogg" then
+					ply.NextTaunt = CurTime() + 30
+				end
 			end
 		end
 	end

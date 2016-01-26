@@ -78,7 +78,7 @@ function RS:HasInventorySpace( ply )
 		return true
 	end
 	print( #res, RS.InventoryLimit )
-	PrintTable( res )
+	--PrintTable( res )
 	if #res < RS.InventoryLimit then
 		return true
 	else

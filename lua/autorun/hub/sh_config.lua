@@ -11,6 +11,8 @@ RS.RefundRatio = 0.5 -- percentage of cash refunded on sale
 
 RS.InventoryLimit = 32
 
+RS.ModelsPerPlayer = 3
+
 RS.InfoHTML = [[
 	<style>
 

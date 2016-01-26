@@ -41,13 +41,16 @@ local drawtexthats = CreateClientConVar("hub_texthats", 1, true, false)
 local drawparticles = CreateClientConVar("hub_particles", 1, true, false)
 local drawtrails = CreateClientConVar("hub_trails", 1, true, false)
 local drawdistance = CreateClientConVar("hub_drawdistance", 1024, true, false)
+local debugOn = CreateClientConVar("hub_debughud", 0, true, false )
+--local limitdrawhats = CreateClientConVar("hub_limit_hats", 1, true, false )
 
 RS.Options = { -- gets drawn in the options tab
 	{"h1", "Options"},
 	{"bool","hub_hats","Hats Visible"},
 	{"bool","hub_gift_notif", "Gift Notifications"},
 	{"bool","hub_texthats", "Texthats Visible"},
-	{"bool","hub_particles", "Particle Effects Visible"}
+	{"bool","hub_particles", "Particle Effects Visible"},
+	{"bool","hub_debughud", "Enable Debug HUD"}
 }
 
 function RS:ReceiveVip()
@@ -230,23 +233,40 @@ local fov = 110 -- give it 10 more degrees than max fov to prevent popping
 local maxAng = fov/2
 local maxDot = math.cos( maxAng * math.pi/180 )
 
+local dby = 92
 
--- hook.Add("HUDPaint", "testingFrustrum", function()
--- 	draw.SimpleText( "frustrum FOV: "..tostring( fov ), "default", 16, 64, Color(0,255,0) )
--- 	draw.SimpleText( "maxDot: "..tostring(maxDot), "default", 16, 64 + 16, Color(0,255,0) )
--- 	draw.SimpleText( "Num Rendering: "..tostring(#RS.LastRenderedModels), "default", 16, 64 + 32, Color(0,255,0) )
--- 	for k,v in ipairs(player.GetAll()) do
--- 		if v ~= LocalPlayer() then
--- 			local hatDir = ( v:EyePos() - LocalPlayer():EyePos() )
--- 			hatDir:Normalize()
--- 			local cosine = EyeVector():Dot( hatDir )
--- 			draw.SimpleText( v:Nick().."(eye to eye dot): "..tostring(cosine), "default", 16, 64 + 16*k + 16, Color(255,0,0) )
--- 		end
--- 	end
--- end)
+local red, green, blue = Color(255,0,0), Color(0,255,0), Color(0,0,255)
+
+hook.Add("HUDPaint", "testingFrustrum", function()
+	if debugOn:GetBool() then
+		local lines = {
+			{"frustrum FOV: ", fov, green},
+			{"minDot: ", maxDot, green},
+			{"models rendering: ", #RS.LastRenderedModels, green}
+		}
+
+		for i = 1, #lines do
+			local li = lines[i]
+			draw.SimpleText( li[1].."\t"..tostring(li[2]), "default", 16, dby + (i-1)*16, li[3] or Color(255,255,255) )
+		end
+		for k,v in ipairs(player.GetAll()) do
+			if v ~= LocalPlayer() then
+				local hatDir = ( v:EyePos() - EyePos() )
+				hatDir:Normalize()
+				local cosine = EyeVector():Dot( hatDir )
+				draw.SimpleText( v:Nick().."(eye to eye dot): "..tostring(cosine), "default", 16, dby + 16*(#lines-1) + 16*k, Color(255,0,0) )
+			end
+		end
+	end
+end)
+
+local plyhats = {}
 
 function RS:RenderClientModels()
 	RS.LastRenderedModels = {}
+	for k,v in pairs( plyhats ) do
+		plyhats[k] = 0
+	end
 	if drawhats:GetBool() == true then
 		for id, m in pairs(RS.ClientSideModels) do
 			if (m.ply == nil or (not IsValid(m.ply)) ) and m.id64 then
@@ -261,18 +281,20 @@ function RS:RenderClientModels()
 				
 				if IsValid(m.ply) then
 					if ( (LocalPlayer() ~= m.ply) or LocalPlayer():ShouldDrawLocalPlayer() ) then
+
+
 						local shouldDraw = true
 						
 						local dist = 0
 						local drawdist = drawdistance:GetInt()
 						local alpha = 255
-						dist = m.ply:EyePos():Distance( LocalPlayer():EyePos() )
+						dist = m.ply:EyePos():Distance( EyePos() )
 						if dist > drawdist then
 							--print("out of range")
 							shouldDraw = false
 						end
 
-						local hatDir = ( m.ply:EyePos() - LocalPlayer():EyePos() )
+						local hatDir = ( m.ply:EyePos() - EyePos() )
 						hatDir:Normalize()
 						local cosine = EyeVector():Dot( hatDir )
 						--print( math.abs( math.acos( cosine ) )  )
@@ -285,7 +307,10 @@ function RS:RenderClientModels()
 							shouldDraw = true
 						end
 
-						if true then
+						plyhats[m.ply] = (plyhats[m.ply] or 0) + 1
+						--print( plyhats[m.ply] )
+
+						if plyhats[m.ply] <= RS.ModelsPerPlayer then
 							-- 
 
 							-- if m.ply:GetObserverMode() ~= OBS_MODE_NONE then return end
@@ -614,6 +639,7 @@ RS.TextHatEffects = {
 }
 
 hook.Add("PostPlayerDraw", "TextHats", function(ply)
+	
 	if textHatCache[ply:SteamID64()] and drawtexthats:GetBool() == true then
 		if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and textHatCache[ply:SteamID64()].col.a > 0 then
 			local tx = textHatCache[ply:SteamID64()]
@@ -668,6 +694,7 @@ hook.Add("PostPlayerDraw", "TextHats", function(ply)
 				render.SetStencilEnable(false)
 				
 			cam.End3D2D()
+
 		end
 	end
 end)
@@ -746,7 +773,7 @@ hook.Add("PostPlayerDraw","EffectCreator", function( ply )
 	if drawparticles:GetBool() == true then
 		if ply:Alive() then
 			if ply:GetPos():Distance( LocalPlayer():GetPos() ) < drawdistance:GetInt() then
-				local plyDir = ( ply:EyePos() - LocalPlayer():EyePos() )
+				local plyDir = ( ply:EyePos() - EyePos() )
 				plyDir:Normalize()
 				local cosine = EyeVector():Dot( plyDir )
 				--print( math.abs( math.acos( cosine ) )  )
