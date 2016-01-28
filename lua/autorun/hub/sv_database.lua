@@ -189,11 +189,16 @@ function RS:PlayerEquip( ply, id)
 	--get class
 	local res = sql.Query( "SELECT class FROM shop_items WHERE ID="..tostring(id))
 	if res == false then print(sql.LastError()) return end
+	
 	if res ~= nil then
 		local class = res[1]["class"]
 		local item = RS.Items[class]
 		if item then
 			item:OnEquip( ply, id )
+			if item.Category == "taunts" then
+				ply.TauntOnDeath = item.TauntOnDeath
+				ply.DeathTaunt = item.TauntSound or ""
+			end
 			if item.Category == "materials" then
 				ply.LastMaterial = item.Material
 			end

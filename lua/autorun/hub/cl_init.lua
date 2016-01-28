@@ -238,7 +238,7 @@ local dby = 92
 local red, green, blue = Color(255,0,0), Color(0,255,0), Color(0,0,255)
 
 hook.Add("HUDPaint", "testingFrustrum", function()
-	if debugOn:GetBool() then
+	if debugOn:GetBool() and LocalPlayer():IsAdmin() then
 		local lines = {
 			{"frustrum FOV: ", fov, green},
 			{"minDot: ", maxDot, green},

@@ -68,6 +68,7 @@ blank_item.Material = nil
 blank_item.Buyable = true
 blank_item.IsToken = false
 blank_item.Visible = true
+blank_item.Sellable = true
 
 function blank_item:OnSpawn()
 end
@@ -98,6 +99,7 @@ for k,cat in ipairs(categories) do
 
 		ITEM.Class = itemname
 		ITEM.Category = cat
+		ITEM.StorePrice = ITEM.StorePrice * RS.Inflation
 
 		if cat == "skins" then
 			util.PrecacheModel( ITEM.PlayerModel )

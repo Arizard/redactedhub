@@ -231,6 +231,7 @@
 		["KILL YOURSELF"] = "https://www.youtube.com/watch?v=2dbR2JZmlWo",
 		["FRANK SAYS"] = "https://www.youtube.com/watch?v=2G2dsk83eiE",
 		["MEME MACHINE"] = "https://www.youtube.com/watch?v=1pA2FKVQQmk",
+		["DICK PAYS RENT"] = "https://www.youtube.com/watch?v=AeqRj-bYIzc",
 	},
 	["Caesars"] = {
 		["Jerk It Out"] = "https://www.youtube.com/watch?v=4B1ZQcbSvdU",
@@ -322,5 +323,15 @@
 	},
 	["Nintento Wii"] = {
 		["Mii Channel Theme"] = "https://www.youtube.com/watch?v=po-0n1BKW2w",
-	}
+	},
+	["Pegboard Nerds"] = {
+	    ["Just Like That (feat. Johnny Graves)"] = "https://www.youtube.com/watch?v=XZq2l0iLV7Y",
+	    ["Swamp Thing"] = "https://www.youtube.com/watch?v=SDiJiGuUeBo",
+	    ["Try This"] = "https://www.youtube.com/watch?v=ggqI-HH8yXc",
+	    ["End is Near (Fire in the Hole VIP) "] = "https://www.youtube.com/watch?v=t9eazV4Fmdg",
+	    ["Luigi's Mansion"] = "https://www.youtube.com/watch?v=haas3N9vxsM",
+	},
+	["Raffi"] = {
+		["Banana Phone"] = "https://www.youtube.com/watch?v=j5C6X9vOEkU"
+	},
 }

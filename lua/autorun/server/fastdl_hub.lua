@@ -290,6 +290,13 @@ local taunts = {
 	"now_good_time",
 	"pizza",
 	"quickly",
+	"121gigawatts",
+	"booyouwhore",
+	"nooo",
+	"smams",
+	"sorrydave",
+	"xfiles",
+	"youmaniacs",
 }
 
 for k,v in ipairs(taunts) do

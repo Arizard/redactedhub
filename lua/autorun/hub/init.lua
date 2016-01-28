@@ -185,7 +185,7 @@ function RS:SellItem( ply, id )
 		local saleprice = math.floor(item.StorePrice * RS.RefundRatio)
 
 
-		if item.IsToken == true then
+		if item.IsToken == true or item.Sellable == false then
 			RS:StoreMessage(ply, "You cannot sell this item.")
 			ply:SendLua([[surface.PlaySound("buttons/button10.wav")]])
 			return
@@ -293,7 +293,9 @@ end
 --/ Now handle equipped and unequipped items.
 
 function ItemEquipAll( ply )
+
 	if ply:Team() == TEAM_SPECTATOR or not ply:Alive() then  return end
+	ply.TauntOnDeath = false
 	local eq = RS:GetEquippedItems( ply )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
@@ -353,6 +355,9 @@ function ItemPlayerDeath( ply )
 		end
 	end
 
+	if ply.TauntOnDeath then
+		ply:EmitSound( ply.DeathTaunt, 500, 100, 1 )
+	end
 
 end
 hook.Add("PlayerDeath", "RS:PlayerDeath", ItemPlayerDeath)

@@ -1,9 +1,10 @@
 ITEM.Name = "Green & Gold"
 ITEM.Description = "Aussie Day 2016"
-ITEM.StorePrice = 2000
+ITEM.StorePrice = 200
 ITEM.Material = "vhs7/greengoldstars.vmt"
 ITEM.Buyable = false
 ITEM.Rarity = 5
+ITEM.Sellable = false
 
 function ITEM:OnEquip(ply, id)
 	ply:SetMaterial( self.Material )

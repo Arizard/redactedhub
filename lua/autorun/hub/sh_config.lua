@@ -1,17 +1,19 @@
 RS.PDataProvider = "redactedhub_default_provider" -- don't need to change this unless you want to reset money while still storing the old amounts
 RS.OpenMenuCommands = {"shop","store"}
 
-RS.UseStock = false -- if true, you will need to manually add stock for items.
 
 RS.HubTitle = "VHS-7 / Server Hub"
 RS.Currency = "VC" -- "VaporCredits"
 RS.CurrencyFull = "Vapor Credits"
 
-RS.RefundRatio = 0.5 -- percentage of cash refunded on sale
+RS.RefundRatio = 0.25 -- percentage of cash refunded on sale
+RS.Inflation = 1.5 -- scales store prices up, but not cash
 
 RS.InventoryLimit = 32
 
 RS.ModelsPerPlayer = 3
+
+
 
 RS.InfoHTML = [[
 	<style>
