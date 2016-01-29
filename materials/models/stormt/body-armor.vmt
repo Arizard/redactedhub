@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/stormt/body-armor"
+	"$bumpmap" "models/stormt/body-armor_normal"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[ 0.2 0.2 0.2 ]" 
+	"$model" 1
+}

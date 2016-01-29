@@ -1,0 +1,6 @@
+"eyes"
+{
+	"$basetexture" "models/stormt/eyeball_l"
+	"$iris" "models/stormt/pupil_l"
+	"$halflambert" 1
+}
