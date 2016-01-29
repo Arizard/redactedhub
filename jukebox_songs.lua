@@ -1,4 +1,4 @@
-{
+tempsongs = {
 	["Arctic Monkeys"] = {
 		["Why'd You Only Call Me When You're High?"] = "https://www.youtube.com/watch?v=ivyQUekCmX8",
 		["R U Mine?"] = "https://www.youtube.com/watch?v=NBqO4qlqnFE",
@@ -334,4 +334,12 @@
 	["Raffi"] = {
 		["Banana Phone"] = "https://www.youtube.com/watch?v=j5C6X9vOEkU"
 	},
+}
+
+tempstreams = {
+	["Australia"] = {
+		["Triple J"] = "",
+	},
+	["International"] = {
+	}
 }

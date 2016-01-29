@@ -6,9 +6,7 @@ http.Fetch( "https://raw.githubusercontent.com/Arizard/redactedhub/master/jukebo
 	function( body, len, headers, code )
 		local luatorun = body
 
-		luatorun = [[tempsongs = ]]..luatorun
-
-		RunString( luatorun )
+		RunString( luatorun ) -- SPOOKY RUNSTRING!!!!!!!
 
 		--print( luatorun, tempsongs )
 
@@ -21,7 +19,11 @@ http.Fetch( "https://raw.githubusercontent.com/Arizard/redactedhub/master/jukebo
 			end
 		end
 
-		PrintTable( RS.JukeSongs )
+		--PrintTable( RS.JukeSongs )
+
+		if tempstreams == nil then tempstreams = {} end
+
+		RS.JukeStreams = table.Copy( tempstreams )
 	end,
 
 	function( error )
