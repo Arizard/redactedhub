@@ -6,7 +6,7 @@ ITEM.CrateMat = "vhs7/nebula4.vmt"
 ITEM.StorePrice = 200
 ITEM.Col = Color(241, 196, 15)
 ITEM.CrateContains = {
-	["col_spaceblue"] = 40,
+	["col_spaceblue"] = 45,
 	["col_stardustpink"] = 40,
 	["col_emeraldgreen"] = 40, -- 120 paints
 
@@ -30,6 +30,8 @@ ITEM.CrateContains = {
 
 	["dalek_black"] = 2,
 	["dalek_brass"] = 2, -- 4 skins LOL
+	["bobafett"] = 2,
+	["darthvader"] = 2,
 
 	["astronauthelmet_shiny"] = 1,
 	["antlionhat_shiny"] = 1,
