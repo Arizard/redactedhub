@@ -1222,20 +1222,51 @@ function RS:JukeboxPlayNext()
 	end
 end
 
+RS.KeepStreaming = false
+
 function RS:JukeboxStopStream()
 	if RS.StreamChannel then
 		RS.StreamChannel:Stop()
+		RS.KeepStreaming = false
 		RS.StreamChannel = nil
 	end
 end
+
+hook.Add("DeathrunBeginPrep", "FixJukeBoxDeathrun", function()
+	--print( RS.KeepStreaming, "Memes" )
+	if RS.KeepStreaming then
+		print("Attempting to continue stream...")
+		if IsValid(RS.StreamChannel) then
+			RS.StreamChannel:Play()
+			print("Attempting to play stream...")
+		end
+	end
+end)
+
+hook.Add("TTTPrepareRound", "FixJukeBoxTTT", function()
+	--print( RS.KeepStreaming, "Memes" )
+	if RS.KeepStreaming then
+		print("Attempting to continue stream...")
+		if IsValid(RS.StreamChannel) then
+			RS.StreamChannel:Play()
+			print("Attempting to play stream...")
+		end
+	end
+end)
 
 function RS:JukeboxStartStream( url, niceName )
 	if not niceName then
 		niceName = ""
 	end
 	RS:JukeboxStopStream()
+	RS.KeepStreaming = true
 	sound.PlayURL( url, "", function( ch )
 		if IsValid( ch ) then
+			if IsValid( RS.StreamChannel ) then
+				RS.StreamChannel:Stop( true )
+				RS.StreamChannel = nil
+			end
+
 			RS.StreamChannel = ch
 			RS.StreamChannel:SetVolume( GetConVarNumber( "grhub_jukebox_volume" )/100 )
 			RS:GiftNotify( "Now listening to "..niceName, true)
