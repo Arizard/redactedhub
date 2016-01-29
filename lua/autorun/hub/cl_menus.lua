@@ -960,7 +960,7 @@ function EXPAND:CountSongs()
 	return self.songcount
 end
 
-function EXPAND:AddSong( artist, song, url )
+function EXPAND:AddSong( artist, song, url, isStream )
 	local jb = vgui.Create( "hub_button", self )
 	jb:SetSize(self:GetWide()-8, 24)
 	jb:SetText(song)
@@ -971,17 +971,28 @@ function EXPAND:AddSong( artist, song, url )
 	jb.name = song
 	jb.artist = artist
 
-	function jb:DoClick()
-		local mn = vgui.Create("DMenu", self)
-		mn:AddOption("Play Song", function()
-			RS:JukeboxStartPlayer( self.artist, self.name, self.link )
-		end):SetIcon("icon16/control_play_blue.png")
-		mn:AddOption("Queue Song", function()
-			table.insert(RS.JukeQueue, {self.artist, self.name, self.link} )
-			RS:UpdateJukeQueue()
-		end):SetIcon("icon16/script_add.png")
+	if not isStream then
+		function jb:DoClick()
+			local mn = vgui.Create("DMenu", self)
+			mn:AddOption("Play Song", function()
+				RS:JukeboxStartPlayer( self.artist, self.name, self.link )
+			end):SetIcon("icon16/control_play_blue.png")
+			mn:AddOption("Queue Song", function()
+				table.insert(RS.JukeQueue, {self.artist, self.name, self.link} )
+				RS:UpdateJukeQueue()
+			end):SetIcon("icon16/script_add.png")
 
-		mn:Open()
+			mn:Open()
+		end
+	else
+		function jb:DoClick()
+			local mn = vgui.Create("DMenu", self)
+			mn:AddOption("Listen to station", function()
+				RS:JukeboxStartStream( self.link, self.name )
+			end):SetIcon("icon16/control_play_blue.png")
+
+			mn:Open()
+		end
 	end
 
 	function jb:DoRightClick(mousekey)
@@ -1210,6 +1221,32 @@ function RS:JukeboxPlayNext()
 		-- PrintTable( RS.JukeQueue_Played )
 	end
 end
+
+function RS:JukeboxStopStream()
+	if RS.StreamChannel then
+		RS.StreamChannel:Stop()
+		RS.StreamChannel = nil
+	end
+end
+
+function RS:JukeboxStartStream( url, niceName )
+	if not niceName then
+		niceName = ""
+	end
+	RS:JukeboxStopStream()
+	sound.PlayURL( url, "", function( ch )
+		if IsValid( ch ) then
+			RS.StreamChannel = ch
+			RS.StreamChannel:SetVolume( GetConVarNumber( "grhub_jukebox_volume" )/100 )
+			RS:GiftNotify( "Now listening to "..niceName, true)
+
+			RS.JukeCurrent = { niceName, niceName, url }
+		else
+			RS:GiftNotify( "Stream failed to load :(" )
+		end
+	end)
+end
+
 
 function RS:JukeboxStartPlayer( artist, song, link )
 	
@@ -1754,6 +1791,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 
 	juke.browse = juke:AddTab("Artists")
+	juke.streams = juke:AddTab("Streams")
+	juke:SetTab( 1 )
 
 
 	--jukebox controls size: parentwidth, 100
@@ -1777,6 +1816,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.stop:SetOffsets(0,-10)
 	function juke.stop:DoClick()
 		RS.JukePlayer:OpenURL("http://vhs7.tv/about.php")
+		RS:JukeboxStopStream()
 	end
 	juke.stop:SetColors( AuColors.New.E, AuColors.New.D )
 
@@ -1885,6 +1925,33 @@ function RS:CreateHubWindow( hubdata, opentab )
 		end
 	end
 
+	juke.streams.scroll = vgui.Create("DScrollPanel",juke.streams)
+	juke.streams.scroll:SetSize( juke.streams:GetWide(), juke.streams:GetTall()-108-2 )
+	juke.streams.scroll:SetPos(0,2)
+
+	RS:ImproveScrollbar( juke.streams.scroll:GetVBar() )
+
+	juke.streams.list = vgui.Create("DIconLayout")
+	juke.streams.scroll:AddItem(juke.streams.list)
+	juke.streams.list:SetSize( juke.streams.scroll:GetWide(), juke.streams.scroll:GetTall())
+	juke.streams.list:SetSpaceY(2)
+	juke.streams.list:SetPos(2,0)
+
+	for k,v in pairs(RS.JukeStreams) do
+		local region = k
+		local stations = v
+		local lb = juke.streams.list:Add("hub_jukebox_expand")
+		lb:SetSize(juke.streams.list:GetWide()-12, 32)
+		lb:SetText( region )
+		lb:SetFont("Screen_Medium")
+		lb:SetColor( AuColors.New.E )
+		lb:SetOffsets( 0,0 )
+
+		for kk,vv in pairs(v) do
+			lb:AddSong( region, kk, vv, true )
+		end
+	end
+
 	-- queued songs
 	queue.browse.scroll = vgui.Create("DScrollPanel",queue.browse)
 	queue.browse.scroll:SetSize( queue.browse:GetWide(), queue.browse:GetTall()-108 )
@@ -1938,6 +2005,10 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function sl:OnValueChanged()
 		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( self:GetValue() ).." );")
 		RS.JukeVolume = tonumber( math.ceil(self:GetValue()) )
+		if IsValid( RS.StreamChannel ) then
+			RS.StreamChannel:SetVolume( self:GetValue()/100 )
+			print( self:GetValue()/100 )
+		end
 		RunConsoleCommand("grhub_jukebox_volume", math.ceil(self:GetValue()) )
 	end
 

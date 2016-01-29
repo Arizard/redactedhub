@@ -1,4 +1,5 @@
 RS.JukeSongs = {}
+RS.JukeStreams = {}
 
 -- this retrieves it from the list of things on the website so that the servers have more than one thing ya feel?
 http.Fetch( "https://raw.githubusercontent.com/Arizard/redactedhub/master/jukebox_songs.lua",
@@ -24,6 +25,8 @@ http.Fetch( "https://raw.githubusercontent.com/Arizard/redactedhub/master/jukebo
 		if tempstreams == nil then tempstreams = {} end
 
 		RS.JukeStreams = table.Copy( tempstreams )
+
+		PrintTable( RS.JukeStreams )
 	end,
 
 	function( error )
