@@ -7,7 +7,7 @@ ITEM.StorePrice = 200
 ITEM.Col = Color(241, 196, 15)
 ITEM.CrateContains = {
 	["col_spaceblue"] = 45,
-	["col_stardustpink"] = 40,
+	["col_stardustpink"] = 45,
 	["col_emeraldgreen"] = 40, -- 120 paints
 
 	["antlionhat"] = 15,
@@ -32,6 +32,8 @@ ITEM.CrateContains = {
 	["dalek_brass"] = 2, -- 4 skins LOL
 	["bobafett"] = 2,
 	["darthvader"] = 2,
+	["stormtrooper"] = 4,
+	["chewbacca"] = 4,
 
 	["astronauthelmet_shiny"] = 1,
 	["antlionhat_shiny"] = 1,
