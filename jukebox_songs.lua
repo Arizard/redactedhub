@@ -338,8 +338,11 @@ tempsongs = {
 
 tempstreams = {
 	["Australia"] = {
-		["Triple J"] = "",
+		["Triple J"] = "http://www.abc.net.au/res/streaming/audio/mp3/triplej.pls",
 	},
 	["International"] = {
+		["Lainchan Radio"] = "https://lainchan.org/radio_assets/lain.ogg",
+		["Nightwave Plaza"] = "https://plaza.one:8000/plaza"
 	}
 }
+
