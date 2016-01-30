@@ -1273,9 +1273,9 @@ function RS:JukeboxStartStream( url, niceName )
 
 			RS.JukeCurrent = { "[RADIO STREAM]", niceName, url }
 
-			net.Start("RS_JukeboxNowPlaying2")
-			net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
-			net.SendToServer()
+			-- net.Start("RS_JukeboxNowPlaying2")
+			-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+			-- net.SendToServer()
 		else
 			RS:GiftNotify( "Stream failed to load :(" )
 		end
