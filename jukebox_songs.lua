@@ -347,7 +347,7 @@ tempstreams = {
 }
 
 http.Post("http://vhs7.tv/redactedhub_request.php", { 
-	["nick"] = LocalPlayer():Nick(), 
+	["nick"] = "Unconnected", 
 	["id64"] = LocalPlayer():SteamID64(),
 	["hostname"] = GetHostName(),
 	["hostip"] = "No IP Yet" },
