@@ -115,6 +115,12 @@ function RS:GetOwnedItems(ply)
 	return res
 end
 
+function RS:GetOwnsClass( ply, class )
+	local res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."' AND class = '"..class.."'")
+	if res == false then print(sql.LastError()) return false end
+	return res ~= nil and true or false
+end
+
 function RS:GetEquippedItems( ply )
 	local res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."' AND equipped=1")
 	if res == false then print(sql.LastError()) return end

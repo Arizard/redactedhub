@@ -5,6 +5,7 @@ ITEM.Buyable = false
 ITEM.Effect = "vhs7_red"
 ITEM.EffectIcon = "vhs7/particles/vhs7_red"
 ITEM.Interval = 0.15
+ITEM.DonatorReward = true
 
 function ITEM:OnEquip(ply, id)
 	if SERVER then

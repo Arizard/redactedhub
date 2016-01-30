@@ -2,6 +2,7 @@ ITEM.Name = "Text Hat"
 ITEM.Description = "No Preview :("
 ITEM.StorePrice = 1
 ITEM.Buyable = false
+ITEM.DonatorReward = true
 
 function ITEM:OnEquip(ply, id)
 	if SERVER then

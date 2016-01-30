@@ -538,10 +538,27 @@ function PLAYER:GiveVip()
 	self:SetPData("has_vip", true)
 	self:SendLua("RS:ReceiveVip()")
 	RS:StoreChat( self, "You were awarded VIP access!" )
+	RS:GiftNotify( self, "You were awarded VIP access!" )
+
+	-- give shit
+	for k,v in ipairs( RS.DonatorItems ) do
+		if not RS:GetOwnsClass( self, v ) then
+			RS:CreateItem( RS.Items[v], self )
+		end
+	end
+
 	UpdateDonatorStatus(self)
 end
 function PLAYER:TakeVip()
 	self:SetPData("has_vip", false)
+
+	-- give shit
+	for k,v in ipairs( RS.DonatorItems ) do
+		RS:RemoveItemsFromPlayer( self:SteamID64(), v )
+	end
+
+	RS:GiftNotify( self, "Your VIP status was revoked." )
+
 	UpdateDonatorStatus(self)
 end
 

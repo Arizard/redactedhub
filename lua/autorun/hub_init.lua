@@ -69,6 +69,7 @@ blank_item.Buyable = true
 blank_item.IsToken = false
 blank_item.Visible = true
 blank_item.Sellable = true
+blank_item.DonatorReward = false
 
 function blank_item:OnSpawn()
 end
@@ -78,6 +79,8 @@ function blank_item:OnEquip()
 end
 function blank_item:OnHolster()
 end
+
+RS.DonatorItems = {}
 
 local files, categories = file.Find("autorun/hub/shop/*","LUA", "namedesc")
 RS.Categories = categories
@@ -100,6 +103,10 @@ for k,cat in ipairs(categories) do
 		ITEM.Class = itemname
 		ITEM.Category = cat
 		ITEM.StorePrice = ITEM.StorePrice * RS.Inflation
+
+		if ITEM.DonatorReward == true then
+			table.insert( RS.DonatorItems, itemname )
+		end
 
 		if cat == "skins" then
 			util.PrecacheModel( ITEM.PlayerModel )

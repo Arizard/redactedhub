@@ -1271,7 +1271,11 @@ function RS:JukeboxStartStream( url, niceName )
 			RS.StreamChannel:SetVolume( GetConVarNumber( "grhub_jukebox_volume" )/100 )
 			RS:GiftNotify( "Now listening to "..niceName, true)
 
-			RS.JukeCurrent = { niceName, niceName, url }
+			RS.JukeCurrent = { "[RADIO STREAM]", niceName, url }
+
+			net.Start("RS_JukeboxNowPlaying2")
+			net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+			net.SendToServer()
 		else
 			RS:GiftNotify( "Stream failed to load :(" )
 		end
