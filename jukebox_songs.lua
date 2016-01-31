@@ -341,18 +341,15 @@ tempstreams = {
 		["Triple J"] = "http://www.abc.net.au/res/streaming/audio/mp3/triplej.pls",
 		["Triple J Unearthed"] = "http://www.abc.net.au/res/streaming/audio/mp3/unearthed.pls",
 		["Double J"] = "http://abc.net.au/res/streaming/audio/mp3/dig_music.pls",
-		["Edge Digital"] = "http://player.arn.com.au/alternate/edgedigital.m3u",
-		["Mix 90s"] = "http://player.arn.com.au/alternate/mix90s.pls",
-		["Mix 80s"] = "http://player.arn.com.au/alternate/mix80s.m3u",
 	},
 	["Top Charts"] = {
 		["KIIS1065"] = "http://player.arn.com.au/alternate/mix1065.pls"
 	},
 	["Rock"] = {
-		["Triple M Sydney"] = "http://sc.syd.triplem.com.au/listen.pls",
-		["Triple M Adelaide"] = "http://sc.ade.triplem.com.au/listen.pls",
-		["Triple M Brisbane"] = "http://sc.bne.triplem.com.au/listen.pls",
-		["Triple M Melbourne"] = "http://sc.mel.triplem.com.au/listen.pls",
+		-- ["Triple M Sydney"] = "http://sc.syd.triplem.com.au/listen.pls",
+		-- ["Triple M Adelaide"] = "http://sc.ade.triplem.com.au/listen.pls",
+		-- ["Triple M Brisbane"] = "http://sc.bne.triplem.com.au/listen.pls",
+		-- ["Triple M Melbourne"] = "http://sc.mel.triplem.com.au/listen.pls",
 	},
 	["Classical"] = {
 		["ABC Classic FM"] = "http://abc.net.au/res/streaming/audio/mp3/classic_fm.pls",
@@ -361,7 +358,7 @@ tempstreams = {
 		["ABC Jazz"] = "http://abc.net.au/res/streaming/audio/mp3/abc_jazz.pls"
 	},
 	["Chill Out"] = {
-		["Buddha Radio"] = "http://player.arn.com.au/alternate/edgedigital.m3u"
+		--["Buddha Radio"] = "http://player.arn.com.au/alternate/edgedigital.m3u"
 	},
 	["Electronic"] = {
 		["Lainchan Radio"] = "https://lainchan.org/radio_assets/lain.ogg",
