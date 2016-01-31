@@ -337,12 +337,44 @@ tempsongs = {
 }
 
 tempstreams = {
-	["Australia"] = {
+	["Assorted Genres"] = {
 		["Triple J"] = "http://www.abc.net.au/res/streaming/audio/mp3/triplej.pls",
+		["Triple J Unearthed"] = "http://www.abc.net.au/res/streaming/audio/mp3/unearthed.pls",
+		["Double J"] = "http://abc.net.au/res/streaming/audio/mp3/dig_music.pls",
+		["Edge Digital"] = "http://player.arn.com.au/alternate/edgedigital.m3u",
+		["Mix 90s"] = "http://player.arn.com.au/alternate/mix90s.pls",
+		["Mix 80s"] = "http://player.arn.com.au/alternate/mix80s.m3u",
 	},
-	["International"] = {
+	["Top Charts"] = {
+		["KIIS1065"] = "http://player.arn.com.au/alternate/mix1065.pls"
+	},
+	["Rock"] = {
+		["Triple M Sydney"] = "http://sc.syd.triplem.com.au/listen.pls",
+		["Triple M Adelaide"] = "http://sc.ade.triplem.com.au/listen.pls",
+		["Triple M Brisbane"] = "http://sc.bne.triplem.com.au/listen.pls",
+		["Triple M Melbourne"] = "http://sc.mel.triplem.com.au/listen.pls",
+	},
+	["Classical"] = {
+		["ABC Classic FM"] = "http://abc.net.au/res/streaming/audio/mp3/classic_fm.pls",
+	},
+	["Jazz"] = {
+		["ABC Jazz"] = "http://abc.net.au/res/streaming/audio/mp3/abc_jazz.pls"
+	},
+	["Chill Out"] = {
+		["Buddha Radio"] = "http://player.arn.com.au/alternate/edgedigital.m3u"
+	},
+	["Electronic"] = {
 		["Lainchan Radio"] = "https://lainchan.org/radio_assets/lain.ogg",
+	},
+	["Vaporwave"] = {
 		["Nightwave Plaza"] = "https://plaza.one:8000/plaza"
+	},
+	["Easy Listening"] = {
+		["Koffee"] = "http://livesh.koffee.com.au:15004/listen.pls",
+		["Smooth 95.3"] = "http://www.australianliveradio.com/smooth953.m3u",
+	},
+	["News"] = {
+		["702 ABC Sydney"] = "http://abc.net.au/res/streaming/audio/mp3/local_sydney.pls",
 	}
 }
 

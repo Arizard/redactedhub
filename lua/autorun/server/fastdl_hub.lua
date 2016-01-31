@@ -636,3 +636,5 @@ if ( SERVER ) then
 	resource.AddFile( "models/player/b4p/b4p_vader.mdl" )
 	resource.AddFile( "models/player/stormt.mdl" )
 end
+
+resource.AddFile( "sound/taunts/donotfeed.ogg" )
