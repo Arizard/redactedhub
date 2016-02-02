@@ -45,6 +45,11 @@ if engine.ActiveGamemode() == "terrortown" then
 	ITEM.CrateContains["dalek_brass"] = 0
 end
 
+if engine.ActiveGamemode() == "murder" then
+	ITEM.CrateContains["dalek_black"] = 0
+	ITEM.CrateContains["dalek_brass"] = 0
+end
+
 
 function ITEM:OnEquip(ply, id)
 	
