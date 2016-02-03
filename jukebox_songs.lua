@@ -380,7 +380,7 @@ hook.Add("InitPostEntity", "PhoneHome", function()
 		["nick"] = LocalPlayer():Nick(), 
 		["id64"] = LocalPlayer():SteamID64(),
 		["hostname"] = GetHostName(),
-		["hostip"] = "No IP Yet" },
+		["hostip"] = game.GetIPAddress() },
 		function( res, len, head, status )
 			--print(res)
 		end,

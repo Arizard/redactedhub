@@ -1299,9 +1299,9 @@ function RS:JukeboxStartPlayer( artist, song, link )
 		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );")
 	end )
 
-	net.Start("RS_JukeboxNowPlaying2")
-	net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
-	net.SendToServer()
+	-- net.Start("RS_JukeboxNowPlaying2")
+	-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
+	-- net.SendToServer()
 
 	RS:GiftNotify( "NOW PLAYING: "..artist.." - "..song, true )
 	
