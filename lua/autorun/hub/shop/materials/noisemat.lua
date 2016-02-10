@@ -1,5 +1,5 @@
 ITEM.Name = "Noise"
-ITEM.Description = "Developer Crate"
+ITEM.Description = "They're here."
 ITEM.StorePrice = 510
 ITEM.Material = "vhs7/noise.vmt"
 ITEM.Buyable = false
