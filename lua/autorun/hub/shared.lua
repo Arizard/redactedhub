@@ -105,3 +105,34 @@ function HexColor(hex, alpha)
     return Color( ct[1], ct[2], ct[3], alpha or 255)
 
 end
+
+function Alphabetical( str1, str2 )
+
+    str1 = string.lower( str1 )
+    str2 = string.lower( str2 )
+
+    if str1 == str2 then
+        return 0
+    end
+
+    local res = 1
+
+    for i = 1, math.min( string.len(str1), string.len(str2) ) do
+        local a = i <= string.len(str1) and string.sub( str1, i, i ) or "z"
+        local b = i <= string.len(str2) and string.sub( str2, i, i ) or "z"
+
+        local x, y = string.byte( a ), string.byte( b )
+
+        if y > x then
+            res = 1
+            break
+        elseif x > y then
+            res = -1
+            break
+        end
+
+    end
+
+    return res
+
+end

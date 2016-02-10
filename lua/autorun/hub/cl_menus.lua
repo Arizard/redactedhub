@@ -270,7 +270,7 @@ function MPANEL:Init()
 
 	function self.navright:Think()
 		if self:IsDown() then
-			print("moving right")
+			--print("moving right")
 			self:GetParent().buttonoffset = self:GetParent().buttonoffset - 2 * (FrameTime()/(1/100))
 			self:GetParent():PerformLayout()
 		end
@@ -633,7 +633,7 @@ function ICON:PerformLayout()
 					self.m.send:AddOption( v:Nick(), function() 
 						if self ~= nil then
 							if self:GetParent() ~= nil then
-								RunConsoleCommand( "shop_senditem_sid", v:SteamID64(), tostring(self:GetParent():GetID()) )
+								SendItem( v, self:GetParent():GetID() )
 							end
 						end
 					end):SetIcon("icon16/email_go.png")
@@ -1787,7 +1787,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	local inventory = store:AddTab("Inventory")
 
 	inventory.scr = vgui.Create("DScrollPanel", inventory)
-	inventory.scr:SetSize(inventory:GetWide()-4, inventory:GetTall() -16 -4)
+	inventory.scr:SetSize(inventory:GetWide()-4, inventory:GetTall() -16 -4 -26)
 	inventory.scr:SetPos(2,2)
 	RS:ImproveScrollbar( inventory.scr:GetVBar() )
 
@@ -1799,23 +1799,50 @@ function RS:CreateHubWindow( hubdata, opentab )
 	inventory.list:SetSize(inventory.scr:GetWide()-4, inventory.scr:GetTall())
 
 	RS.InventoryList = inventory.list
+	RS.InventoryItems = hubdata.owneditems
+	RS:UpdateInventory()
+
+	-- dropdown to select sort method
+	local comb = vgui.Create("DComboBox", inventory)
+	comb:SetSize( 192, 24 )
+	comb:SetPos( 2, inventory.scr:GetTall() + 2 + 4 )
+
+	local sorts = {
+		"ID",
+		"Rarity",
+		"Category",
+		"Alphabetical"
+	}
+
+	comb:SetValue( "Sort Mode: "..(sorts[ (RS.sortMode:GetFloat()+1) or 1 ] or "error") )
+
+	for i = 1, #sorts do
+		comb:AddChoice( sorts[i], i-1 )
+	end
+
+	function comb:OnSelect( panel, i, val )
+		--RunConsoleCommand("hub_inventory_sort",val)
+		RS.sortMode:SetFloat( math.floor(val) )
+		RS:UpdateInventory()
+		self:SetValue( "Sort Mode: "..(sorts[ (RS.sortMode:GetFloat()+1) or 1 ] or "error") )
+	end
 
 	--add inventory items
-	if hubdata.owneditems then
-		for k,v in ipairs(hubdata.owneditems) do
-			local icon = vgui.Create("hub_icon")
-			local worked = icon:SetItem(RS.Items[v["class"]])
-			if worked ~= false then
-				icon:SetInventoryItem( true )
-				icon:SetEquipped( tobool(v["equipped"]) )
-				icon:SetID( (v["ID"]) )
+	-- if hubdata.owneditems then
+	-- 	for k,v in ipairs(hubdata.owneditems) do
+	-- 		local icon = vgui.Create("hub_icon")
+	-- 		local worked = icon:SetItem(RS.Items[v["class"]])
+	-- 		if worked ~= false then
+	-- 			icon:SetInventoryItem( true )
+	-- 			icon:SetEquipped( tobool(v["equipped"]) )
+	-- 			icon:SetID( (v["ID"]) )
 
-				icon:SetIsToken( RS.Items[v["class"]].IsToken )
+	-- 			icon:SetIsToken( RS.Items[v["class"]].IsToken )
 
-				inventory.list:Add(icon)
-			end
-		end
-	end
+	-- 			inventory.list:Add(icon)
+	-- 		end
+	-- 	end
+	-- end
 
 	-- --information
 	-- info.html = vgui.Create("DHTML", info)
@@ -2057,7 +2084,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		RS.JukeVolume = tonumber( math.ceil(self:GetValue()) )
 		if IsValid( RS.StreamChannel ) then
 			RS.StreamChannel:SetVolume( self:GetValue()/100 )
-			print( self:GetValue()/100 )
+			--print( self:GetValue()/100 )
 		end
 		RunConsoleCommand("grhub_jukebox_volume", math.ceil(self:GetValue()) )
 	end
@@ -2106,11 +2133,89 @@ function BuyItem( class )
 	net.SendToServer()
 end
 
+function ShopConfirmWindow( tbl, confirmClick )
+
+	if RS.confirmPrompts:GetBool() == false then
+		confirmClick()
+		return
+	end
+
+	local frame = vgui.Create("AuFrame")
+	frame:SetSize( 380, 160 )
+	frame:Center()
+	frame:SetTitle("Confirmation")
+	frame:SetColor( Color(0,0,0) )
+
+	local tx = "You are about to"
+
+	if type( tbl ) == "string" then
+		tx = tx .. " " .. tbl .. "."
+	elseif type( tbl ) == "table" then
+		for i = 1, #tbl do
+			if i < #tbl-1 then
+				tx = tx .. " " .. tbl[i] .. ","
+			elseif i == #tbl-1 then
+				tx = tx .. " " .. tbl[i] .. ""
+			else
+				tx = tx .. " and " .. tbl[i] .. "."
+			end
+		end
+	end
+
+	tx = tx .. " Are you sure you want to do this? The operation might be irreversible."
+
+	local lb = vgui.Create("DLabel", frame)
+	lb:SetPos( 4, 32 )
+	lb:SetWide( frame:GetWide()-8 -64 )
+	lb:SetFont( "Screen_Small" )
+	lb:SetWrap( true )
+	lb:SetAutoStretchVertical( true )
+	lb:SetText( tx )
+	lb:SetTextColor( Color(0,0,0) )
+
+	if lb:GetTall() > frame:GetTall()-32-8 then
+		lb:SetTall( frame:GetTall() - 32 - 8 )
+	end
+
+	local sub = vgui.Create("AuButton", frame)
+	sub:SetPos( 4+lb:GetWide() , 32 )
+	sub:SetSize( 64, (frame:GetTall()-32-8-4)*0.33333 )
+	sub:SetColors( AuColors.New.A, AuColors.New.A )
+	sub:SetText("Confirm")
+
+	local cls = vgui.Create("AuButton", frame)
+	cls:SetPos( 4+lb:GetWide() , 32 + sub:GetTall()+4 )
+	cls:SetSize( 64, (frame:GetTall()-32-8-4)*0.66666 )
+	cls:SetText("Reject")
+	
+	function cls:DoClick()
+		frame:Close()
+	end
+
+	sub.DoClick = function()
+		confirmClick()
+		frame:Close()
+	end
+end
+
 function SellItem( id )
-	net.Start("SellItem")
-	net.WriteInt( tonumber(id), 32 )
-	net.SendToServer()
+
+	ShopConfirmWindow( "sell item "..tostring(id), function()
+
+		net.Start("SellItem")
+		net.WriteInt( tonumber(id), 32 )
+		net.SendToServer()
+
+	end)
 	--LocalPlayer():ChatPrint( "networking item sale "..tostring(id) )
+end
+
+function SendItem( ply, id )
+	local sid = ply:SteamID64()
+	ShopConfirmWindow( "send item "..tostring( id ).." to "..tostring(ply:Nick()), function() 
+		--print(sid,id)
+		RunConsoleCommand( "shop_senditem_sid", sid, tostring(id) )
+	end)
 end
 
 function ToggleItem( id )
@@ -2125,16 +2230,123 @@ function OpenCrate( id )
 	net.SendToServer()
 end
 
-net.Receive("UpdateInventory", function()
+local sortMode = CreateClientConVar("hub_inventory_sort", 1, true, false)
+RS.sortMode = sortMode
 
+function RS:UpdateInventory( owneditems )
 	if not IsValid( RS.HubWindow ) or RS.HubWindow == nil then return end
 
-	local owneditems = net.ReadTable()
+	owneditems = table.Copy( owneditems or RS.InventoryItems or {} )
 
 	RS.InventoryList:Clear()
 
 	if owneditems then
-		for k,v in ipairs(owneditems) do
+
+		local oldOwneditems = table.Copy( owneditems )
+		local sorteditems = {}
+
+		--if sortMode:GetFloat() == 1 then -- sort by rarity
+		local sorted = 1
+		local numInserts = 0
+		local numItems = #owneditems
+		while numInserts < numItems do
+			local ra = -1
+			local ra_item = 0
+			
+			for i = sorted, numItems do
+
+				if owneditems[i] then
+
+					if RS.Items[ owneditems[i]["class"] ] then
+						--print( RS.Items[ owneditems[i]["class"] ].Rarity, ra )
+						if (RS.Items[ owneditems[i]["class"] ].Rarity or 0) > ra then
+							ra = RS.Items[ owneditems[i]["class"] ].Rarity or 0
+							ra_item = i
+						end
+					end
+				end
+			end
+
+			table.insert( sorteditems, owneditems[ra_item] )
+			-- owneditems[ra_item] = nil
+			table.remove( owneditems, ra_item )
+			numInserts = numInserts + 1
+		end
+		--end
+
+		if sortMode:GetFloat() == 0 then -- sort by id
+			sorteditems = table.Copy( oldOwneditems )
+		end
+
+		-- sort 1 is just by rarity alone
+
+		if sortMode:GetFloat() == 2 then -- sort by category by rarity
+			local cats = {}
+			for i = 1, #RS.Categories do
+				cats[RS.Categories[i]] = {}
+			end
+
+			local oldSorted = table.Copy( sorteditems )
+			sorteditems = {}
+
+			for k,v in ipairs( oldSorted ) do
+				local cat = v["category"]
+				table.insert( cats[cat], v )
+			end
+
+			
+			for k,v in pairs( cats ) do
+				for i = 1, #v do
+					table.insert( sorteditems, v[i] )
+				end
+			end
+
+			--PrintTable( sorteditems )
+		end
+
+		if sortMode:GetFloat() == 3 then -- alphabetical
+
+			--print("Sorting by alphabet")
+
+			owneditems = table.Copy( oldOwneditems )
+			--PrintTable( owneditems )
+
+			sorteditems = {}
+
+			local sorted = 1
+			local numInserts = 0
+			local numItems = #owneditems
+			while numInserts < numItems do
+				local ra_item = 1
+				
+				for i = sorted, numItems do
+
+					if owneditems[i] then
+
+						if RS.Items[ owneditems[i]["class"] ] then
+							--print( RS.Items[ owneditems[i]["class"] ].Rarity, ra )
+							--print(  i, RS.Items[ owneditems[i]["class"] ].Name, RS.Items[ owneditems[ra_item]["class"] ].Name  )
+							if Alphabetical( RS.Items[ owneditems[i]["class"] ].Name, RS.Items[ owneditems[ra_item]["class"] ].Name ) >= 0 then
+								ra_item = i
+								--print( ra_item )
+							end
+						end
+					end
+				end
+
+				table.insert( sorteditems, owneditems[ra_item] )
+				-- owneditems[ra_item] = nil
+				table.remove( owneditems, ra_item )
+				numInserts = numInserts + 1
+			end
+
+		end
+
+		for i = 1, #sorteditems do
+
+			local v = sorteditems[i]
+			--PrintTable(v)
+
 			local icon = vgui.Create("hub_icon")
 			icon:SetItem(RS.Items[v["class"]])
 			icon:SetInventoryItem( true )
@@ -2152,6 +2364,15 @@ net.Receive("UpdateInventory", function()
 	timer.Create("ReloadPreview",1,1, function()
 		RS:ResetPlayerModelPreview()
 	end)
+end
+
+net.Receive("UpdateInventory", function()
+
+	local t = net.ReadTable()
+
+	RS:UpdateInventory( t )
+	RS.InventoryItems = t
+
 
 end)
 

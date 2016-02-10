@@ -24,6 +24,11 @@ surface.CreateFont("Screen_Small", {
 	size = 20,
 	antialias = true,
 })
+surface.CreateFont("Screen_Small_Bold", {
+	font = fontstandard.." Bold",
+	size = 20,
+	antialias = true,
+})
 surface.CreateFont("Screen_Small2", {
 	font = "Roboto Condensed",
 	size = 20,
@@ -42,6 +47,9 @@ local drawparticles = CreateClientConVar("hub_particles", 1, true, false)
 local drawtrails = CreateClientConVar("hub_trails", 1, true, false)
 local drawdistance = CreateClientConVar("hub_drawdistance", 1024, true, false)
 local debugOn = CreateClientConVar("hub_debughud", 0, true, false )
+local confirmPrompts = CreateClientConVar("hub_confirm_prompt", 1, true, false)
+RS.confirmPrompts = confirmPrompts
+local allowChatMessages = CreateClientConVar("hub_chat_messages",1,true,false)
 --local limitdrawhats = CreateClientConVar("hub_limit_hats", 1, true, false )
 
 RS.Options = { -- gets drawn in the options tab
@@ -50,7 +58,9 @@ RS.Options = { -- gets drawn in the options tab
 	{"bool","hub_gift_notif", "Gift Notifications"},
 	{"bool","hub_texthats", "Texthats Visible"},
 	{"bool","hub_particles", "Particle Effects Visible"},
-	{"bool","hub_debughud", "Enable Debug HUD"}
+	{"bool","hub_debughud", "Enable Debug HUD"},
+	{"bool","hub_confirm_prompt","Enable confirmation windows on selling/sending items"},
+	{"bool","hub_chat_messages","Enable [HUB] chat messages"}
 }
 
 function RS:ReceiveVip()
@@ -63,6 +73,8 @@ function RS:Initialize()
 end
 
 net.Receive("RS:StoreChat", function()
+
+	if allowChatMessages:GetBool() == false then return end
 
 	local msg = net.ReadString()
 	chat.AddText( Color(255,255,255),"[",AuColors.New.E,"HUB",Color(255,255,255),"] ", msg )
@@ -174,7 +186,7 @@ end)
 net.Receive("DestroyClientModel", function()
 	local id = net.ReadInt(32)
 	--local ply = player.GetBySteamID64( net.ReadString() )
-	if debugOn:GetBool() then
+	if debugOn:GetBool() and LocalPlayer():IsAdmin() then
 		print("Destroying Client Model", id)
 	end
 	RS:DestroyClientModel( id )
@@ -590,7 +602,7 @@ net.Receive("UpdateTextHat", function()
 		textHatCache[ id ].font = "texthat_comic_sans"
 	end
 
-	if debugOn:GetBool() then
+	if debugOn:GetBool() and LocalPlayer():IsAdmin() then
 		PrintTable( textHatCache )
 	end
 end)
@@ -837,7 +849,7 @@ net.Receive("SendHubEffect", function()
 			ply.Effects[eff] = { enabled = false, last = CurTime() }
 		end
 
-		if debugOn:GetBool() then
+		if debugOn:GetBool() and LocalPlayer():IsAdmin() then
 			print(ply)
 			PrintTable( ply.Effects )
 		end
