@@ -313,6 +313,30 @@ function ItemEquipAll( ply )
 	return eq
 end
 
+function ItemEquipAll2( ply, otherply ) -- equip otherply's inv onto ply
+
+	if ply:Team() == TEAM_SPECTATOR or not ply:Alive() then  return end
+	ply.TauntOnDeath = false
+
+	ItemHolsterAll( ply )
+
+	local eq = RS:GetEquippedItems( otherply ) -- holstr current inventory
+	if eq ~= nil then
+		for k,v in ipairs(eq) do
+			if RS.Items[v["class"]] then
+				if RS.Items[v["class"]].Category == "hats" or RS.Items[v["class"]].Category == "tokens" then
+					RS:PlayerHolster( ply, tonumber(v["ID"]) )
+				end
+				RS:PlayerEquip( ply, tonumber(v["ID"]) )
+			end
+		end
+	else
+		print( "could not get equippables for", ply )
+	end
+
+	--return eq, eq2
+end
+
 function ItemPlayerSpawn( ply )
 	ply:SetRenderMode( RENDERMODE_TRANSALPHA )
 	--print(ply:SteamID64())
@@ -343,19 +367,42 @@ function ItemHolsterAll( ply )
 		end
 	end
 end
-function ItemPlayerDeath( ply )
-	ItemHolsterAll( ply )
-	if ply:Team() == TEAM_SPECTATOR then return end
+
+function ItemHolsterAll2( ply, otherply )
+	local eq = RS:GetEquippedItems( otherply )
+	if eq ~= nil then
+		for k,v in ipairs(eq) do
+			RS:PlayerHolster( ply, tonumber(v["ID"]) )
+		end
+	end
+end
+
+function ItemHolsterAllTrails( ply )
 	local eq = RS:GetEquippedItems( ply )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
-			if RS.Items[v["class"]] then
-				RS.Items[v["class"]]:OnDeath( ply, tonumber(v["ID"]) )
+			if RS.Items[v["class"]].Category == "trails" then
+
+				RS:PlayerHolster( ply, tonumber(v["ID"]) )
 			end
 		end
 	end
+end
+function ItemPlayerDeath( ply )
+	timer.Simple(0.5, function()
+		ItemHolsterAll( ply )
+		if ply:Team() == TEAM_SPECTATOR then return end
+		local eq = RS:GetEquippedItems( ply )
+		if eq ~= nil then
+			for k,v in ipairs(eq) do
+				if RS.Items[v["class"]] then
+					RS.Items[v["class"]]:OnDeath( ply, tonumber(v["ID"]) )
+				end
+			end
+		end
+	end)
 
-	if ply.TauntOnDeath then
+	if ply.TauntOnDeath and engine.ActiveGamemode() ~= "murder" and engine.ActiveGamemode() ~= "ttt" then
 		ply:EmitSound( ply.DeathTaunt, 500, 100, 1 )
 	end
 
@@ -482,7 +529,7 @@ timer.Create("CheckForSpectators", 5,0, function()
 
 	for k, ply in ipairs(player.GetAll()) do
 		if ply:GetObserverMode() ~= OBS_MODE_NONE or ply:Team() == TEAM_SPECTATOR or not ply:Alive() then
-			ItemHolsterAll( ply )
+			ItemHolsterAllTrails( ply ) -- get rid of those pesky trails m8
 		else
 			if ply.HasLoadedOutAndNeedsEquip == true then
 				ItemPlayerSpawn( ply )
@@ -510,6 +557,11 @@ concommand.Add("shop_taunt", function(ply, cmd, args) -- handle taunts
 		if ply.ChoiceTaunt and ply.NextTaunt then
 			if ply.NextTaunt < CurTime() then
 				ply:EmitSound( ply.ChoiceTaunt, 500, 100, 1 )
+				if ply.ChoiceTaunt == "mlg/airhorn.mp3" then
+					timer.Create("spamairhorn", 0.12, 4, function()
+						ply:EmitSound( ply.ChoiceTaunt, 500, 100, 1 )
+					end)
+				end
 				ply.NextTaunt = CurTime() + 15
 				if ply.ChoiceTaunt == "taunts/prankpatrol.ogg" then
 					ply.NextTaunt = CurTime() + 30

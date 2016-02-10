@@ -172,7 +172,12 @@ net.Receive("SendClientModelsOnSpawn", function()
 end)
 
 net.Receive("DestroyClientModel", function()
-	RS:DestroyClientModel( net.ReadInt(32) )
+	local id = net.ReadInt(32)
+	--local ply = player.GetBySteamID64( net.ReadString() )
+	if debugOn:GetBool() then
+		print("Destroying Client Model", id)
+	end
+	RS:DestroyClientModel( id )
 end)
 
 function RS:DestroyClientModel(id)
@@ -309,6 +314,10 @@ function RS:RenderClientModels()
 
 						plyhats[m.ply] = (plyhats[m.ply] or 0) + 1
 						--print( plyhats[m.ply] )
+
+						if not m.ply:Alive() or m.ply:GetObserverMode() ~= OBS_MODE_NONE then
+							shouldDraw = false
+						end
 
 						if plyhats[m.ply] <= RS.ModelsPerPlayer then
 							-- 
@@ -553,7 +562,18 @@ for k,v in ipairs( hatfonts ) do
 	table.insert( validfonts, v[1] )
 end
 
-local textHatCache = {}
+local textHatCache = {
+	
+	-- ['76561198020843439'] = {
+	-- 	col = Color(255,255,255),
+	-- 	effect	=	"flash2",
+	-- 	font	=	"texthat_coolvetica",
+	-- 	frac	=	0,
+	-- 	size	=	0.075,
+	-- 	text	=	"I LOVE ASS"
+	-- }
+
+}
 
 net.Receive("UpdateTextHat", function()
 	local id = net.ReadString()
@@ -570,7 +590,9 @@ net.Receive("UpdateTextHat", function()
 		textHatCache[ id ].font = "texthat_comic_sans"
 	end
 
-	--PrintTable( textHatCache )
+	if debugOn:GetBool() then
+		PrintTable( textHatCache )
+	end
 end)
 
 function DrawTextHatText( text, font, color, offset, y, fx )
@@ -668,6 +690,8 @@ hook.Add("PostPlayerDraw", "TextHats", function(ply)
 					marquee_w = tw 
 				end
 
+				surface.SetAlphaMultiplier(1)
+
 				-- https://facepunch.com/showthread.php?t=1274569&p=40851965&viewfull=1#post40851965
 
 				render.ClearStencil()
@@ -692,6 +716,7 @@ hook.Add("PostPlayerDraw", "TextHats", function(ply)
 				end
 				
 				render.SetStencilEnable(false)
+				
 				
 			cam.End3D2D()
 
@@ -812,8 +837,10 @@ net.Receive("SendHubEffect", function()
 			ply.Effects[eff] = { enabled = false, last = CurTime() }
 		end
 
-		--print(ply)
-		--PrintTable( ply.Effects )
+		if debugOn:GetBool() then
+			print(ply)
+			PrintTable( ply.Effects )
+		end
 	end
 end)
 

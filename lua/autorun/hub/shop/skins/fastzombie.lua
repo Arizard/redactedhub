@@ -10,6 +10,10 @@ function ITEM:OnEquip(ply, id)
 	end)
 end
 
+if engine.ActiveGamemode() == "murder" then
+     ITEM.Buyable = false
+end
+
 function ITEM:OnHolster(ply, id)
 end
 

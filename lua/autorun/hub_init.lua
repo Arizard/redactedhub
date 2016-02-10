@@ -102,7 +102,7 @@ for k,cat in ipairs(categories) do
 
 		ITEM.Class = itemname
 		ITEM.Category = cat
-		ITEM.StorePrice = ITEM.StorePrice * RS.Inflation
+		ITEM.StorePrice = math.floor(ITEM.StorePrice * RS.Inflation)
 
 		if ITEM.DonatorReward == true then
 			table.insert( RS.DonatorItems, itemname )

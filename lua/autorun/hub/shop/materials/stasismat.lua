@@ -11,6 +11,10 @@ function ITEM:OnHolster(ply, id)
 	ply:SetMaterial( "" )
 end
 
+if engine.ActiveGamemode() == "murder" then
+     ITEM.Buyable = false
+end
+
 function ITEM:OnSpawn(ply, id)
 end
 

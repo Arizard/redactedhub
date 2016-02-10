@@ -1254,6 +1254,18 @@ hook.Add("TTTPrepareRound", "FixJukeBoxTTT", function()
 	end
 end)
 
+hook.Add("OnStartRound", "FixJukeboxMurder", function()
+	timer.Simple(1, function()
+		if RS.KeepStreaming then
+			print("Attempting to continue stream...")
+			if IsValid(RS.StreamChannel) then
+				RS.StreamChannel:Play()
+				print("Attempting to play stream...")
+			end
+		end
+	end)
+end)
+
 function RS:JukeboxStartStream( url, niceName )
 	if not niceName then
 		niceName = ""
@@ -1284,6 +1296,9 @@ end
 
 
 function RS:JukeboxStartPlayer( artist, song, link )
+
+	RS:JukeboxStopStream()
+	RS.KeepStreaming = true
 	
 	link = string.Replace(link, "https://www.youtube.com/watch?v=", "")
 	link = string.Replace(link, "http://www.youtube.com/watch?v=", "")
