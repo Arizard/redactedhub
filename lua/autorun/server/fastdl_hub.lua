@@ -294,7 +294,7 @@ local taunts = {
 	"121gigawatts",
 	"booyouwhore",
 	"nooo",
-	"nootnott",
+	"nootnoot",
 	"smams",
 	"sorrydave",
 	"xfiles",
