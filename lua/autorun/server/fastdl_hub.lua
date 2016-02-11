@@ -245,6 +245,7 @@ resource.AddFile( "sound/mlg/momgetthecamera.wav" )
 resource.AddFile( "sound/mlg/triple.mp3" )
 resource.AddFile( "sound/mlg/wombocombo.wav" )
 resource.AddFile( "sound/mlg/wow.wav" )
+resource.AddFile( "sound/taunts/nootnoot.ogg" )
 
 --horse
 resource.AddFile( "materials/models/horsie/horsie.vmt" )
@@ -293,6 +294,7 @@ local taunts = {
 	"121gigawatts",
 	"booyouwhore",
 	"nooo",
+	"nootnott",
 	"smams",
 	"sorrydave",
 	"xfiles",
