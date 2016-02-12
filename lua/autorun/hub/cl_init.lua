@@ -204,7 +204,8 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 		SafeRemoveEntity(RS.ClientSideModels[id])
 	end
 
-	local cmod = ClientsideModel(mdl)
+	local cmod = ClientsideModel(mdl, RENDERGROUP_BOTH )
+
 	cmod.att = att
 	cmod.posoff = posoff
 	cmod.angoff = angoff
@@ -217,11 +218,12 @@ function RS:CreateClientModel( mdl, att, posoff, angoff, scl, mat, col, ply, id,
 	cmod.isToken = token
 	cmod.class = class
 	cmod.id64 = id64 or ply:SteamID64()
+
+
 	
 	print("RedactedHub - Creating model for",player.GetBySteamID64(cmod.id64) or cmod.id64, mdl, cmod.id)
 
 	cmod:SetModelScale( scl, 0 )
-	cmod:SetRenderMode( RENDERMODE_TRANSALPHA )
 
 	RS.ClientSideModels[id] = cmod
 
@@ -366,10 +368,11 @@ function RS:RenderClientModels()
 								if m:GetMaterial() ~= m.mat then
 									m:SetMaterial( m.mat )
 								end
-
+								render.SetColorModulation( m.col.r/255, m.col.g/255, m.col.b/255 )
 								if (m.IsToken == false) or (not m.IsToken) then
 									m:DrawModel()
 								end
+								render.SetColorModulation( 1,1,1 )
 								table.insert( RS.LastRenderedModels, m )
 							end
 						end

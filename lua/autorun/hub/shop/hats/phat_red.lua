@@ -1,17 +1,19 @@
-ITEM.Name = "Mohawk1"
-ITEM.Description = "Hairstyle Crate"
-ITEM.StorePrice = 150
-ITEM.HatModel = "models/jessev92/apb/hair_mohawk1.mdl"
-ITEM.HatMat = ""
-ITEM.HatCol = Color(150,150,150) -- hair color
+ITEM.Name = "Red Party Hat"
+ITEM.Description = "Rare Item"
+ITEM.StorePrice = 1200
+ITEM.HatModel = "models/duncehat/duncehat.mdl"
+ITEM.HatMat = "models/debug/debugwhite"
+ITEM.HatCol = Color(255,0,0)
 ITEM.Att = "eyes"
-ITEM.PosOff = Vector(0,-3,-68)
-ITEM.AngOff = Angle(0,0,0)
-ITEM.Scl = 1
+ITEM.PosOff = Vector(0,-4.2,3.5)
+ITEM.AngOff = Angle(25,0,0)
+ITEM.Scl = 0.5
+ITEM.IconFOV = 15
+ITEM.IconPosOff = Vector(0,0,-9)
 ITEM.Buyable = false
-ITEM.IconPosOff = Vector(0,0,-70.5)
-ITEM.IconFOV = 13
- 
+ITEM.Sellable = false
+ITEM.Rarity = 5
+
 function ITEM:OnEquip(ply, id)
 	RS:CreateClientModel( self.HatModel, self.Att, self.PosOff , self.AngOff , self.Scl, self.HatMat, self.HatCol, ply, id )
 end

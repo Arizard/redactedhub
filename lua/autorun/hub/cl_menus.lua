@@ -748,6 +748,15 @@ function ICON:SetItem( tab )
 	self.oldmat = LocalPlayer():GetMaterial()
 	self.oldpmod = LocalPlayer():GetModel()
 
+	function self.model:PreDrawModel()
+		local col = self:GetParent().item.HatCol or (self:GetParent().item.OverrideCol or (self:GetParent().item.Color or Color(255,255,255)))
+		render.SetColorModulation( col.r/255, col.g/255, col.b/255)
+	end
+
+	function self.model:PostDrawModel()
+		render.SetColorModulation( 1,1,1 )
+	end
+
 	self.b:SetText(tostring(self.item.StorePrice).." "..RS.Currency)
 	if self.item.Category == "colours" then
 		self.model:SetModel("models/props_junk/metal_paintcan001a.mdl")
@@ -795,6 +804,8 @@ function ICON:SetItem( tab )
 		self.model.Entity:SetModelScale( self.item.Scl, 0)
 		self.model.Entity:SetMaterial( self.item.HatMat )
 		self.model.Entity:SetColor( self.item.HatCol )
+
+		print( self.item.Name, self.item.HatCol )
 
 		if self.item.IconLayoutEntity then
 			self.model.LayoutEntity = self.item.IconLayoutEntity
@@ -1657,10 +1668,13 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 						m:SetAngles(ang)	
 						m:SetMaterial( m.mat )	
-						m:SetColor( m.col or Color(0,0,0) )
+
+						--m:SetColor( m.col or Color(0,0,0) )
 						--if id == "apb_afro" then
 							--PrintTable(m:GetTable())
-						--end				
+						--end
+						render.SetColorModulation( m.col.r/255, m.col.g/255, m.col.b/255 )
+
 						m:DrawModel()
 
 
@@ -1677,6 +1691,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 								cam.IgnoreZ( false )
 							end
 						end
+
+						render.SetColorModulation( 1,1,1 )
 
 					end
 				end

@@ -1,8 +1,8 @@
-ITEM.Name = "Union Jack Flag"
-ITEM.Description = "RULE BRITANNIA"
+ITEM.Name = "Canadian Flag"
+ITEM.Description = "Eh"
 ITEM.StorePrice = 100
 ITEM.HatModel = "models/weapons/arizard/c_buffbanner/c_buffbanner.mdl"
-ITEM.HatMat = "models/weapons/arizard/flag_uk.vmt"
+ITEM.HatMat = "models/weapons/arizard/flag_ca.vmt"
 ITEM.HatCol = Color(255,255,255)
 ITEM.Att = "chest"
 ITEM.PosOff = Vector(12,-8,-65)
