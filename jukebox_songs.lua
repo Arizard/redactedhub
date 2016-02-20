@@ -325,14 +325,41 @@ tempsongs = {
 		["Mii Channel Theme"] = "https://www.youtube.com/watch?v=po-0n1BKW2w",
 	},
 	["Pegboard Nerds"] = {
-	    ["Just Like That (feat. Johnny Graves)"] = "https://www.youtube.com/watch?v=XZq2l0iLV7Y",
-	    ["Swamp Thing"] = "https://www.youtube.com/watch?v=SDiJiGuUeBo",
-	    ["Try This"] = "https://www.youtube.com/watch?v=ggqI-HH8yXc",
-	    ["End is Near (Fire in the Hole VIP) "] = "https://www.youtube.com/watch?v=t9eazV4Fmdg",
-	    ["Luigi's Mansion"] = "https://www.youtube.com/watch?v=haas3N9vxsM",
+		["Just Like That (feat. Johnny Graves)"] = "https://www.youtube.com/watch?v=XZq2l0iLV7Y",
+		["Swamp Thing"] = "https://www.youtube.com/watch?v=SDiJiGuUeBo",
+		["Try This"] = "https://www.youtube.com/watch?v=ggqI-HH8yXc",
+		["End is Near (Fire in the Hole VIP) "] = "https://www.youtube.com/watch?v=t9eazV4Fmdg",
+		["Luigi's Mansion"] = "https://www.youtube.com/watch?v=haas3N9vxsM",
 	},
 	["Raffi"] = {
 		["Banana Phone"] = "https://www.youtube.com/watch?v=j5C6X9vOEkU"
+	},
+
+	["Kitsune2"] = {
+		["Avast your ass"] = "https://www.youtube.com/watch?v=Y0E5wpyLd3M",
+		["Rock my emotions"] = "https://www.youtube.com/watch?v=QDvvt1kmL1Q",
+		["U R Everything"] = "https://www.youtube.com/watch?v=IQ4GKOV0gcE",
+		["Rainbow Tylenol"] = "https://www.youtube.com/watch?v=5K7Frc2lTI8"
+	},
+
+	["O-zone"] = {
+		["Dragosta din tei"] = "https://www.youtube.com/watch?v=xa0wow-MNtg"
+	},
+
+	["Tom Petty"] = {
+		["Wont back down"] = "https://www.youtube.com/watch?v=nvlTJrNJ5lA"
+	},
+
+	["CaptainSparklez"] = {
+		["Fallen Kingdom"] = "https://www.youtube.com/watch?v=I-sH53vXP2A"
+	},
+
+	["Simon and Garfunkel"] = {
+		 ["Sound of Silence"] = "https://www.youtube.com/watch?v=4zLfCnGVeL4"
+	},
+
+	["Matthew Wilder"] = {
+		["Break My Stride"] = "https://www.youtube.com/watch?v=sLE_emfAd74",
 	},
 }
 

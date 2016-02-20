@@ -458,9 +458,28 @@ end
 
 function RS:ProcessChat( ply, text, public )
 
+
 	local args = string.Split(text, " ")
 	local prefix = string.sub(args[1],1,1)
 	local cmd = string.sub(args[1], 2,-1)
+
+	local inDeathrun = true
+	if DR then
+		if DR.ChatCommands[ cmd ] == nil then
+			inDeathrun = false
+		end
+	else
+		inDeathrun = false 
+	end
+
+	local inULX = true
+	if ULib then
+		if not ULib.ucl.query( ply, "ulx "..cmd, true) then
+			inULX = false
+		end
+	else
+		inULX = false
+	end
 
 	--print(prefix, cmd)
 
@@ -473,9 +492,37 @@ function RS:ProcessChat( ply, text, public )
 
 		cmdfunc( ply, args2 )
 		if prefix == "/" then return false end -- make it silent if you use /
+	elseif ((prefix == "!") or (prefix == "/")) and (not RS.ChatCommands[ cmd ]) and not inULX and not inDeathrun then
+		
+		print("Command \""..text.."\" not found, attempting to help...")
+		local best = 0
+		local bestcmd = ""
+		for c,_ in pairs( RS.ChatCommands ) do
+			local start = 1
+			local count = 0
+			if math.abs(string.len(c) - string.len(cmd)) <= 1 then
+				for i = 1, string.len( cmd ) do
+					local fi = string.find( string.sub( c, start, -1 ), string.sub( cmd, i, i ) )
+					if fi ~= nil then
+						start = fi
+						count = count + 1
+					end
+				end
+				if count > best then
+					best = count
+					bestcmd = c
+				end
+			end
+		end
+		if best > 3 then
+			timer.Simple(0, function()
+				RS:StoreChat( ply,  "Did you mean to type "..bestcmd.."?" )
+			end)
+		end
+		if prefix == "/" then return false end
 	end
 
-	print("RedactedHub - Checking chat...")
+	--print("RedactedHub - Checking chat...")
 
 end
 hook.Add("PlayerSay","ProcessStoreChatRedactedHub",function( ply, text, pub ) RS:ProcessChat( ply, text, pub ) end )

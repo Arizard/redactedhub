@@ -805,7 +805,7 @@ function ICON:SetItem( tab )
 		self.model.Entity:SetMaterial( self.item.HatMat )
 		self.model.Entity:SetColor( self.item.HatCol )
 
-		print( self.item.Name, self.item.HatCol )
+		--print( self.item.Name, self.item.HatCol )
 
 		if self.item.IconLayoutEntity then
 			self.model.LayoutEntity = self.item.IconLayoutEntity

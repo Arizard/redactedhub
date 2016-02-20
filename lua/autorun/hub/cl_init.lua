@@ -60,7 +60,8 @@ RS.Options = { -- gets drawn in the options tab
 	{"bool","hub_particles", "Particle Effects Visible"},
 	{"bool","hub_debughud", "Enable Debug HUD"},
 	{"bool","hub_confirm_prompt","Enable confirmation windows on selling/sending items"},
-	{"bool","hub_chat_messages","Enable [HUB] chat messages"}
+	{"bool","hub_chat_messages","Enable [HUB] chat messages"},
+	{"bool","autime_draw","Enable playtime tracker on top left of the HUD"}
 }
 
 function RS:ReceiveVip()
@@ -525,7 +526,7 @@ end)
 
 hook.Add("PreDrawViewModel", "HandMaterials", function( vm, ply, wep )
 	--`PrintTable( vm:GetMaterials() )
-	if vm then
+	if vm and false then
 		--print( vm:GetModel() )
 		--PrintTable( vm:GetTable() )
 		if vm:GetMaterials()[1] == "models/weapons/v_hand/v_hand_sheet" then
