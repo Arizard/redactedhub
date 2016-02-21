@@ -8,7 +8,7 @@ tempsongs = {
 	},
 	["Bon Jovi"] = {
 		["It's My Life"] = "https://www.youtube.com/watch?v=D7oSQ6wV5vU",
-		["Livin' on a Prayer"] = "https://www.youtube.com/watch?v=lDK9QqIzhwk",
+		-- ["Livin' on a Prayer"] = "https://www.youtube.com/watch?v=lDK9QqIzhwk", -- broken?
 	},
 	["Daft Punk"] = {
 		["One More Time"] = "https://www.youtube.com/watch?v=jtQC8ChpUeg",
@@ -361,6 +361,10 @@ tempsongs = {
 	["Matthew Wilder"] = {
 		["Break My Stride"] = "https://www.youtube.com/watch?v=sLE_emfAd74",
 	},
+
+	["Toto"] = {
+		["Africa"] = "https://www.youtube.com/watch?v=FTQbiNvZqaY"
+	}
 }
 
 tempstreams = {
@@ -399,6 +403,11 @@ tempstreams = {
 	},
 	["News"] = {
 		["702 ABC Sydney"] = "http://abc.net.au/res/streaming/audio/mp3/local_sydney.pls",
+	},
+	["Fallout"] = {
+		["Diamond City Radio"] = "http://46.101.243.245:8000/falloutfm7.ogg",
+		["Classical Radio"] = "http://46.101.243.245:8000/falloutfm6.ogg",
+		["Galaxy News Radio"] = "http://40.76.26.172:9786/listen.pls",
 	}
 }
 
