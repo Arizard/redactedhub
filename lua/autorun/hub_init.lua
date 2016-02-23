@@ -35,7 +35,7 @@ if SERVER then
 			local path = "autorun/hub/shop/"..cat.."/"..f
 			local relpath = "hub/shop/"..cat.."/"..f
 			AddCSLuaFile(relpath)
-			print("$- Added CSLua File "..relpath)
+			--print("$- Added CSLua File "..relpath)
 		end
 	end
 
@@ -89,7 +89,7 @@ local catnum = 0
 
 for k,cat in ipairs(categories) do
 	local itemfiles = file.Find("autorun/hub/shop/"..cat.."/*.lua", "LUA", "namedesc")
-	PrintTable( itemfiles )
+	--PrintTable( itemfiles )
 
 	for kk, f in ipairs(itemfiles) do
 		local path = "autorun/hub/shop/"..cat.."/"..f

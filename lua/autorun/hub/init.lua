@@ -381,9 +381,11 @@ function ItemHolsterAllTrails( ply )
 	local eq = RS:GetEquippedItems( ply )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
-			if RS.Items[v["class"]].Category == "trails" then
+			if RS.Items[v["class"]] then
+				if RS.Items[v["class"]].Category == "trails" then
 
-				RS:PlayerHolster( ply, tonumber(v["ID"]) )
+					RS:PlayerHolster( ply, tonumber(v["ID"]) )
+				end
 			end
 		end
 	end

@@ -64,7 +64,7 @@ function WINDOW:Paint()
 	surface.SetDrawColor( AuColors.New.B )
 	surface.DrawRect(0,0, self:GetWide(), self:GetTall())
 
-	draw.ShadowText( self.Title, "Screen_Medium", self.padding, self.padding/4, AuColors.New.E, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1 )
+	AuShadowText( self.Title, "au_title", self.padding, self.padding, AuColors.New.E, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1 )
 
 end
 
@@ -78,145 +78,10 @@ end
 vgui.Register("hub_window", WINDOW)
 
 
-local BUTTN = {} -- custom buttons
-
-function BUTTN:Init()
-	self.w, self.h = 64,24
-	self.color = {}
-	self.color.up = Color(192, 57, 43)
-	self.color.hover = Color(231, 76, 60)
-	self.hover = false
-	self.active = false
-
-	self.font = "Screen_Small"
-	self.offsets = {0,-11}
-
-	self.text = "Label"
-
-	self.b = vgui.Create("DButton", self)
-
-	self.ax, self.ay = 0,0
-	self.frac = 0
-
-	self.b.OnCursorEntered = function()
-		self.hover = true
-		self.ax, self.ay = self:LocalCursorPos()
-	end
-
-	self.b.OnCursorExited = function()
-		self.hover = false
-	end
-
-	self.b.OnMousePressed = function( self2, mkey )
-
-		self:OnMousePressed(mkey)
-	end
-
-	function self.b:Paint() end
-	self.b:SetText("")
-
-	self.textcol = Color(255,255,255)
-	self.textshad = 1
-	--self.b.DoClick = function() self:DoClick() end
-
-	self:SetColors( AuColors.New.E, AuColors.New.D )
-
-end
-
-function BUTTN:SetTextColor( col )
-	self.textcol = col
-end
-
-function BUTTN:SetTextShadow( s )
-	self.textshad = s
-end
-
-function BUTTN:PerformLayout()
-	self.b:SetSize(self:GetWide(),self:GetTall())
-end
-
-function BUTTN:PaintOver(w,h)
-	if self.hover == true or self.active == true then
-		surface.SetDrawColor(self.color.hover)
-	elseif self.hover == false then
-		surface.SetDrawColor(self.color.up)
-	end
-	surface.DrawRect(0,0,w,h)
-
-	if self.hover or self.frac > 0 then -- cool animation
-		self.frac = self.frac + FrameTime()*1.6
-		self.frac = math.max( math.min(self.frac, 1), 0 )
-
-		surface.SetDrawColor(255,255,255,70*QuadLerp(self.frac,1,0) )
-		local cx, cy = self.ax, self.ay
-		draw.NoTexture()
-		surface.DrawCircle(cx, cy, w*QuadLerp(self.frac,0,1))
-	end
-
-	if not self.hover and self.frac >= 0.7 then
-		self.frac = 0
-	end
-
-	draw.ShadowText(self.text,self.font,w/2 , h/2 , self.textcol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, self.textshad)
-end
-
-function BUTTN:SetFont(fo)
-	self.font = fo
-end
-
-function BUTTN:SetOffsets(x,y)
-	self.offsets = {x,y}
-end
-
-function BUTTN:SetSelected( bool )
-
-	self.active = bool
-
-end
-
-function BUTTN:SetText( text )
-
-	self.text = text
-
-end
-
-function BUTTN:SetColors(upcol, hovercol)
-	self.color.up = upcol
-	self.color.hover = hovercol
-end
-
-function BUTTN:DoClick()
-
-end
-
-function BUTTN:DoRightClick()
-end
-
-function BUTTN:OnMousePressed( mkey )
-
-	if mkey == MOUSE_LEFT then
-		self:DoClick()
-	end
-
-	if mkey == MOUSE_RIGHT then
-		self:DoRightClick()
-	end
-
-end
-
-function BUTTN:IsDown()
-
-	if self.hover == true then
-		if input.IsMouseDown( MOUSE_LEFT ) then
-			return true
-		end
-	end
-
-	return false
-end
-
-
-vgui.Register("hub_button",BUTTN)
+vgui.Register("hub_button",{},"AuButton")
+hook.Add("InitPostEntity", "MakeSure2016DermaLoaded", function()
+	vgui.Register("hub_button",{},"AuButton")
+end)
 
 
 --hub multi panels
@@ -253,7 +118,7 @@ function MPANEL:Init()
 	  -- Color(39, 174, 96)
 	self.navleft = vgui.Create("hub_button", self)
 	self.navleft:SetColors( Color(39, 174, 96), Color(46, 204, 113))
-	self.navleft:SetText( "<" )
+	self.navleft:SetText( "◄" )
 	self.navleft:SetSize(24,24)
 
 	function self.navleft:Think()
@@ -265,7 +130,7 @@ function MPANEL:Init()
 
 	self.navright = vgui.Create("hub_button", self)
 	self.navright:SetColors( Color(39, 174, 96), Color(46, 204, 113))
-	self.navright:SetText( ">" )
+	self.navright:SetText( "►" )
 	self.navright:SetSize(24,24)
 
 	function self.navright:Think()
@@ -455,8 +320,9 @@ function M2PANEL:AddTab(str_name)
 
 	self.buttons[str_name] = vgui.Create("hub_button", self)
 	self.buttons[str_name]:SetSize(168,32)
-	self.buttons[str_name]:SetText(str_name)
+	self.buttons[str_name]:SetText(string.upper( str_name ) )
 	self.buttons[str_name]:SetColors(self.color[1], self.color[2])
+	self.buttons[str_name]:SetFont("au_title")
 
 	self.tabs[#self.tabs+1] = str_name
 
@@ -674,12 +540,12 @@ function ICON:Paint()
 
 	if not self.item then return nil end
 
-	draw.ShadowText(self.item.Name, "Screen_Small2", self:GetWide()/2, 121, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
-	draw.ShadowText(self.item.Description, "Screen_Tiny", self:GetWide()/2, 121+18, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
+	draw.ShadowText(self.item.Name, "Screen_Small2", self:GetWide()/2, 121, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 0)
+	draw.ShadowText(self.item.Description, "Screen_Tiny", self:GetWide()/2, 121+18, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 0)
 	if self.inv == false then
-		draw.ShadowText(tostring(self.stock).." In Stock", "Screen_Tiny", self:GetWide()/2, 121+17*2, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
+		draw.ShadowText(tostring(self.stock).." In Stock", "Screen_Tiny", self:GetWide()/2, 121+17*2, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 0)
 	else
-		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 0)
+		draw.ShadowText("No. "..tostring(self:GetID()), "Screen_Tiny", self:GetWide()/2, 121+17*2, (self.item.Rarity or 0) > 0 and AuColors.New.B or AuColors.New.F, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 0)
 	end
 	--draw.ShadowText("No. "..tostring(self.id), "Screen_Tiny", self:GetWide()/2, 121+17*2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
 	--image/color/model size: 117/117
@@ -814,8 +680,8 @@ function ICON:SetItem( tab )
 		--print(self.item.HatCol)
 	elseif self.item.Category == "crates" then
 		self.model:SetModel(self.item.CrateModel)
-		self.model:SetFOV(40)
-		self.model:SetLookAt(Vector(0,0,10))
+		self.model:SetFOV(self.item.IconFOV or 40)
+		self.model:SetLookAt(Vector(0,0,10) - (self.item.IconPosOff or Vector(0,0,0) ))
 		self.model.Entity:SetMaterial( self.item.CrateMat )
 	elseif self.item.Category == "weapons" then
 		self.model:SetModel(self.item.WeaponModel)
@@ -953,7 +819,8 @@ local EXPAND = {}
 
 function EXPAND:Init()
 	self.lb = vgui.Create("hub_label", self)
-	self.lb:SetTall( 32 )
+	self.lb:SetTall( 22 )
+	--self.lb:SetFont("au_small")
 	self.b = vgui.Create("DButton", self)
 	self.b:SetAlpha( 0 )
 	self.b:SetText("Don't see this!")
@@ -973,11 +840,11 @@ end
 
 function EXPAND:AddSong( artist, song, url, isStream )
 	local jb = vgui.Create( "hub_button", self )
-	jb:SetSize(self:GetWide()-8, 24)
+	jb:SetSize(self:GetWide()-8, 20)
 	jb:SetText(song)
 	jb:SetTextColor( AuColors.New.E )
-	jb:SetTextShadow( 0 )
-	jb:SetColors(Color(128,128,128, 90), AuColors.New.C )
+	--jb:SetTextShadow( 0 )
+	jb:SetColors(Color(128,128,128, 90), AuColors.New.E30 )
 	jb.link = url
 	jb.name = song
 	jb.artist = artist
@@ -1010,7 +877,7 @@ function EXPAND:AddSong( artist, song, url, isStream )
 		
 	end
 
-	jb:SetPos(4, 32 + self.songcount*28 )
+	jb:SetPos(4, 22 + self.songcount*22 )
 	self.songcount = self.songcount + 1
 end
 
@@ -1036,7 +903,7 @@ function EXPAND:PerformLayout()
 end
 
 function EXPAND:Paint(w,h)
-	surface.SetDrawColor( AuColors.New.E )
+	surface.SetDrawColor( AuColors.New.E30 )
 	surface.DrawOutlinedRect( 0,0,w,h )
 
 	if self.open then
@@ -1047,23 +914,26 @@ function EXPAND:Paint(w,h)
 
 	self.frac = math.Clamp( self.frac, 0, 1 )
 
-	local height = self.songcount*28
+	local height = self.songcount*22 + 2
 
-	self:SetTall( 32 + ( self.open and QuadLerp( self.frac, 0, height ) or QuadLerp( 1-self.frac, height, 0 ) ) )
+	self:SetTall( 22 + ( self.open and QuadLerp( self.frac, 0, height ) or QuadLerp( 1-self.frac, height, 0 ) ) )
 	if self.frac > 0 or self.frac < 1 then
 		self:GetParent():Layout()
 	end
 
 	local m = Matrix()
-	local wx, wy = self:LocalToScreen( w - 16, 16 )
+	local wx, wy = self:LocalToScreen( w - 16, 12 )
 	m:Translate( Vector(wx,wy) )
 	m:Rotate( Angle(0, ( self.open and QuadLerp( self.frac, 0, 180 ) or QuadLerp( 1-self.frac, 180, 0 ) ) ,0) )
 	m:Translate( -Vector(wx,wy) )
 
 	cam.PushModelMatrix( m )
-	draw.SimpleText("▼", "Screen_Medium", w-16, 16, AuColors.New.E, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+	draw.SimpleText("▼", "au_small", w-16, 12, AuColors.New.E, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 	cam.PopModelMatrix()
 
+	surface.SetAlphaMultiplier( self.open and QuadLerp( self.frac, 0.6, 1 ) or QuadLerp( 1-self.frac, 1, 0.6 ) )
+	draw.SimpleText( tostring( self.songcount ).." Track"..( (self.songcount ~= 1) and "s" or ""), "au_small", w-32, 12, AuColors.New.E, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+	surface.SetAlphaMultiplier(1)
 end
 
 vgui.Register("hub_jukebox_expand", EXPAND)
@@ -1088,6 +958,12 @@ local JukeStates = {
 	["cycleall"] = "Cycle All",
 	["cyclequeue"] = "Cycle Queue"
 }
+
+timer.Create("SaveJukeState", 1, 0, function()
+	if RS:GetClientData("jukestate") ~= RS.JukeState then
+		RS:SetClientData("jukestate",RS.JukeState)
+	end
+end)
 
 function RS:JukeboxPickRandom()
 	local songlist = {}
@@ -1241,9 +1117,18 @@ function RS:JukeboxStopStream()
 		RS.KeepStreaming = false
 		RS.StreamChannel = nil
 	end
+
+	RS:SetClientData("continue","none")
 end
 
-hook.Add("DeathrunBeginPrep", "FixJukeBoxDeathrun", function()
+function RS:JukeboxStopSong()
+	if RS.JukePlayer then
+		RS.JukePlayer:OpenURL("http://vhs7.tv")
+	end
+	RS:SetClientData("continue","none")
+end
+
+hook.Add("PostCleanupMap", "FixJukeBoxDeathrun", function()
 	--print( RS.KeepStreaming, "Memes" )
 	if RS.KeepStreaming then
 		print("Attempting to continue stream...")
@@ -1254,27 +1139,21 @@ hook.Add("DeathrunBeginPrep", "FixJukeBoxDeathrun", function()
 	end
 end)
 
-hook.Add("TTTPrepareRound", "FixJukeBoxTTT", function()
-	--print( RS.KeepStreaming, "Memes" )
-	if RS.KeepStreaming then
-		print("Attempting to continue stream...")
-		if IsValid(RS.StreamChannel) then
-			RS.StreamChannel:Play()
-			print("Attempting to play stream...")
-		end
-	end
-end)
-
-hook.Add("OnStartRound", "FixJukeboxMurder", function()
-	timer.Simple(1, function()
-		if RS.KeepStreaming then
-			print("Attempting to continue stream...")
-			if IsValid(RS.StreamChannel) then
-				RS.StreamChannel:Play()
-				print("Attempting to play stream...")
+hook.Add("InitPostEntity", "JukeboxBetweenMaps", function()
+	local cont = RS:GetClientData("continue")
+	local data = RS:GetClientData("continue_data")
+	if data then
+		data = util.JSONToTable( data )
+		if cont == "stream" then
+			if data then
+				RS:JukeboxStartStream( unpack( data ) )
+			end
+		elseif cont == "song" then
+			if data then
+				RS:JukeboxStartPlayer( unpack( data ) )
 			end
 		end
-	end)
+	end
 end)
 
 function RS:JukeboxStartStream( url, niceName )
@@ -1282,6 +1161,7 @@ function RS:JukeboxStartStream( url, niceName )
 		niceName = ""
 	end
 	RS:JukeboxStopStream()
+	RS:JukeboxStopSong()
 	RS.KeepStreaming = true
 	sound.PlayURL( url, "", function( ch )
 		if IsValid( ch ) then
@@ -1303,12 +1183,16 @@ function RS:JukeboxStartStream( url, niceName )
 			RS:GiftNotify( "Stream failed to load :(" )
 		end
 	end)
+
+	RS:SetClientData("continue", "stream")
+	RS:SetClientData("continue_data", util.TableToJSON({url, niceName}) )
 end
 
 
 function RS:JukeboxStartPlayer( artist, song, link )
 
 	RS:JukeboxStopStream()
+	RS:JukeboxStopSong()
 	RS.KeepStreaming = true
 	
 	link = string.Replace(link, "https://www.youtube.com/watch?v=", "")
@@ -1330,7 +1214,27 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	-- net.SendToServer()
 
 	RS:GiftNotify( "NOW PLAYING: "..artist.." - "..song, true )
-	
+	RS:SetClientData("continue", "song")
+	RS:SetClientData("continue_data", util.TableToJSON({artist,song,link}) )
+end
+
+if not file.Exists( "grhub_persist_data.txt", "DATA" ) then
+	file.Write("grhub_persist_data.txt", "[]")
+end
+
+RS.PersistData = util.JSONToTable( file.Read("grhub_persist_data.txt","DATA") )
+
+function RS:SetClientData( id, val )
+	RS.PersistData["id_"..tostring(id)] = val
+	file.Write("grhub_persist_data.txt", util.TableToJSON( RS.PersistData ) )
+end
+
+function RS:GetClientData( id, def )
+	return RS.PersistData["id_"..tostring(id)] or def
+end
+
+if RS:GetClientData("jukestate") then
+	RS.JukeState = RS:GetClientData("jukestate")
 end
 
 if not file.Exists("grhub_jukebox_queue.txt", "DATA") then
@@ -1343,12 +1247,12 @@ function RS:UpdateJukeQueue()
 
 	self.JukeQueueList:Clear()
 
-	local lb = self.JukeQueueList:Add("hub_label")
-	lb:SetSize(self.JukeQueueList:GetWide()-12, 64)
-	lb:SetText( "Queued Songs" )
-	lb:SetFont("Screen_Medium")
-	lb:SetColor(AuColors.New.E)
-	lb:SetOffsets( 0,0 )
+	-- local lb = self.JukeQueueList:Add("hub_label")
+	-- lb:SetSize(self.JukeQueueList:GetWide()-12, 64)
+	-- lb:SetText( "Queued Songs" )
+	-- lb:SetFont("Screen_Medium")
+	-- lb:SetColor(AuColors.New.E)
+	-- lb:SetOffsets( 0,0 )
 
 	for i=1,#RS.JukeQueue do
 		local track = RS.JukeQueue[i]
@@ -1357,12 +1261,12 @@ function RS:UpdateJukeQueue()
 		local song = track[2]
 		local link = track[3]
 
-		local jb = self.JukeQueueList:Add( "hub_button" )
+		local jb = self.JukeQueueList:Add( "AuButton" )
 		jb:SetSize(self.JukeQueueList:GetWide()-8, 24)
 		jb:SetText(artist.." - "..song)
 		jb:SetTextColor( AuColors.New.E )
-		jb:SetTextShadow( 0 )
-		jb:SetColors(Color(128,128,128, 90), AuColors.New.C )
+		--jb:SetTextShadow( 0 )
+		jb:SetColors(Color(128,128,128, 90), AuColors.New.E30 )
 		jb.link = link
 		jb.name = song
 		jb.artist = artist
@@ -1428,7 +1332,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	--local inventory = hub.largemulti:AddTab("Inventory")
 	local juketab = hub.largemulti:AddTab("Jukebox")
 	local supp = hub.largemulti:AddTab("Support Us")
-	local info = hub.largemulti:AddTab("Commands")
+	local info = hub.largemulti:AddTab("Help")
 
 	-- info panel, i.e commands
 	info.html = vgui.Create("DHTML", info)
@@ -1542,8 +1446,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 	-- top left: 8, 72
 	-- preview store items
 	local previewcon = vgui.Create("DPanel", storetab)
-	previewcon:SetSize( storetab:GetWide()*0.3333333333 -8, storetab:GetTall() - 36)
-	previewcon:SetPos(storetab:GetWide()*0.66666666666 + 8, 24)
+	previewcon:SetSize( storetab:GetWide()*0.3333333333 -8, storetab:GetTall() - 12)
+	previewcon:SetPos(storetab:GetWide()*0.66666666666 + 8, 0)
 	function previewcon:Paint()
 		surface.SetDrawColor(225,225,225)
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
@@ -1737,7 +1641,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		-- cam.End3D()
 		-- cam.IgnoreZ( false )
 
-		AuShadowText("Maximum "..tostring( RS.ModelsPerPlayer ).." hats.", "Screen_Small2", 4, ph-4, AuColors.New.E, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1 )
+		AuShadowText("Maximum "..tostring( RS.ModelsPerPlayer ).." hats.", "Screen_Small2", 4, ph-4, AuColors.New.E, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM, 1 )
 
 	end
 
@@ -1803,7 +1707,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	local inventory = store:AddTab("Inventory")
 
 	inventory.scr = vgui.Create("DScrollPanel", inventory)
-	inventory.scr:SetSize(inventory:GetWide()-4, inventory:GetTall() -16 -4 -26)
+	inventory.scr:SetSize(inventory:GetWide()-4, inventory:GetTall() -16 -4 -26 -6)
 	inventory.scr:SetPos(2,2)
 	RS:ImproveScrollbar( inventory.scr:GetVBar() )
 
@@ -1819,9 +1723,19 @@ function RS:CreateHubWindow( hubdata, opentab )
 	RS:UpdateInventory()
 
 	-- dropdown to select sort method
-	local comb = vgui.Create("DComboBox", inventory)
-	comb:SetSize( 192, 24 )
-	comb:SetPos( 2, inventory.scr:GetTall() + 2 + 4 )
+
+	local sortpanel = vgui.Create("DPanel", inventory)
+	sortpanel:SetSize( inventory.scr:GetWide(), 30 )
+	sortpanel:SetPos( 2, inventory.scr:GetTall() + 2 + 4 + 5 )
+
+	function sortpanel:Paint(w,h)
+		surface.SetDrawColor( AuColors.New.E )
+		surface.DrawRect(0,0,w,h)
+	end
+
+	local comb = vgui.Create("DComboBox", sortpanel)
+	comb:SetSize( 192, 21 )
+	comb:SetPos( 4, 4 )
 
 	local sorts = {
 		"ID",
@@ -1906,9 +1820,9 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.stop:SetPos(92+4, juke.browse:GetTall()-106)
 	juke.stop:SetFont("Screen_Small")
 	juke.stop:SetText("■")
-	juke.stop:SetOffsets(0,-10)
+	juke.stop:SetOffsets(0,0)
 	function juke.stop:DoClick()
-		RS.JukePlayer:OpenURL("http://vhs7.tv/about.php")
+		RS:JukeboxStopSong()
 		RS:JukeboxStopStream()
 	end
 	juke.stop:SetColors( AuColors.New.E, AuColors.New.D )
@@ -2007,9 +1921,9 @@ function RS:CreateHubWindow( hubdata, opentab )
 		local artist = k
 		local songs = v
 		local lb = juke.browse.list:Add("hub_jukebox_expand")
-		lb:SetSize(juke.browse.list:GetWide()-12, 32)
+		lb:SetSize(juke.browse.list:GetWide()-12, 22)
 		lb:SetText( artist )
-		lb:SetFont("Screen_Medium")
+		lb:SetFont("au_small")
 		lb:SetColor( AuColors.New.E )
 		lb:SetOffsets( 0,0 )
 
@@ -2034,9 +1948,9 @@ function RS:CreateHubWindow( hubdata, opentab )
 		local region = k
 		local stations = v
 		local lb = juke.streams.list:Add("hub_jukebox_expand")
-		lb:SetSize(juke.streams.list:GetWide()-12, 32)
+		lb:SetSize(juke.streams.list:GetWide()-12, 22)
 		lb:SetText( region )
-		lb:SetFont("Screen_Medium")
+		lb:SetFont("au_small")
 		lb:SetColor( AuColors.New.E )
 		lb:SetOffsets( 0,0 )
 
@@ -2054,9 +1968,9 @@ function RS:CreateHubWindow( hubdata, opentab )
 
 	queue.browse.list = vgui.Create("DIconLayout")
 	queue.browse.scroll:AddItem(queue.browse.list)
-	queue.browse.list:SetSize( queue.browse.scroll:GetWide()-4, queue.browse.scroll:GetTall())
+	queue.browse.list:SetSize( queue.browse.scroll:GetWide()-4, queue.browse.scroll:GetTall()-4)
 	queue.browse.list:SetSpaceY(2)
-	queue.browse.list:SetPos(2,0)
+	queue.browse.list:SetPos(2,2)
 
 	juke.info = vgui.Create("DPanel", queue)
 	juke.info:SetSize((queue:GetWide()-4)*0.66666 -1, 92)
@@ -2065,8 +1979,8 @@ function RS:CreateHubWindow( hubdata, opentab )
 		surface.SetDrawColor(AuColors.New.E)
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
 		
-		draw.ShadowText("Now Playing: "..RS.JukeCurrent[2],"Screen_Large",16,8,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM,1)
-		draw.ShadowText("By "..RS.JukeCurrent[1],"Screen_Medium",17,42,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_BOTTOM,1)
+		draw.ShadowText("Now Playing: "..RS.JukeCurrent[2],"Screen_Large",16,8,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1)
+		draw.ShadowText("By "..RS.JukeCurrent[1],"Screen_Medium",17,42,Color(255,255,255),TEXT_ALIGN_LEFT,TEXT_ALIGN_TOP,1)
 	end
 	juke.volume = vgui.Create("DPanel", queue)
 	juke.volume:SetSize((queue:GetWide()-4)*0.33333, 92)
@@ -2074,7 +1988,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	function juke.volume:Paint()
 		surface.SetDrawColor(AuColors.New.E)
 		surface.DrawRect(0,0,self:GetWide(),self:GetTall())
-		draw.ShadowText("Volume: "..tostring( math.floor(RS.JukeVolume) ), "Screen_Medium", self:GetWide()/2, 10, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1)
+		draw.ShadowText("Volume: "..tostring( math.floor(RS.JukeVolume) ), "Screen_Medium", self:GetWide()/2, 10, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
 	end
 
 	local sl = vgui.Create("Slider", juke.volume)
@@ -2469,8 +2383,8 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 	local cratemodel = vgui.Create("DModelPanel", cratepanel)
 	cratemodel:SetModel( crate.CrateModel )
 	cratemodel:SetSize(cratemodel:GetParent():GetSize())
-	cratemodel:SetLookAt( Vector(0,0,5) )
-	cratemodel:SetFOV( 40 )
+	cratemodel:SetLookAt( Vector(0,0,10) - (crate.IconPosOff or Vector(0,0,0) ) )
+	cratemodel:SetFOV( crate.IconFOV or 40 )
 	cratemodel.Entity:SetMaterial( crate.CrateMat )
 
 	local resultpanel = vgui.Create("DPanel", frame)

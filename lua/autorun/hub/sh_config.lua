@@ -2,7 +2,7 @@ RS.PDataProvider = "redactedhub_default_provider" -- don't need to change this u
 RS.OpenMenuCommands = {"shop","store"}
 
 
-RS.HubTitle = "VHS-7 / Server Hub"
+RS.HubTitle = "VHS-7 / SERVER HUB"
 RS.Currency = "VC" -- "VaporCredits"
 RS.CurrencyFull = "Vapor Credits"
 

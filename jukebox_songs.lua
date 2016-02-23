@@ -408,6 +408,7 @@ tempstreams = {
 		["Diamond City Radio"] = "http://46.101.243.245:8000/falloutfm7.ogg",
 		["Classical Radio"] = "http://46.101.243.245:8000/falloutfm6.ogg",
 		["Galaxy News Radio"] = "http://40.76.26.172:9786/listen.pls",
+		["Enclave Radio"] = "http://46.101.243.245:8000/falloutfm1.ogg",
 	}
 }
 
