@@ -44,7 +44,8 @@ tempsongs = {
 	["Queen"] = {
 		["Bohemian Rhapsody"] = "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
 		["I Want To Break Free"] = "https://www.youtube.com/watch?v=eM8Ss28zjcE",
-		["Under Pressure"] = " https://www.youtube.com/watch?v=a01QQZyl-_I"
+		--["Under Pressure"] = " https://www.youtube.com/watch?v=a01QQZyl-_I" broken
+		["Radio Ga Ga"] = "https://www.youtube.com/watch?v=azdwsXLmrHE",
 	},
 	["Cee Lo Green"] = {
 		["Forget You"] = "https://www.youtube.com/watch?v=bKxodgpyGec",
@@ -364,7 +365,33 @@ tempsongs = {
 
 	["Toto"] = {
 		["Africa"] = "https://www.youtube.com/watch?v=FTQbiNvZqaY"
-	}
+	},
+
+	["Bonnie Tyler"] = {
+		["Total Eclipse of the Heart"] = "https://www.youtube.com/watch?v=lcOxhH8N3Bo",
+		["Holding Out for a Hero"] = "https://www.youtube.com/watch?v=bWcASV2sey0",
+	},
+
+	["The Buggles"] = {
+	    ["Video Killed The Radio Star"] = "https://www.youtube.com/watch?v=W8r-tXRLazs",
+	},
+
+	["Just A Gent"] = {
+		["Heavy as a Heartbreak (feat. LANKS)"] = "https://www.youtube.com/watch?v=XV-wUFbgBU4",
+	},
+
+	["Godot"] = {
+		["The Fragrance of Dark Coffee"] = "https://www.youtube.com/watch?v=HMnrl0tmd3k"
+	},
+
+	["Flume"] = {
+		["Never Be Like You feat. Kai"] = "https://www.youtube.com/watch?v=Ly7uj0JwgKg",
+	},
+
+	["Lorde"] = {
+		["Tennis Court (Flume Remix)"] = "https://www.youtube.com/watch?v=8ATu1BiOPZA",
+
+	},
 }
 
 tempstreams = {
