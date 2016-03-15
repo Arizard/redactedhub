@@ -175,7 +175,8 @@ tempsongs = {
 		["Where Are U Now (feat. Justin Bieber)"] = "https://www.youtube.com/watch?v=nntGTK2Fhb0"
 	},
 	["Justin Bieber"] = {
-		["What Do U Mean"] = "https://www.youtube.com/watch?v=NywWB67Z7zQ"
+		["What Do U Mean"] = "https://www.youtube.com/watch?v=NywWB67Z7zQ",
+		["Love Yourself"] = "https://www.youtube.com/watch?v=oyEuk8j8imI",
 	},
 	["Macintosh Plus"] = {
 		[ [[リサフランク420 / 現代のコンピュー]] ] = "https://www.youtube.com/watch?v=cU8HrO7XuiE"
