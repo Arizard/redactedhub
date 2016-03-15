@@ -183,7 +183,8 @@ tempsongs = {
 	["CHVRCHES"] = {
 		["Leave A Trace"] = "https://www.youtube.com/watch?v=4Eo84jDIMKI",
 		["Clearest Blue"] = "https://www.youtube.com/watch?v=QpFXXPruuqU",
-		["Recover"] = "https://www.youtube.com/watch?v=JyqemIbjcfg"
+		["Recover"] = "https://www.youtube.com/watch?v=JyqemIbjcfg",
+		["Never Ending Circles"] = "https://www.youtube.com/watch?v=AU9_0pxiDjY",
 	},
 	["Macklemore & Ryan Lewis"] = {
 		["Downtown"] = "https://www.youtube.com/watch?v=JGhoLcsr8GA"
@@ -386,12 +387,86 @@ tempsongs = {
 
 	["Flume"] = {
 		["Never Be Like You feat. Kai"] = "https://www.youtube.com/watch?v=Ly7uj0JwgKg",
+		["Smoke & Retribution feat. Vince Staples & Kucka"] = "https://www.youtube.com/watch?v=4fAzM5cI5FM",
 	},
 
 	["Lorde"] = {
 		["Tennis Court (Flume Remix)"] = "https://www.youtube.com/watch?v=8ATu1BiOPZA",
 
 	},
+
+	["Chet Faker"] = {
+		["The Trouble With Us"] = "https://www.youtube.com/watch?v=JAd--mEjcco",
+	},
+
+	["Jess Kent"] = {
+		["Get Down"] = "https://www.youtube.com/watch?v=eNQqEtibfoc",
+	},
+
+	["Drake"] = {
+		["Hotline Bling"] = "https://www.youtube.com/watch?v=uxpDa-c-4Mc",
+		["Hold On, We're Going Home"] = "https://www.youtube.com/watch?v=UEs97EhtuGk"
+	},
+
+	["Nicole Millar"] = {
+		["Tremble"] = "https://www.youtube.com/watch?v=IPhxjNDnEi0"
+	},
+
+	["Aluna George"] = {
+		["I'm In Control"] = "https://www.youtube.com/watch?v=NSdcG1e9APE",
+	},
+
+	["Violent Soho"] = {
+		["Viceroy"] = "https://www.youtube.com/watch?v=4sHArWki1aQ",
+		["Like Soda"] = "https://www.youtube.com/watch?v=hRWi-SvzviY",
+		["Neighbour Neighbour"] = "https://www.youtube.com/watch?v=2kotmVEsA9I",
+		["Covered in Chrome"] = "https://www.youtube.com/watch?v=RN9NC4iQcsA",
+	},
+
+	["Flosstradamus & NGHTMRE"] = {
+		["Lighters Up"] = "https://www.youtube.com/watch?v=WGyWvBRP92E",
+	},
+
+	["Ladyhawke"] = {
+		["A Love Song"] = "https://www.youtube.com/watch?v=zqQSxHrrSkE",
+	},
+
+	["Last Dinosaurs"] = {
+		["Apollo"] = "https://www.youtube.com/watch?v=M01rsp80LCk",
+	},
+
+	["Grimes"] = {
+		["California"] = "https://www.youtube.com/watch?v=77w13GzY1No",
+		["Oblivion"] = "https://www.youtube.com/watch?v=m5H-YlcMSbc",
+		["Flesh Without Blood"] = "https://www.youtube.com/watch?v=Tv9YoYCKNoE",
+	},
+
+	["The Rubens"] = {
+		["Hold Me Back"] = "https://www.youtube.com/watch?v=Hs58pcvDsXA",
+		["Hoops"] = "https://www.youtube.com/watch?v=LFBe_wP2_gw",
+	},
+
+	["Elizabeth Rose"] = {
+		["Playing with Fire feat. REMI"] = "https://www.youtube.com/watch?v=VmihmGgHi8E",
+
+	},
+
+	["Carmada"] = {
+		["On Fire feat. Maribelle"] = "https://www.youtube.com/watch?v=kF9_8iy_Sqg",
+	},
+
+	["RUFUS"] = {
+		["Say A Prayer For Me"] = "https://www.youtube.com/watch?v=AoJVp237r6A",
+	},
+
+	["Miike Snow"] = {
+		["Ghengis Khan"] = "https://www.youtube.com/watch?v=P_SlAzsXa7E",
+	},
+
+	["Urthboy"] = {
+		["Second Heartbeat feat. Sampa The Great and Okenyo"] = "https://www.youtube.com/watch?v=WNyDtGJ0Q6k",
+	},
+
 }
 
 tempstreams = {
