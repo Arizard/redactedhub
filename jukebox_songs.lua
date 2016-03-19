@@ -485,9 +485,6 @@ tempsongs = {
 	},
 }
 
-
-}
-
 tempstreams = {
 	["Assorted Genres"] = {
 		["Triple J"] = "http://www.abc.net.au/res/streaming/audio/mp3/triplej.pls",
