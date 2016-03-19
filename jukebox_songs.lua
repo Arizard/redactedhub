@@ -80,9 +80,9 @@ tempsongs = {
 		["Walking On The Moon"] = "https://www.youtube.com/watch?v=K2BlPcG74eo",
 		["Message In A Bottle"] = "https://www.youtube.com/watch?v=67Qagb2Vk4Y",
 	},
-	["Billy Joel"] = {
-		["Piano Man"] = "https://www.youtube.com/watch?v=gxEPV4kolz0",
-	},
+	-- ["Billy Joel"] = {
+	-- 	["Piano Man"] = "https://www.youtube.com/watch?v=gxEPV4kolz0",
+	-- },
 	["Elton John"] = {
 		["Rocket Man"] = "https://www.youtube.com/watch?v=-LX7WrHCaUA",
 		["Can You Feel The Love Tonight? [The Lion King]"] = "https://www.youtube.com/watch?v=25QyCxVkXwQ",
@@ -155,7 +155,8 @@ tempsongs = {
 		["Don't Stop Believing"] = "https://www.youtube.com/watch?v=1k8craCGpgs"
 	},
 	["Billy Joel"] = {
-		["Uptown Girl"] = "https://www.youtube.com/watch?v=hCuMWrfXG4E"
+		["Uptown Girl"] = "https://www.youtube.com/watch?v=hCuMWrfXG4E",
+		["Piano Man"] = "https://www.youtube.com/watch?v=gxEPV4kolz0",
 	},
 	["Spandau Ballet"] = {
 		["Gold"] = "https://www.youtube.com/watch?v=ntG50eXbBtc"
