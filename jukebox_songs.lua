@@ -470,6 +470,22 @@ tempsongs = {
 		["Second Heartbeat feat. Sampa The Great and Okenyo"] = "https://www.youtube.com/watch?v=WNyDtGJ0Q6k",
 	},
 
+	["$UICIDEBOY$"] = {
+		["Antarctica"] = "https://www.youtube.com/watch?v=2QEijk5VZbk",
+	},
+
+	["Knife Party"] = {
+		["Bonfire"] = "https://www.youtube.com/watch?v=e-IWRmpefzE",
+		["Internet Friends"] = "https://www.youtube.com/watch?v=luJJBeCFeM0",
+		["LRAD"] = "https://www.youtube.com/watch?v=4qC9KwujVtQ",
+		["Centipede"] = "https://www.youtube.com/watch?v=kXp6wOg6pxM",
+		["PLUR Police"] = "https://www.youtube.com/watch?v=wi8ITCWzX-Q",
+		["Parliament Funk"] = "https://www.youtube.com/watch?v=0RyGqLFOXEo",
+		["Kraken (With Tom Staar)"] = "https://www.youtube.com/watch?v=46aUL9y5uUc",
+	},
+}
+
+
 }
 
 tempstreams = {
