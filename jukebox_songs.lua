@@ -483,6 +483,22 @@ tempsongs = {
 		["Parliament Funk"] = "https://www.youtube.com/watch?v=0RyGqLFOXEo",
 		["Kraken (With Tom Staar)"] = "https://www.youtube.com/watch?v=46aUL9y5uUc",
 	},
+
+	["Fall Out Boy"] = {
+		["Disloyal Order of Water Buffaloes"] = "https://www.youtube.com/watch?v=tqB6llqyaVg",
+		["She's My Winona"] = "https://www.youtube.com/watch?v=9TcjcRfRmpA",
+		["I Don't Care"] = "https://www.youtube.com/watch?v=90MxRK0P1u0",
+		["America's Suitehearts"] = "https://www.youtube.com/watch?v=kzddyeXvbSE",
+		["Headfirst Slide Into Cooperstown On A Bad Bet"] = "https://www.youtube.com/watch?v=c8cIEGkZ-yA",
+		["The (Shipped) Gold Standard"] = "https://www.youtube.com/watch?v=kRdKQ2e7E0E",
+		["[Coffee's For Closers"] = "https://www.youtube.com/watch?v=8zi3sQEnhGY",
+		["What A Catch, Donnie"] = "https://www.youtube.com/watch?v=_lkJkwnXQZ8",
+		["27"] = "https://www.youtube.com/watch?v=Ha9KAJY1yzo",
+		["Tiffany Blews"] = "https://www.youtube.com/watch?v=FxkckEH7hMY",
+		["w.a.m.s"] = "https://www.youtube.com/watch?v=0UBDsDttrp8",
+		["20 Dollar Nosebleed"] = "https://www.youtube.com/watch?v=_NX6duV7ipQ",
+		["West Coast Smoker"] = "https://www.youtube.com/watch?v=KP1KyqWoDd0",
+	}
 }
 
 tempstreams = {
