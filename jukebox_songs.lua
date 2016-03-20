@@ -491,7 +491,7 @@ tempsongs = {
 		["America's Suitehearts"] = "https://www.youtube.com/watch?v=kzddyeXvbSE",
 		["Headfirst Slide Into Cooperstown On A Bad Bet"] = "https://www.youtube.com/watch?v=c8cIEGkZ-yA",
 		["The (Shipped) Gold Standard"] = "https://www.youtube.com/watch?v=kRdKQ2e7E0E",
-		["[Coffee's For Closers"] = "https://www.youtube.com/watch?v=8zi3sQEnhGY",
+		["[Coffee's For Closers]"] = "https://www.youtube.com/watch?v=8zi3sQEnhGY",
 		["What A Catch, Donnie"] = "https://www.youtube.com/watch?v=_lkJkwnXQZ8",
 		["27"] = "https://www.youtube.com/watch?v=Ha9KAJY1yzo",
 		["Tiffany Blews"] = "https://www.youtube.com/watch?v=FxkckEH7hMY",
