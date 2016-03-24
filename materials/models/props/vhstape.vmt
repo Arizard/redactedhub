@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/props/vhstape"
+	"$surfaceprop" "plastic"
+	"$model" 1
+}

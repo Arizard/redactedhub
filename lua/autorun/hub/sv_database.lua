@@ -108,9 +108,14 @@ function RS:GetDatabase()
 	return res
 end
 
-function RS:GetOwnedItems(ply)
+function RS:GetOwnedItems(ply, slim)
 	print("retrieving owned items for",ply:Nick())
-	local res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."'")
+	local res
+	if not slim then
+		res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."'")
+	else
+		res = sql.Query("SELECT ID, category, class, equipped FROM shop_items WHERE owner_id64='"..ply:SteamID64().."'")
+	end
 	if res == false then print(sql.LastError()) return end
 	return res
 end
@@ -121,8 +126,14 @@ function RS:GetOwnsClass( ply, class )
 	return res ~= nil and true or false
 end
 
-function RS:GetEquippedItems( ply )
-	local res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."' AND equipped=1")
+function RS:GetEquippedItems( ply, slim )
+	local res
+	if not slim then
+		res = sql.Query("SELECT * FROM shop_items WHERE owner_id64='"..ply:SteamID64().."' AND equipped=1")
+	else
+		res = sql.Query("SELECT ID, category, class, equipped FROM shop_items WHERE owner_id64='"..ply:SteamID64().."' AND equipped=1")
+	end
+
 	if res == false then print(sql.LastError()) return end
 	if res ~= nil then
 		return res

@@ -460,13 +460,13 @@ function ICON:PerformLayout()
 				self.m.pur = self.m:AddOption("Purchase ("..tostring(self:GetParent().item.StorePrice).." "..RS.Currency..")", 
 					function() 
 						BuyItem( self:GetParent().item.Class ) 
-					end):SetIcon( "icon16/coins_delete.png")
+					end):SetIcon( "icon16/money_delete.png")
 				for i = 1, 4 do
 					self.m["restock_"..tostring(i)] = self.m:AddOption("Restock ("..tostring(i*8)..")", 
 						function() 
 							RunConsoleCommand( "shop_restock", self:GetParent().item.Class, i*8 )
 							self:GetParent():SetStock( self:GetParent():GetStock() + i*8 )
-						end):SetIcon( "icon16/coins_delete.png")
+						end):SetIcon( "icon16/money_delete.png")
 				end
 			
 				self.m:Open()
@@ -490,7 +490,7 @@ function ICON:PerformLayout()
 				self.m.custom = self.m:AddOption( self:GetParent().item.CustomOptionsName, function() self:GetParent().item:DoCustomOptions( self:GetParent().item.id ) end ):SetIcon("icon16/wrench.png")
 			end
 
-			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() if IsValid( self ) then SellItem( self:GetParent():GetID() ) end end ):SetIcon( "icon16/coins_add.png")
+			self.m.s = self.m:AddOption( "Sell ("..tostring(math.floor(self:GetParent().item.StorePrice * RS.RefundRatio)).." "..RS.Currency..")", function() if IsValid( self ) then SellItem( self:GetParent():GetID() ) end end ):SetIcon( "icon16/money_add.png")
 
 			self.m.send = self.m:AddSubMenu("Send To")
 
@@ -855,7 +855,7 @@ function EXPAND:AddSong( artist, song, url, isStream )
 			mn:AddOption("Play Song", function()
 				RS:JukeboxStartPlayer( self.artist, self.name, self.link )
 			end):SetIcon("icon16/control_play_blue.png")
-			mn:AddOption("Queue Song", function()
+			mn:AddOption("Add to Mixtape", function()
 				table.insert(RS.JukeQueue, {self.artist, self.name, self.link} )
 				RS:UpdateJukeQueue()
 			end):SetIcon("icon16/script_add.png")
@@ -954,9 +954,9 @@ RS.JukeQueueIndex = 1
 RS.JukeState = "shuffleall"
 local JukeStates = {
 	["shuffleall"] = "Shuffle All",
-	["shufflequeue"] = "Shuffle Queue",
+	["shufflequeue"] = "Shuffle Mixtape",
 	["cycleall"] = "Cycle All",
-	["cyclequeue"] = "Cycle Queue"
+	["cyclequeue"] = "Cycle Mixtape"
 }
 
 timer.Create("SaveJukeState", 1, 0, function()
@@ -1176,7 +1176,7 @@ function RS:JukeboxStartStream( url, niceName )
 
 			RS.JukeCurrent = { "[RADIO STREAM]", niceName, url }
 
-			-- net.Start("RS_JukeboxNowPlaying2")
+			-- net.Start("JukeboxTell", true)
 			-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
 			-- net.SendToServer()
 		else
@@ -1209,7 +1209,7 @@ function RS:JukeboxStartPlayer( artist, song, link )
 		RS.JukePlayer:Call("ytplayer.setVolume( "..tonumber( GetConVarNumber("grhub_jukebox_volume") ).." );")
 	end )
 
-	-- net.Start("RS_JukeboxNowPlaying2")
+	-- net.Start("JukeboxTell", true)
 	-- net.WriteString( util.TableToJSON( RS.JukeCurrent ) )
 	-- net.SendToServer()
 
@@ -1277,7 +1277,7 @@ function RS:UpdateJukeQueue()
 			mn:AddOption("Play Song", function()
 				RS:JukeboxStartPlayer( artist, song, link )
 			end):SetIcon("icon16/control_play_blue.png")
-			mn:AddOption("Unqueue Song", function()
+			mn:AddOption("Remove from Mixtape", function()
 				table.remove(RS.JukeQueue, self.index )
 				RS:UpdateJukeQueue()
 			end):SetIcon("icon16/script_delete.png")
@@ -1330,7 +1330,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	hub.largemulti:SetPos(8,32)
 	local storetab = hub.largemulti:AddTab("Store")
 	--local inventory = hub.largemulti:AddTab("Inventory")
-	local juketab = hub.largemulti:AddTab("Jukebox")
+	local juketab = hub.largemulti:AddTab("Cassettes")
 	local supp = hub.largemulti:AddTab("Support Us")
 	local info = hub.largemulti:AddTab("Help")
 
@@ -1620,7 +1620,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		local x = self:GetWide()/2 - w/2
 		local y = 16 - math.abs( math.sin( CurTime()*5) )*5*( a/255 )
 
-		surface.SetDrawColor(HexColor("#E74C3C",a))
+		surface.SetDrawColor(HexColor("#E74C3C",math.min(255,a)))
 		surface.DrawRect(x,y, w, h)
 
 		draw.ShadowText(m, "Screen_Small", self:GetWide()/2, y + h/2, Color(255,255,255,a > 255 and 255 or ( a > 0 and a or 0 )), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
@@ -1741,7 +1741,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 		"ID",
 		"Rarity",
 		"Category",
-		"Alphabetical"
+		--"Alphabetical"
 	}
 
 	comb:SetValue( "Sort Mode: "..(sorts[ (RS.sortMode:GetFloat()+1) or 1 ] or "error") )
@@ -1791,7 +1791,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	queue:ArrowsVisible( false )
 	queue:SetPos( queue:GetParent():GetWide()/2+4, 0 )
 	queue:SetSize( queue:GetParent():GetWide()/2 - 4, queue:GetParent():GetTall())
-	queue.browse = queue:AddTab("Queue")
+	queue.browse = queue:AddTab("Mixtape")
 	
 	juke:SetPos(0,0)
 	juke:SetSize(juke:GetParent():GetWide()/2 - 4,juke:GetParent():GetTall())
@@ -1865,7 +1865,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.cyclequeue:SetSize(92,92/4)
 	juke.cyclequeue:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*1)
 	juke.cyclequeue:SetFont("Screen_Tiny")
-	juke.cyclequeue:SetText("Cycle Queue")
+	juke.cyclequeue:SetText("Cycle Mixtape")
 	juke.cyclequeue:SetOffsets(0,-0)
 	function juke.cyclequeue:DoClick()
 		RS.JukeState = "cyclequeue"
@@ -1887,7 +1887,7 @@ function RS:CreateHubWindow( hubdata, opentab )
 	juke.shufflequeue:SetSize(92,92/4)
 	juke.shufflequeue:SetPos((92+2)*4 + 2, juke.browse:GetTall()-106 + (92/4)*3)
 	juke.shufflequeue:SetFont("Screen_Tiny")
-	juke.shufflequeue:SetText("Shuffle Queue")
+	juke.shufflequeue:SetText("Shuffle Mixtape")
 	juke.shufflequeue:SetOffsets(0,-0)
 	function juke.shufflequeue:DoClick()
 		RS.JukeState = "shufflequeue"
@@ -2450,7 +2450,7 @@ function RS:OpenCrateGUI( result, class ) -- class as in crate class
 							surface.SetDrawColor( self.washcol )
 							surface.DrawRect(0,0,w,h)
 							AuShadowText( tostring(self.amt), "Screen_XLarge", w/2, h/2 - 16, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1 )
-							AuShadowText( RS.CurrencyFull.."!", "Screen_Medium", w/2, h/2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1 )
+							AuShadowText( RS.CurrencyFull.."!", "Screen_Medium", w/2, h/2, Color(255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1 )
 						end
 					end
 				end

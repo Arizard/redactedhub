@@ -611,9 +611,31 @@ RS:AddChatCommand("jukebox", function(ply)
 end)
 
 RS:AddChatCommandAlias("jukebox","juke")
+RS:AddChatCommandAlias("jukebox","jb")
+RS:AddChatCommandAlias("jukebox","cassettes")
 RS:AddChatCommandAlias("jukebox","music")
 RS:AddChatCommandAlias("restock","stock")
 
 RS:AddChatCommand("donate", function(ply)
 	ply:SendLua([[AdvertiseDonation(640,420)]])
+end)
+
+RS:AddChatCommand("RTN", function(ply)
+	ply:SendLua("surface.PlaySound('taunts/prankpatrol.ogg')")
+end)
+RS:AddChatCommandAlias("RTN", "rtn")
+
+
+-- send chat commands to clients
+util.AddNetworkString("SendChatCommandList")
+concommand.Add("hub_get_chat_commands", function(ply, cmd, args)
+	local cmds = {}
+
+	for k,v in pairs( RS.ChatCommands ) do
+		table.insert( cmds, k )
+	end
+
+	net.Start("SendChatCommandList")
+	net.WriteTable( cmds )
+	net.Send( ply )
 end)

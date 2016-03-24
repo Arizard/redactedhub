@@ -61,7 +61,9 @@ RS.Options = { -- gets drawn in the options tab
 	{"bool","hub_debughud", "Enable Debug HUD"},
 	{"bool","hub_confirm_prompt","Enable confirmation windows on selling/sending items"},
 	{"bool","hub_chat_messages","Enable [HUB] chat messages"},
-	{"bool","autime_draw","Enable playtime tracker on top left of the HUD"}
+	{"bool","autime_draw","Enable playtime tracker on top right of the HUD"},
+	{"bool","pointshud_draw", "Enable "..RS.Currency.." tracker on the top left of the HUD"},
+	{"bool","logbook_hud", "Enable !logbook tracker on the top left of the HUD"}
 }
 
 function RS:ReceiveVip()
@@ -70,7 +72,7 @@ end
 
 function RS:Initialize()
 
-	print(" RedactedHub - Clientside Hub initialized")
+	print("RedactedHub - Clientside Hub initialized")
 end
 
 net.Receive("RS:StoreChat", function()
@@ -551,7 +553,8 @@ local hatfonts = {
 	{"texthat_impact","Impact"},
 	{"texthat_greek", "Symbol"},
 	{"texthat_oldenglish","Old English Text MT"},
-	{"texthat_bodoni","Bodoni MT"}
+	{"texthat_bodoni","Bodoni MT"},
+	{"texthat_electronics","Electronics"}
 }
 
 local validfonts = {}
@@ -962,3 +965,53 @@ end)
 -- 		for k,v in ipairs( ents.FindByClass)
 -- 	end
 -- end)
+
+--
+
+local chatcmdcache = {}
+
+net.Receive("SendChatCommandList", function(len)
+
+	chatcmdcache = net.ReadTable()
+
+	PrintTable( chatcmdcache )
+
+end)
+
+hook.Add("HUDPaint", "GetChatCommandList", function()
+
+	RunConsoleCommand("hub_get_chat_commands")
+	hook.Remove("HUDPaint", "GetChatCommandList")
+
+end)
+
+hook.Add("OnChatTab", "CommandAutofill", function( text )
+
+	local pre = string.sub( text, 1, 1 )
+
+	if pre == "!" or pre == "/" then
+
+		local fill = text
+		local search = string.sub( text, 2, -1 )
+
+		if search ~= "" then
+
+			local matches = {}
+
+			for i = 1, #chatcmdcache do
+				local cmd = chatcmdcache[i]
+				if search == string.sub( cmd, 1, string.len(search) ) then
+					table.insert( matches, cmd )
+				end
+			end
+
+			if #matches > 0 then
+				return pre..matches[1]
+			end
+
+		end
+		--return fill
+
+	end
+
+end)

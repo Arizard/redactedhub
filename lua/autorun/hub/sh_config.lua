@@ -46,7 +46,7 @@ RS.InfoHTML = [[
 		</p>
 		<p>
 			<b>/juke</b><br>
-			Opens the jukebox where you can play music. This can also be accessed by clicking on the Jukebox tab in the Hub.<br>
+			Opens the Cassettes Library where you can play music. This can also be accessed by clicking on the Cassettes tab in the Hub.<br>
 			Aliases: <b>jukebox, music</b>.
 		</p>
 		<p>

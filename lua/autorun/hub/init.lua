@@ -35,7 +35,7 @@ function RS:GiftNotify( ply, msg )
 	net.Send( ply )
 end
 
-util.AddNetworkString("RS_JukeboxNowPlaying2")
+util.AddNetworkString("JukeboxTell")
 
 concommand.Add("hub_open2", function(ply, cmd, args) 
 	--local start = SysTime()
@@ -45,7 +45,7 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 
 		net.Start("OpenHub")
 		local data = {}
-		data.owneditems = RS:GetOwnedItems(ply)
+		data.owneditems = RS:GetOwnedItems(ply, true)
 		data.stock = RS:GetAllStocks() -- faster than doing it individually, less sql queries
 		data.opentab = tonumber(args[1] or 1)
 
@@ -54,6 +54,8 @@ concommand.Add("hub_open2", function(ply, cmd, args)
 		if args[1] then
 			data.opentab = args[1]
 		end
+
+		--PrintTable( data )
 
 		-- for k,v in pairs(RS.Items) do -- SUPER SLOW!!!
 		-- 	data.stock[k] = RS:GetStoreStock(v.Class)
@@ -270,7 +272,11 @@ function RS:OpenCrate( ply, id )
 						itemname = RS.Items[result].Name
 					end
 
-					RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
+					if RS.Items[result].Rarity then
+						if RS.Items[result].Rarity > 1 then
+							RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
+						end
+					end
 				end )
 			else
 				RS:StoreMessage(ply, "Your inventory is full. Considered donating?")
@@ -296,7 +302,7 @@ function ItemEquipAll( ply )
 
 	if ply:Team() == TEAM_SPECTATOR or not ply:Alive() then  return end
 	ply.TauntOnDeath = false
-	local eq = RS:GetEquippedItems( ply )
+	local eq = RS:GetEquippedItems( ply, true )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			if RS.Items[v["class"]] then
@@ -320,7 +326,7 @@ function ItemEquipAll2( ply, otherply ) -- equip otherply's inv onto ply
 
 	ItemHolsterAll( ply )
 
-	local eq = RS:GetEquippedItems( otherply ) -- holstr current inventory
+	local eq = RS:GetEquippedItems( otherply, true ) -- holstr current inventory
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			if RS.Items[v["class"]] then
@@ -360,7 +366,7 @@ end
 hook.Add("PlayerLoadout", "RS:PlayerSpawn", ItemPlayerSpawn)
 --hook.Remove("PlayerLoadout","RS:PlayerSpawn")
 function ItemHolsterAll( ply )
-	local eq = RS:GetEquippedItems( ply )
+	local eq = RS:GetEquippedItems( ply, true )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			RS:PlayerHolster( ply, tonumber(v["ID"]) )
@@ -369,7 +375,7 @@ function ItemHolsterAll( ply )
 end
 
 function ItemHolsterAll2( ply, otherply )
-	local eq = RS:GetEquippedItems( otherply )
+	local eq = RS:GetEquippedItems( otherply, true )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
 			RS:PlayerHolster( ply, tonumber(v["ID"]) )
@@ -378,14 +384,12 @@ function ItemHolsterAll2( ply, otherply )
 end
 
 function ItemHolsterAllTrails( ply )
-	local eq = RS:GetEquippedItems( ply )
+	local eq = RS:GetEquippedItems( ply, true )
 	if eq ~= nil then
 		for k,v in ipairs(eq) do
-			if RS.Items[v["class"]] then
-				if RS.Items[v["class"]].Category == "trails" then
+			if RS.Items[v["class"]].Category == "trails" then
 
-					RS:PlayerHolster( ply, tonumber(v["ID"]) )
-				end
+				RS:PlayerHolster( ply, tonumber(v["ID"]) )
 			end
 		end
 	end
@@ -394,7 +398,7 @@ function ItemPlayerDeath( ply )
 	timer.Simple(0.5, function()
 		ItemHolsterAll( ply )
 		if ply:Team() == TEAM_SPECTATOR then return end
-		local eq = RS:GetEquippedItems( ply )
+		local eq = RS:GetEquippedItems( ply, true )
 		if eq ~= nil then
 			for k,v in ipairs(eq) do
 				if RS.Items[v["class"]] then
@@ -626,15 +630,18 @@ hook.Add("PlayerLoadout", "UpdateDonatorStatus", UpdateDonatorStatus)
 
 -- jukebox notification functionality
 local lastJukeboxUpdate = 0
-local jukeUpdateInterval = 60
-net.Receive("RS_JukeboxNowPlaying2", function(len, ply)
+local jukeUpdateInterval = 15
+
+net.Receive("JukeboxTell", function(len, ply)
 	local current = util.JSONToTable( net.ReadString() )
 
 	if not ( lastJukeboxUpdate+jukeUpdateInterval > CurTime() ) then
 
 		lastJukeboxUpdate = CurTime()
-		RS:StoreBroadcast(ply:Nick().." is now listening to "..current[2].." by "..current[1].."! Type /juke to listen to more music!")
 
+		timer.Simple(3, function()
+			RS:StoreBroadcast(ply:Nick().." is now listening to "..current[2].." by "..current[1].."! Type /juke to listen to more music!")
+		end)
 	end
 end)
 
