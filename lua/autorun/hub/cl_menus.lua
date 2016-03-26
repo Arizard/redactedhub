@@ -1142,6 +1142,7 @@ end)
 hook.Add("InitPostEntity", "JukeboxBetweenMaps", function()
 	local cont = RS:GetClientData("continue")
 	local data = RS:GetClientData("continue_data")
+	local seek = RS:GetClientData("continue_position", 0)
 	if data then
 		data = util.JSONToTable( data )
 		if cont == "stream" then
@@ -1150,6 +1151,7 @@ hook.Add("InitPostEntity", "JukeboxBetweenMaps", function()
 			end
 		elseif cont == "song" then
 			if data then
+				table.insert(data, (seek ~= 0) and true or false )
 				RS:JukeboxStartPlayer( unpack( data ) )
 			end
 		end
@@ -1189,7 +1191,7 @@ function RS:JukeboxStartStream( url, niceName )
 end
 
 
-function RS:JukeboxStartPlayer( artist, song, link )
+function RS:JukeboxStartPlayer( artist, song, link, cont )
 
 	RS:JukeboxStopStream()
 	RS:JukeboxStopSong()
@@ -1199,8 +1201,9 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	link = string.Replace(link, "http://www.youtube.com/watch?v=", "")
 	--link = string.Replace(link, "/watch?v=","/embed/")
 	--link = link.."?autoplay=1"
-	local embed = "http://arizard.github.io/youtube_jukebox/host.html?v=" .. link .."&volume="..tostring(GetConVarNumber("grhub_jukebox_volume"))
-	--``print(embed)
+	local embed = "http://vhs7.tv/video.html?v=" .. link .."&volume="..tostring(GetConVarNumber("grhub_jukebox_volume")).."&seek="..(cont and RS:GetClientData("continue_position",0) or 0)
+
+	print(embed)
 	RS.JukePlayer:OpenURL(embed)
 	RS.JukePlayer:SetAllowLua( true )
 	RS.JukeCurrent = {artist,song,embed} -- parents everyehwere
@@ -1216,7 +1219,13 @@ function RS:JukeboxStartPlayer( artist, song, link )
 	RS:GiftNotify( "NOW PLAYING: "..artist.." - "..song, true )
 	RS:SetClientData("continue", "song")
 	RS:SetClientData("continue_data", util.TableToJSON({artist,song,link}) )
+
+	RS:SetClientData('continue_position', 0)
 end
+
+timer.Create("SaveJukeboxSeekTime", 2, 0, function()
+	RS.JukePlayer:Call("luaSavePosition()")
+end)
 
 if not file.Exists( "grhub_persist_data.txt", "DATA" ) then
 	file.Write("grhub_persist_data.txt", "[]")

@@ -498,6 +498,14 @@ tempsongs = {
 		["w.a.m.s"] = "https://www.youtube.com/watch?v=0UBDsDttrp8",
 		["20 Dollar Nosebleed"] = "https://www.youtube.com/watch?v=_NX6duV7ipQ",
 		["West Coast Smoker"] = "https://www.youtube.com/watch?v=KP1KyqWoDd0",
+	},
+	["Green Day"] = {
+		["Boulevard of Broken Dreams"] = "https://www.youtube.com/watch?v=aGzgoSg5OZg",
+		["Wake Me Up When September Ends"] = "https://www.youtube.com/watch?v=ci5D5r6ZjXA",
+		["21 Guns"] = "https://www.youtube.com/watch?v=qcOK_YATp6U",
+		["Good Riddance"] = "https://www.youtube.com/watch?v=_bTdLi0YUVM",
+		["American Idiot"] = "https://www.youtube.com/watch?v=a1BS7XnEZqc",
+		["Holiday"] = "https://www.youtube.com/watch?v=9iJayMaUGrk",
 	}
 }
 
