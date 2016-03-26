@@ -8,7 +8,7 @@ tempsongs = {
 	},
 	["Bon Jovi"] = {
 		["It's My Life"] = "https://www.youtube.com/watch?v=D7oSQ6wV5vU",
-		-- ["Livin' on a Prayer"] = "https://www.youtube.com/watch?v=lDK9QqIzhwk", -- broken?
+		["Livin' on a Prayer"] = "https://www.youtube.com/watch?v=lDK9QqIzhwk",
 	},
 	["Daft Punk"] = {
 		["One More Time"] = "https://www.youtube.com/watch?v=jtQC8ChpUeg",
@@ -262,7 +262,7 @@ tempsongs = {
 		["Hiphopopotamus vs Rhymenocerous"] = "https://www.youtube.com/watch?v=aUDtE3P8xVg",
 	},
 	["David Bowie"] = {
-		["Space Oddity"] = "https://www.youtube.com/watch?v=nP6xBFyA_aw",
+		["Space Oddity"] = "https://www.youtube.com/watch?v=cYMCLz5PQVw",
 		["Life On Mars"] = "https://www.youtube.com/watch?v=v--IqqusnNQ",
 	},
 	["Vera Blue"] = {
