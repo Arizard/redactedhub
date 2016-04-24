@@ -136,6 +136,11 @@ tempsongs = {
 		["Crawl"] = "https://www.youtube.com/watch?v=iFbhSijV41o",
 		["Sober"] = "https://www.youtube.com/watch?v=ayLiAVJ6vTM"
 	},
+	["Disturbed"] = {
+		["The Sound Of Silence"] = "https://www.youtube.com/watch?v=u9Dg-g7t2l4",
+		["Stricken"] = "https://www.youtube.com/watch?v=3moLkjvhEu0",
+		["Fire It Up"] = "https://www.youtube.com/watch?v=Jct3HKRYU2A",
+	},
 	["KDrew"] = {
 		["Bullseye"] = "https://www.youtube.com/watch?v=kqjKOL0N8ks",
 	},
@@ -171,6 +176,7 @@ tempsongs = {
 		["Yoshi City"] = "https://www.youtube.com/watch?v=iX1a3JngmpI",
 		["Lightsaber // Saviour"] = "https://www.youtube.com/watch?v=PN4sazbviho",
 		["Hurt"] = "https://www.youtube.com/watch?v=stgrSjynPKs",
+		["Hoover"] = "https://www.youtube.com/watch?v=9jDiAcqbO0c",
 	},
 	["Skrillex and Diplo"] = {
 		["Where Are U Now (feat. Justin Bieber)"] = "https://www.youtube.com/watch?v=nntGTK2Fhb0"
@@ -210,6 +216,10 @@ tempsongs = {
 		["By The Way"] = "https://www.youtube.com/watch?v=JnfyjwChuNU",
 		["Under The Bridge"] = "https://www.youtube.com/watch?v=lwlogyj7nFE",
 		["Scar Tissue"] = "https://www.youtube.com/watch?v=mzJj5-lubeM",
+		["Californication"] = "https://www.youtube.com/watch?v=YlUKcNNmywk",
+		["Give It Away"] = "https://www.youtube.com/watch?v=Mr_uHJPUlO8",
+		["Can't Stop"] = "https://www.youtube.com/watch?v=8DyziWtkfBw",
+		
 	},
 	["Evanescence"] = {
 		["Bring Me To Life"] = "https://www.youtube.com/watch?v=SEy6WPB_txw",
@@ -277,6 +287,7 @@ tempsongs = {
 		["Karma Police"] = "https://www.youtube.com/watch?v=IBH97ma9YiI",
 		["No Surprises"] = "https://www.youtube.com/watch?v=u5CVsCnxyXg",
 		["Spectre"] = "https://www.youtube.com/watch?v=Zv-w0zPSsTs",
+		["Creep"] = "https://www.youtube.com/watch?v=XFkzRNyygfk",
 	},
 	["Tame Impala"] = {
 		["Feels Like We Only Go Backwards"] = "https://www.youtube.com/watch?v=wycjnCCgUes",
@@ -391,6 +402,7 @@ tempsongs = {
 	["Flume"] = {
 		["Never Be Like You feat. Kai"] = "https://www.youtube.com/watch?v=Ly7uj0JwgKg",
 		["Smoke & Retribution feat. Vince Staples & Kucka"] = "https://www.youtube.com/watch?v=4fAzM5cI5FM",
+		["Say It feat. Tove Lo"] = "https://www.youtube.com/watch?v=hZe5K1DN4ec",
 	},
 
 	["Lorde"] = {
@@ -506,6 +518,9 @@ tempsongs = {
 		["Good Riddance"] = "https://www.youtube.com/watch?v=_bTdLi0YUVM",
 		["American Idiot"] = "https://www.youtube.com/watch?v=a1BS7XnEZqc",
 		["Holiday"] = "https://www.youtube.com/watch?v=9iJayMaUGrk",
+	},
+	["La Caution"] = {
+		["Thé à la Menthe"] = "https://www.youtube.com/watch?v=YNGp7uevnlM"
 	}
 }
 
