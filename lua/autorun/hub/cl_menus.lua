@@ -461,12 +461,14 @@ function ICON:PerformLayout()
 					function() 
 						BuyItem( self:GetParent().item.Class ) 
 					end):SetIcon( "icon16/money_delete.png")
-				for i = 1, 4 do
-					self.m["restock_"..tostring(i)] = self.m:AddOption("Restock ("..tostring(i*8)..")", 
-						function() 
-							RunConsoleCommand( "shop_restock", self:GetParent().item.Class, i*8 )
-							self:GetParent():SetStock( self:GetParent():GetStock() + i*8 )
-						end):SetIcon( "icon16/money_delete.png")
+				if LocalPlayer():IsSuperAdmin() then
+					for i = 1, 4 do
+						self.m["restock_"..tostring(i)] = self.m:AddOption("Restock ("..tostring(i*8)..")", 
+							function() 
+								RunConsoleCommand( "shop_restock", self:GetParent().item.Class, i*8 )
+								self:GetParent():SetStock( self:GetParent():GetStock() + i*8 )
+							end):SetIcon( "icon16/money_delete.png")
+					end
 				end
 			
 				self.m:Open()
@@ -1223,9 +1225,6 @@ function RS:JukeboxStartPlayer( artist, song, link, cont )
 	RS:SetClientData('continue_position', 0)
 end
 
-timer.Create("SaveJukeboxSeekTime", 2, 0, function()
-	RS.JukePlayer:Call("luaSavePosition()")
-end)
 
 if not file.Exists( "grhub_persist_data.txt", "DATA" ) then
 	file.Write("grhub_persist_data.txt", "[]")
@@ -2064,6 +2063,12 @@ hook.Add("InitPostEntity", "CreatePlayWindow",function()
 	RS.JukePlayer:SetSize(200,100)
 	RS.JukePlayer:SetPos(20,20)
 	RS.JukePlayer:SetVisible(false)
+
+	timer.Create("SaveJukeboxSeekTime", 2, 0, function()
+		if RS:GetClientData("continue", "none") == "song" then
+			RS.JukePlayer:Call("luaSavePosition()")
+		end
+	end)
 end)
 
 function BuyItem( class )

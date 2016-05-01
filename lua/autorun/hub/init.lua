@@ -272,9 +272,11 @@ function RS:OpenCrate( ply, id )
 						itemname = RS.Items[result].Name
 					end
 
-					if RS.Items[result].Rarity then
-						if RS.Items[result].Rarity > 1 then
-							RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
+					if RS.Items[result] then
+						if RS.Items[result].Rarity then
+							if RS.Items[result].Rarity > 1 then
+								RS:StoreBroadcast( ply:Nick().." opened a "..RS.Items[class].Name.." crate and found "..itemname.."!" )
+							end
 						end
 					end
 				end )

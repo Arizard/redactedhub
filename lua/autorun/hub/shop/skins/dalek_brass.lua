@@ -4,8 +4,9 @@ ITEM.StorePrice = 1000
 ITEM.PlayerModel = "models/neodement/dalek.mdl"
 ITEM.Buyable = false
 ITEM.PlayerMat = "models/arizard/dalek.vmt"
-if engine.ActiveGamemode() == "terrortown" then
-	ITEM.Visible = false
+ITEM.Visible = false
+if engine.ActiveGamemode() ~= "terrortown" and engine.ActiveGamemode() ~= "murder" then
+	ITEM.Visible = true
 end
 
 function ITEM:OnEquip(ply, id)

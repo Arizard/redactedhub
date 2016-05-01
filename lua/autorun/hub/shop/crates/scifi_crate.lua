@@ -40,7 +40,7 @@ ITEM.CrateContains = {
 	["skullhat_shiny"] = 1,
 }
 
-if engine.ActiveGamemode() == "terrortown" then
+if engine.ActiveGamemode() == "terrortown" or engine.ActiveGamemode() == "murder" then
 	ITEM.CrateContains["dalek_black"] = 0
 	ITEM.CrateContains["dalek_brass"] = 0
 end
