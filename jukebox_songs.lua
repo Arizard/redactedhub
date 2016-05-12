@@ -521,6 +521,9 @@ tempsongs = {
 	},
 	["La Caution"] = {
 		["Thé à la Menthe"] = "https://www.youtube.com/watch?v=YNGp7uevnlM"
+	},
+	["TheFunkyFr34k"] = {
+		["Get Ya Hands Up (Mash-Up)"] = "https://www.youtube.com/watch?v=uXW4zyDhkNA",
 	}
 }
 
