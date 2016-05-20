@@ -103,6 +103,14 @@ function MPANEL:Init()
 		AuColors.New.E, AuColors.New.D
 	}
 
+	self.slidetarget = 0
+
+	self.slidepanel = vgui.Create("DPanel", self)
+	self.slidepanel:SetSize( self:GetWide(), self:GetTall()-28)
+	self.slidepanel:SetPos(0,28)
+	function self.slidepanel:Paint() end
+	self.slidex = 0
+
 	self:PerformLayout()
 
 	self.activetab = 0
@@ -116,9 +124,11 @@ function MPANEL:Init()
 	self.spacer:SetPos(0,24)
 	 -- Color(46, 204, 113)
 	  -- Color(39, 174, 96)
-	self.navleft = vgui.Create("hub_button", self)
-	self.navleft:SetColors( Color(39, 174, 96), Color(46, 204, 113))
-	self.navleft:SetText( "◄" )
+	self.navleft = vgui.Create("AuButton", self)
+	--self.navleft:SetColors( Color(39, 174, 96), Color(46, 204, 113))
+	self.navleft:SetUpColor( Color(39, 174, 96) )
+	self.navleft:SetHoverColor( Color(46, 204, 113) )
+	self.navleft:SetText( "<" )
 	self.navleft:SetSize(24,24)
 
 	function self.navleft:Think()
@@ -128,14 +138,16 @@ function MPANEL:Init()
 		end
 	end
 
-	self.navright = vgui.Create("hub_button", self)
-	self.navright:SetColors( Color(39, 174, 96), Color(46, 204, 113))
-	self.navright:SetText( "►" )
+	self.navright = vgui.Create("AuButton", self)
+	--self.navright:SetColors( Color(39, 174, 96), Color(46, 204, 113))
+	self.navright:SetUpColor( Color(39, 174, 96) )
+	self.navright:SetHoverColor( Color(46, 204, 113) )
+	self.navright:SetText( ">" )
 	self.navright:SetSize(24,24)
 
 	function self.navright:Think()
 		if self:IsDown() then
-			--print("moving right")
+			print("moving right")
 			self:GetParent().buttonoffset = self:GetParent().buttonoffset - 2 * (FrameTime()/(1/100))
 			self:GetParent():PerformLayout()
 		end
@@ -145,6 +157,8 @@ function MPANEL:Init()
 	self.navright:SetZPos(98)
 
 	self:ArrowsVisible( false )
+
+	
 end
 
 function MPANEL:ArrowsVisible( bool )
@@ -156,15 +170,19 @@ end
 
 function MPANEL:SetTab( idx )
 
-	for i = 1, #self.tabs do
-		
+	for i = 1, #self.tabs do -- make all tabs invisible
 		self.buttons[self.tabs[i]]:SetSelected( false )
-		self.panels[self.tabs[i]]:SetVisible( false )
-
+		--self.panels[self.tabs[i]]:SetVisible( false )
 	end
+
+	self.slidetarget = (idx-1) * self:GetWide()
+
+	--print(self.slidetarget)
 
 	self.buttons[self.tabs[idx]]:SetSelected( true )
 	self.panels[self.tabs[idx]]:SetVisible( true )
+
+	self.activetab = idx
 
 end
 
@@ -176,7 +194,7 @@ end
 
 function MPANEL:AddTab(str_name)
 
-	self.buttons[str_name] = vgui.Create("hub_button", self)
+	self.buttons[str_name] = vgui.Create("AuButton", self)
 	self.buttons[str_name]:SetSize(92,24)
 	self.buttons[str_name]:SetText(str_name)
 	self.buttons[str_name]:SetColors(self.color[1], self.color[2])
@@ -195,10 +213,10 @@ function MPANEL:AddTab(str_name)
 		parent:SetTab( self.idx )
 	end
 
-	self.panels[str_name] = vgui.Create("DPanel", self)
-	self.panels[str_name]:SetSize(self:GetWide(),self:GetTall()-28)
-	self.panels[str_name]:SetPos(0,28)
-	self.panels[str_name]:SetVisible(false)
+	self.panels[str_name] = vgui.Create("DPanel", self.slidepanel)
+	self.panels[str_name]:SetSize(self:GetWide(),self.slidepanel:GetTall())
+	self.panels[str_name]:SetPos((#self.tabs-1)*self:GetWide(),0)
+	--self.panels[str_name]:SetVisible(false)
 
 	self.panels[str_name].Paint = function(self, w, h)
 		surface.SetDrawColor( Color(0,0,0,0) )
@@ -208,6 +226,8 @@ function MPANEL:AddTab(str_name)
 	self:PerformLayout()
 
 	self:SetTab( self.activetab )
+
+	self.slidepanel:SetPos( -self.slidetarget, 28 )
 
 	self.numbutts = self.numbutts + 1
 	if self.numbutts * 92 > self:GetWide()-50 then
@@ -244,13 +264,43 @@ function MPANEL:PerformLayout()
 	end
 
 	--self.spacer:SetSize(self:GetWide(), 4)
+
+	self.slidepanel:SetSize( (#self.tabs)*self:GetWide(), self:GetTall()-28)
+	-- self.slidepanel:SetPos(0,28)
 end
 
--- function MPANEL:UpdateButtonOffset()
--- 	for i = 1,#self.tabs do
--- 		self.buttons[self.tabs[i]]:SetPos(8+(i-1)*92 + self.buttonoffset,0)
--- 	end
--- end
+function MPANEL:Paint(w,h)
+	local d = 0
+
+	self.dt = CurTime() - (self.lasttime or CurTime())
+	self.lasttime = CurTime()
+
+	if self.slidex < -self.slidetarget then
+		d = 1
+	elseif self.slidex > -self.slidetarget then
+		d = -1
+	else
+		d = 0
+	end
+
+	if math.abs(self.slidex - (-self.slidetarget)) < 4 then
+		self.slidepanel:SetPos( -self.slidetarget , 28 )
+	else
+		local nx = self.slidex + d*self.dt*(100 + math.abs(self.slidex - (-self.slidetarget)))*4
+		if d == 1 then
+			if nx > -self.slidetarget then
+				nx = -self.slidetarget
+			end
+		elseif d == -1 then
+			if nx < -self.slidetarget then
+				nx = -self.slidetarget
+			end
+		end
+		--print(self.dt)
+		self.slidepanel:SetPos( nx , 28 )
+		self.slidex = nx
+	end
+end
 
 
 

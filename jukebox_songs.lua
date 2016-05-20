@@ -555,7 +555,7 @@ tempstreams = {
 		["Lainchan Radio"] = "https://lainchan.org/radio_assets/lain.ogg",
 	},
 	["Vaporwave"] = {
-		["Nightwave Plaza"] = "https://plaza.one:8000/plaza"
+		["Nightwave Plaza"] = "https://plaza.one/ogg"
 	},
 	["Easy Listening"] = {
 		["Koffee"] = "http://livesh.koffee.com.au:15004/listen.pls",
