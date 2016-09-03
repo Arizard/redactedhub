@@ -458,7 +458,7 @@ local hubdata = {}
 net.Receive("OpenHub",function()
 	hubdata = net.ReadTable()
 	--print(hubdata.opentab)
-	RS:CreateHubWindow( hubdata, tonumber( hubdata.opentab ) )
+	RS:CreateHubWindow( (hubdata or {}), tonumber( (hubdata.opentab or 1) ) )
 end)
 
 
@@ -735,13 +735,17 @@ function ICON:SetItem( tab )
 		self.model:SetFOV(self.item.IconFOV or 40)
 		self.model:SetLookAt(Vector(0,0,10) - (self.item.IconPosOff or Vector(0,0,0) ))
 		self.model.Entity:SetMaterial( self.item.CrateMat )
-	elseif self.item.Category == "weapons" then
-		self.model:SetModel(self.item.WeaponModel)
-		self.model:SetFOV(25)
-		self.model:SetLookAt(Vector(0,0,0))
-		self.model.Entity:SetMaterial( self.item.WeaponMat or "" )
-		self.model.Entity:SetColor( self.item.WeaponCol or Color(255,255,255) )
-	elseif self.item.EffectIcon then
+	elseif self.item.Category == "misc" then
+		if self.item.MiscModel then
+			self.model:SetModel(self.item.MiscModel)
+			self.model:SetFOV(25)
+			self.model:SetLookAt(Vector(0,0,0))
+			self.model.Entity:SetMaterial( self.item.MiscMat or "" )
+			self.model.Entity:SetColor( self.item.MiscCol or Color(255,255,255) )
+		end
+	end
+
+	if self.item.EffectIcon then
 		self.model:SetVisible(false)
 		self.effecticon = Material(self.item.EffectIcon)
 	end
@@ -1280,7 +1284,8 @@ if not file.Exists( "grhub_persist_data.txt", "DATA" ) then
 	file.Write("grhub_persist_data.txt", "[]")
 end
 
-RS.PersistData = util.JSONToTable( file.Read("grhub_persist_data.txt","DATA") )
+RS.PersistData = util.JSONToTable( file.Read("grhub_persist_data.txt","DATA") ) or {}
+RS.PersistData = RS.PersistData or {} -- make sure
 
 function RS:SetClientData( id, val )
 	RS.PersistData["id_"..tostring(id)] = val

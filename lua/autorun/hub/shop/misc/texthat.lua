@@ -3,6 +3,7 @@ ITEM.Description = "No Preview :("
 ITEM.StorePrice = 1
 ITEM.Buyable = false
 ITEM.DonatorReward = true
+ITEM.MiscModel = "models/extras/info_speech.mdl"
 
 function ITEM:OnEquip(ply, id)
 	if SERVER then
