@@ -83,6 +83,9 @@ tempsongs = {
 	-- ["Billy Joel"] = {
 	-- 	["Piano Man"] = "https://www.youtube.com/watch?v=gxEPV4kolz0",
 	-- },
+	["Big Mountain"] = {
+		["Baby I Love Your Way"] = "https://www.youtube.com/watch?v=IWIxA7M_-ZA",
+	},
 	["Elton John"] = {
 		["Rocket Man"] = "https://www.youtube.com/watch?v=-LX7WrHCaUA",
 		["Can You Feel The Love Tonight? [The Lion King]"] = "https://www.youtube.com/watch?v=25QyCxVkXwQ",
@@ -164,7 +167,8 @@ tempsongs = {
 		["Piano Man"] = "https://www.youtube.com/watch?v=gxEPV4kolz0",
 	},
 	["Spandau Ballet"] = {
-		["Gold"] = "https://www.youtube.com/watch?v=ntG50eXbBtc"
+		["Gold"] = "https://www.youtube.com/watch?v=ntG50eXbBtc",
+		["True"] = "https://www.youtube.com/watch?v=AR8D2yqgQ1U",
 	},
 	["Harry Enfield"] = {
 		["Loadsamoney"] = "https://www.youtube.com/watch?v=ON-7v4qnHP8",
@@ -524,6 +528,10 @@ tempsongs = {
 	},
 	["TheFunkyFr34k"] = {
 		["Get Ya Hands Up (Mash-Up)"] = "https://www.youtube.com/watch?v=uXW4zyDhkNA",
+	},
+	["Earth, Wind and Fire"] = {
+		["After The Love Has Gone"] = "https://www.youtube.com/watch?v=CUCLNPOjPZw",
+		["September"] = "https://www.youtube.com/watch?v=Gs069dndIYk",
 	}
 }
 
