@@ -533,6 +533,61 @@ tempsongs = {
 		["After The Love Has Gone"] = "https://www.youtube.com/watch?v=CUCLNPOjPZw",
 		["September"] = "https://www.youtube.com/watch?v=Gs069dndIYk",
 	}
+	["Metallica"] = {
+		["Seek and destroy"] = "https://www.youtube.com/watch?v=J-tvJcTPxHc",
+		["Whiplash"] = "https://www.youtube.com/watch?v=PJv8sY2CxZA",
+		["Ride the lightning"] = "https://www.youtube.com/watch?v=YT516h7QwA4",
+		["For whom the bell tolls"] = "https://www.youtube.com/watch?v=bg92QpjRcJk",
+		["Battery"] = "https://www.youtube.com/watch?v=md3B3I7Nmvw",
+		["Master of Puppets"] = "https://www.youtube.com/watch?v=xnKhsTXoKCI",
+		["The Thing that should not be"] = "https://www.youtube.com/watch?v=bYJGt67Mwmo",
+		["Welcome home (Sanitarium)"] = "https://www.youtube.com/watch?v=V6Dfo4zDduI",
+		["Blackened"] = "https://www.youtube.com/watch?v=DU_ggFovJNo",
+		["...And Justice for All"] = "https://www.youtube.com/watch?v=lfg0_FbIqqw",
+		["One"] = "https://www.youtube.com/watch?v=sXPkmIwwobA",
+		["Harvester of Sorrow"] = "https://www.youtube.com/watch?v=jnhlldaNp_Y",
+		["Enter Sandman"] = "https://www.youtube.com/watch?v=CD-E-LDc384",
+		["Sad but true"] = "https://www.youtube.com/watch?v=A8MO7fkZc5o",
+		["The Unforgiven I"] = "https://www.youtube.com/watch?v=Ckom3gf57Yw",
+		["Whereve I may roam"] = "https://www.youtube.com/watch?v=cwPg8gJq_Kw",
+		["Through the never"] = "https://www.youtube.com/watch?v=EFbdYvolxRM",
+		["Nothing else matters"] = "https://www.youtube.com/watch?v=Tj75Arhq5ho",
+		["Of Wolf and Man"] = "https://www.youtube.com/watch?v=gowl6yFG6rU",
+		["The God that failed"] = "https://www.youtube.com/watch?v=Cgrxgp2Jp94",
+		["King Nothing"] = "https://www.youtube.com/watch?v=oFBbOHohwR8",
+		["Fuel"] = "https://www.youtube.com/watch?v=PvF9PAxe5Ng",
+		["The Unforgiven II"] = "https://www.youtube.com/watch?v=G-Bn_kD6QN4",
+		["Frantic"] = "https://www.youtube.com/watch?v=QcHvzNBtlOw",
+		["St. Anger"] = "https://www.youtube.com/watch?v=dwZuFexTy0k",
+		["Some kind of Monster"] = "https://www.youtube.com/watch?v=_Qu4Ass6abo",
+		["Invisible Kid"] = "https://www.youtube.com/watch?v=8jkw539gNGk",
+		["That was just your life"] = "https://www.youtube.com/watch?v=pxg-re3woo0",
+		["The end of the line"] = "https://www.youtube.com/watch?v=SfBcNIpoUmA",
+		["Broken, Beat & Scarred"] = "https://www.youtube.com/watch?v=FSJuHfluKz8",
+		["The day that never comes"] = "https://www.youtube.com/watch?v=O4rJUtJM3aM",
+		["All nightmare long"] = "https://www.youtube.com/watch?v=SeE1Y8S6jVc",
+		["Cyanide"] = "https://www.youtube.com/watch?v=xUMqqVOlJBs",
+		["The Unforgiven III"] = "https://www.youtube.com/watch?v=J3m6et00DfQ",
+		["The Judas Kiss"] = "https://www.youtube.com/watch?v=7mK3LHSg0jY",
+		["Suicide and Redemption"] = "https://www.youtube.com/watch?v=HnCJ3QPilD8",
+		["My Apocalypse"] = "https://www.youtube.com/watch?v=fjcdV0NTTBc"
+	}
+	["Rick Astley"] = {
+		["You move me"] = "https://www.youtube.com/watch?v=RXNFzrZTQy4",
+		["She wants to dance with me"] = "https://www.youtube.com/watch?v=2nKsnQsi0EQ",
+		["Take me to your heart"] = "https://www.youtube.com/watch?v=eYuUAGXN0KM",
+		["Never gonna give you up"] = "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+		["Til then"] = "https://www.youtube.com/watch?v=N7jBf8X_LTo"
+	}
+	["DNCE"] = {
+		["Cake by the ocean"] = "https://www.youtube.com/watch?v=PAzH-YAlFYc"
+	}
+	["Scissereoz wants this"] = {
+		["It's okay to be gay"] = "https://www.youtube.com/watch?v=tjLr1XhBKVQ"
+	}
+	["Four non blondes"] = {
+		["What's up?"] = "https://www.youtube.com/watch?v=6NXnxTNIWkc"
+	}
 }
 
 tempstreams = {
