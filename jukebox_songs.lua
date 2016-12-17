@@ -532,6 +532,9 @@ tempsongs = {
 	["Earth, Wind and Fire"] = {
 		["After The Love Has Gone"] = "https://www.youtube.com/watch?v=CUCLNPOjPZw",
 		["September"] = "https://www.youtube.com/watch?v=Gs069dndIYk",
+	},
+	["Spice Girls"] = {
+		["Wannabe"] = "https://www.youtube.com/watch?v=8X-2czaa3WA"
 	}
 }
 
