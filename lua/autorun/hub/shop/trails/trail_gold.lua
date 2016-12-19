@@ -3,6 +3,8 @@ ITEM.Description = "Gold Trail"
 ITEM.StorePrice = 1000
 ITEM.Trail = "models/player/shared/gold_player.vmt"
 ITEM.Col = Color(100,100,255)
+ITEM.Buyable = false
+ITEM.Rarity = 5
 
 function ITEM:OnEquip(ply, id)
 	if ply[self.Name] then
