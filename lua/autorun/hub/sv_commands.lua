@@ -616,9 +616,9 @@ RS:AddChatCommandAlias("jukebox","cassettes")
 RS:AddChatCommandAlias("jukebox","music")
 RS:AddChatCommandAlias("restock","stock")
 
-RS:AddChatCommand("donate", function(ply)
-	ply:SendLua([[AdvertiseDonation(640,420)]])
-end)
+-- RS:AddChatCommand("donate", function(ply)
+-- 	ply:SendLua([[AdvertiseDonation(640,420)]])
+-- end)
 
 RS:AddChatCommand("RTN", function(ply)
 	ply:SendLua("surface.PlaySound('taunts/prankpatrol.ogg')")

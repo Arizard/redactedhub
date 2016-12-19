@@ -566,16 +566,16 @@ for k,v in ipairs( hatfonts ) do
 	{
 		font = v[2],
 		size = 60,
-		antialias = true,
-		outline = true,
+		antialias = false,
+		--outline = true,
 	})
 
 	surface.CreateFont( v[1].."_preview",
 	{
 		font = v[2],
 		size = 28,
-		antialias = true,
-		outline = true,
+		antialias = false,
+		--outline = true,
 	})
 
 	table.insert( validfonts, v[1] )
@@ -713,20 +713,20 @@ hook.Add("PostPlayerDraw", "TextHats", function(ply)
 
 				-- https://facepunch.com/showthread.php?t=1274569&p=40851965&viewfull=1#post40851965
 
-				render.ClearStencil()
+				--render.ClearStencil()
 				render.SetStencilEnable(true)
 
+				render.SetStencilReferenceValue(6)
 				render.SetStencilFailOperation(STENCILOPERATION_KEEP)
 				render.SetStencilZFailOperation(STENCILOPERATION_REPLACE)
 				render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
 				render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_ALWAYS)
-				render.SetStencilReferenceValue(1)
 
 				surface.SetDrawColor(Color(0,0,0,1))
-				surface.DrawRect( -marquee_w/2, -200, marquee_w, 400 )
+				surface.DrawRect( -marquee_w/2, -50, marquee_w, 100 )
 
-				render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_LESSEQUAL)
-				render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
+				render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+				--render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
 
 				if tx.effect ~= nil then
 					DrawTextHatText( tx.text, tx.font, tx.col, ox, 0, tx.effect )

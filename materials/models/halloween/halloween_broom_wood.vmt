@@ -1,0 +1,15 @@
+VertexLitGeneric
+{
+    $basetexture "models\halloween\halloween_broom_diff"
+    $bumpmap "models\halloween\halloween_broom_norm"
+    $normalmapalphaenvmapmask   "1"
+    $envmap                     env_cubemap
+    $envmaptint                 "[.05 .05 .05]"
+    $phong                      "1"
+    $phongexponent              "2"
+    $phongexponenttexture "models\halloween\halloween_broom_exp"
+    $phongboost                 "0"
+    $phongfresnelranges         "[.25 0.5 1]"
+    $phongalbedotint            "1"
+    $phongtint                  "[.0 .0 .0]"
+}

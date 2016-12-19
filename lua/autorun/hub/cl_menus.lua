@@ -1277,6 +1277,13 @@ function RS:JukeboxStartPlayer( artist, song, link, cont )
 	RS:SetClientData("continue_data", util.TableToJSON({artist,song,link}) )
 
 	RS:SetClientData('continue_position', 0)
+
+	timer.Destroy("SaveJukeboxSeekTime")
+	timer.Create("SaveJukeboxSeekTime", 2, 0, function()
+		if RS:GetClientData("continue", "none") == "song" then
+			RS.JukePlayer:Call("luaSavePosition()")
+		end
+	end)
 end
 
 
@@ -2119,11 +2126,7 @@ hook.Add("InitPostEntity", "CreatePlayWindow",function()
 	RS.JukePlayer:SetPos(20,20)
 	RS.JukePlayer:SetVisible(false)
 
-	timer.Create("SaveJukeboxSeekTime", 2, 0, function()
-		if RS:GetClientData("continue", "none") == "song" then
-			RS.JukePlayer:Call("luaSavePosition()")
-		end
-	end)
+	
 end)
 
 function BuyItem( class )
