@@ -25,7 +25,8 @@ tempsongs = {
 		["What Is Love?"] = "https://www.youtube.com/watch?v=xhrBDcQq2DM",
 	},
 	["Taylor Swift"] = {
-		["Shake It Off"] = "https://www.youtube.com/watch?v=nfWlot6h_JM"
+		["Shake It Off"] = "https://www.youtube.com/watch?v=nfWlot6h_JM",
+		["Love Story"] = "https://www.youtube.com/watch?v=Qx4z-glA474",
 	},
 	["Duran Duran"] = {
 		["Hungry Like The Wolf"] = "https://www.youtube.com/watch?v=IxW0n5Fe5CY"
@@ -119,7 +120,8 @@ tempsongs = {
 		["Black Skinhead"] = "https://www.youtube.com/watch?v=JVgg9cV-NLI",
 		["I Am A God"] = "https://www.youtube.com/watch?v=ViGNBLQpGWE",
 		["Bound 2"] = "https://www.youtube.com/watch?v=SPxkp2F-nAQ",
-		["POWER"] = "https://www.youtube.com/watch?v=L53gjP-TtGE"
+		["POWER"] = "https://www.youtube.com/watch?v=L53gjP-TtGE",
+		["Gold Digger ft. Jamie Foxx"] = "https://www.youtube.com/watch?v=tphl_dOWVmc",
 	},
 	["Jay-Z & Kanye West"] = {
 		["Niggas In Paris"] = "https://www.youtube.com/watch?v=gG_dA32oH44",
@@ -535,8 +537,54 @@ tempsongs = {
 	},
 	["Spice Girls"] = {
 		["Wannabe"] = "https://www.youtube.com/watch?v=8X-2czaa3WA"
-	}
+	},
+	["Wheatus"] = {
+		["Teenage Dirtbag"] = "https://www.youtube.com/watch?v=534Zz_FZYvw",
+	},
+	["Fountains of Wayne"] = {
+		["Stacy's Mom"] = "https://www.youtube.com/watch?v=7UUPawNC5Lg"
+	},
+	["All American Rejects"] = {
+		["Gives You Hell"] = "https://www.youtube.com/watch?v=Xv7i5H4RXhk",
+	},
+	["Avril Lavigne"] = {
+		["Sk8er Boi"] = "https://www.youtube.com/watch?v=zjuI9dua-yY",
+	},
+	["Newclaess"] = {
+		["Feel Alive"] = "https://www.youtube.com/watch?v=9iPQ9dD4Lw4",
+	},
+	["Club Electric"] = {
+		["Sweet Lovin'"] = "https://www.youtube.com/watch?v=WweboEY_dmI",
+	},
+	["Fleur East"] = {
+		["Sax"] = "https://www.youtube.com/watch?v=3JZ4pnNtyxQ",
+	},
+	["Blink-182"] = {
+		["All The Small Things"] = "https://www.youtube.com/watch?v=4rje_hdGgHc",
+	},
+	["Pitbull"] = {
+		["Timber ft. Ke$ha"] = "https://www.youtube.com/watch?v=vFX5SHo_6Rs",
+	},
+	["Fergie"] = {
+		["Fergalicious"] = "https://www.youtube.com/watch?v=MfB6I6-IhkY",
+	},
+	["Gwen Stefani"] = {
+		["Hollaback Girl"] = "https://www.youtube.com/watch?v=mMEQQ9cEe0c",
+	},
+	["Kelly Clarkson"] = {
+		["Since U Been Gone"] = "https://www.youtube.com/watch?v=p0BiGek2bKA",
+	},
+	["Shakira"] = {
+		["Hips Don't Lie"] = "https://www.youtube.com/watch?v=gnUDvKEdke8",
+		["Wherever, Whenever"] = "https://www.youtube.com/watch?v=SK97wN6hrp4",
+	},
+
+	-- [""] = {
+	-- 	[""] = "",
+	-- },
 }
+
+
 
 tempstreams = {
 	["Assorted Genres"] = {
