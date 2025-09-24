@@ -463,8 +463,6 @@ if ( SERVER ) then
 	resource.AddFile( "materials/models/weapons/arizard/flag_au.vtf" )
 	resource.AddFile( "materials/models/weapons/arizard/flag_jpn.vmt" )
 	resource.AddFile( "materials/models/weapons/arizard/flag_jpn.vtf" )
-	resource.AddFile( "materials/models/weapons/arizard/flag_nazi.vmt" )
-	resource.AddFile( "materials/models/weapons/arizard/flag_nazi.vtf" )
 	resource.AddFile( "materials/models/weapons/arizard/flag_nz.vmt" )
 	resource.AddFile( "materials/models/weapons/arizard/flag_nz.vtf" )
 	resource.AddFile( "materials/models/weapons/arizard/flag_scot.vmt" )
